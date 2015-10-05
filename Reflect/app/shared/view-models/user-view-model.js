@@ -1,3 +1,4 @@
+var config = require("../../shared/config");
 var observableModule = require("data/observable");
 var validator = require("email-validator/index");
 

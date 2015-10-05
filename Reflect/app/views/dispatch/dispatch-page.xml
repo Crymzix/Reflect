@@ -1,0 +1,7 @@
+<Page loaded="loaded" actionBarHidden="true">
+    <ScrollView>
+        <StackLayout style="background-color: #2196F3;">
+            <Image src="res://logo" stretch="none" horizontalAlignment="center" verticalAlignment="center"/>
+        </StackLayout>
+    </ScrollView>
+</Page>

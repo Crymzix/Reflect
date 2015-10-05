@@ -1,8 +1,18 @@
-<Page xmlns="http://www.nativescript.org/tns.xsd" loaded="pageLoaded">
-    <StackLayout>
-        <Label text="Tap the button" cssClass="title"/>
-        <Button text="TAP" tap="{{ tapAction }}" />
-        <Button text="Sign Up" tap="{{ loginAction }}" />
-        <Label text="{{ message }}" cssClass="message" textWrap="true"/>
+<Page loaded="loaded" actionBarHidden="true">
+<ScrollView>
+    <StackLayout style="background-color: #2196F3;">
+        <Image src="res://logo" stretch="none" horizontalAlignment="center" />
+
+        <TextField id="email_address" text="{{ email }}" hint="Email Address" keyboardType="email" autocorrect="false" autocapitalizationType="none" />
+        <TextField id="password" secure="true" text="{{ password }}" hint="Password" />
+
+        <GridLayout>
+            <Button text="Sign in" tap="signIn" />
+            <ActivityIndicator busy="{{ authenticating }}" />
+        </GridLayout>
+
+        <Button text="Sign up for Reflect" tap="register"/>
+        <Button text="Forgot password?" tap="forgotPassword"/>
     </StackLayout>
+</ScrollView>
 </Page>
