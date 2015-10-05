@@ -1,2 +1,8 @@
 Reflect/node_modules/
 Reflect/platforms/
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
