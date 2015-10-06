@@ -3,16 +3,16 @@
     <StackLayout style="background-color: #2196F3;">
         <Image src="res://logo" stretch="none" horizontalAlignment="center" />
 
-        <TextField id="email_address" text="{{ email }}" hint="Email Address" keyboardType="email" autocorrect="false" autocapitalizationType="none" />
-        <TextField id="password" secure="true" text="{{ password }}" hint="Password" />
+        <TextField id="email_address" text="{{ email }}" hint="Email Address" keyboardType="email" autocorrect="false" autocapitalizationType="none" cssClass="inputField"/>
+        <TextField id="password" secure="true" text="{{ password }}" hint="Password" cssClass="inputField"/>
 
         <GridLayout>
-            <Button text="Sign in" tap="signIn" />
+            <Button text="Sign in" tap="signIn" cssClass="signIn" />
             <ActivityIndicator busy="{{ authenticating }}" />
         </GridLayout>
 
-        <Button text="Sign up for Reflect" tap="register"/>
-        <Button text="Forgot password?" tap="forgotPassword"/>
+        <Button text="Sign up" tap="signUp" cssClass="signUp"/>
+        <Button text="Forgot password?" tap="forgotPassword" cssClass="forgot"/>
     </StackLayout>
 </ScrollView>
 </Page>

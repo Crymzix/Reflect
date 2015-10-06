@@ -1,3 +1,26 @@
+var gesturesModule = require("ui/gestures");
+var frameModule = require("ui/frame");
+
+exports.loaded = function(args) {
+    var page = args.object;
+
+    var email = page.getViewById("email_address");
+    var password = page.getViewById("password");
+
+    //Dismiss the keyboard when the user taps outside of the two textfields
+    page.observe(gesturesModule.GestureTypes.tap, function() {
+        email.dismissSoftInput();
+        password.dismissSoftInput();
+    });
+};
+
+exports.signUp = function() {
+    frameModule.topmost().navigate({
+        moduleName: "views/signup/signup-page",
+        backstackVisible: true
+    });
+};
+
 //var dialogsModule = require("ui/dialogs");
 //var frameModule = require("ui/frame");
 //var gesturesModule = require("ui/gestures");

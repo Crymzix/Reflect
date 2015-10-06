@@ -14,15 +14,15 @@ exports.loaded = function (args) {
                         moduleName: "views/main/main-page",
                         backstackVisible: false
                     });
-                }, 4000);
+                }, 3000);
             } else {
                 console.log("Not logged in");
                 setTimeout(function() {
                     frameModule.topmost().navigate({
                         moduleName: "views/login/login-page",
-                        backstackVisible: false
+                        backstackVisible: true
                     });
-                }, 4000);
+                }, 3000);
             }
         }
     }));
