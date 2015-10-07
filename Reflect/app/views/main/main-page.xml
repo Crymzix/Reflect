@@ -1,7 +1,32 @@
-<Page xmlns="http://www.nativescript.org/tns.xsd" loaded="pageLoaded">
-  <StackLayout>
-    <Label text="Tap the button" cssClass="title"/>
-    <Button text="TAP" tap="{{ tapAction }}" />
-    <Label text="{{ message }}" cssClass="message" textWrap="true"/>
-  </StackLayout>
+<Page loaded="pageLoaded" xmlns:drawer="nativescript-telerik-ui/sidedrawer" xmlns="http://www.nativescript.org/tns.xsd"
+      actionBarHidden="true">
+  <drawer:SideDrawer id="sideDrawer">
+    <drawer:SideDrawer.drawerTransition>
+      <drawer:SlideInOnTopTransition/>
+    </drawer:SideDrawer.drawerTransition>
+    <drawer:SideDrawer.mainContent>
+      <StackLayout >
+        <GridLayout cssClass="action-bar">
+          <GridLayout cssClass="action-wrap" tap="showSlideout" columns="auto" horizontalAlignment="left">
+            <Image stretch="none" cssClass="icon-image" src="res://ic_menu"/>
+          </GridLayout>
+          <Label text="Reflect" cssClass="action-bar-title" />
+        </GridLayout>
+        <Label text="{{ mainContentText }}" textWrap="true"/>
+      </StackLayout>
+    </drawer:SideDrawer.mainContent>
+    <drawer:SideDrawer.drawerContent>
+      <StackLayout cssClass="drawerContent">
+        <StackLayout cssClass="headerContent">
+          <Label text="Header"/>
+        </StackLayout>
+        <StackLayout cssClass="drawerMenuContent">
+          <Label text="Item 1"/>
+          <Label text="Item 2"/>
+          <Label text="Item 3"/>
+          <Label text="Item 4"/>
+        </StackLayout>
+      </StackLayout>
+    </drawer:SideDrawer.drawerContent>
+  </drawer:SideDrawer>
 </Page>

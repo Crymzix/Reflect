@@ -1,21 +1,11 @@
-var observable = require("data/observable");
-var HelloWorldModel = (function (_super) {
-    __extends(HelloWorldModel, _super);
-    function HelloWorldModel() {
+var observableModule = require("data/observable");
+var MainViewModel = (function (_super) {
+    __extends(MainViewModel, _super);
+    function MainViewModel() {
         _super.call(this);
-        this.counter = 42;
-        this.set("message", this.counter + " taps left");
+        this.set("mainContentText", "SideDrawer for NativeScript can be easily setup in the XML definition of your page by defining main- and drawer-content. The component"
+            + " has a default transition and position and also exposes notifications related to changes in its state.");
     }
-    HelloWorldModel.prototype.tapAction = function () {
-        this.counter--;
-        if (this.counter <= 0) {
-            this.set("message", "Hoorraaay! You unlocked the NativeScript clicker achievement!");
-        }
-        else {
-            this.set("message", this.counter + " taps left");
-        }
-    };
-    return HelloWorldModel;
-})(observable.Observable);
-exports.HelloWorldModel = HelloWorldModel;
-exports.mainViewModel = new HelloWorldModel();
+    return MainViewModel;
+})(observableModule.Observable);
+exports.MainViewModel = MainViewModel;

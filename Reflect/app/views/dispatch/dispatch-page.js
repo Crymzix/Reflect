@@ -19,8 +19,8 @@ exports.loaded = function (args) {
                 console.log("Not logged in");
                 setTimeout(function() {
                     frameModule.topmost().navigate({
-                        moduleName: "views/login/login-page",
-                        backstackVisible: true
+                        moduleName: "views/main/main-page",
+                        backstackVisible: false
                     });
                 }, 3000);
             }
