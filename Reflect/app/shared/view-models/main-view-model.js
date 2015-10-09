@@ -5,7 +5,13 @@ var MainViewModel = (function (_super) {
         _super.call(this);
         this.set("mainContentText", "SideDrawer for NativeScript can be easily setup in the XML definition of your page by defining main- and drawer-content. The component"
             + " has a default transition and position and also exposes notifications related to changes in its state.");
+        this.set("selectedViewIndex", 0);
     }
+
+    MainViewModel.prototype.selectView = function(index) {
+        this.set("selectedViewIndex", index);
+    };
+
     return MainViewModel;
 })(observableModule.Observable);
 exports.MainViewModel = MainViewModel;
