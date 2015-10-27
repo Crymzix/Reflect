@@ -24,6 +24,16 @@
     background-color: #2196F3;
 }
 
+.view-title {
+    height: 32;
+    padding-left: 20;
+    vertical-align: center;
+    background-color: #2196F3;
+    color: white;
+    font-size: 16;
+    font-family: sans-serif-light;
+}
+
 .action-wrap {
     padding-left: 16;
     padding-right: 16;
@@ -45,7 +55,7 @@
 }
 
 .slide-out-btn-selected {
-    color: white;
+    color: #727272;
     background-color: #BBDEFB;
     font-size: 14;
     height: 48;
@@ -53,3 +63,38 @@
     horizontal-align: stretch;
     padding-left: 10;
 }
+
+.event-photo {
+    background-color: #CFD8DC;
+    height: 200;
+}
+
+.upload-photo-wrap {
+    margin-top: 10;
+    padding-left: 16;
+    padding-right: 16;
+    height: 50;
+}
+
+.event-input-field {
+    margin-top: 10;
+    margin-left: 20;
+    padding-left: 10;
+    padding-right: 10;
+    margin-right: 20;
+    color: #727272;
+    background-color: #BBDEFB;
+    border-radius: 5;
+}
+
+.event-label {
+    margin-top: 10;
+    margin-left: 20;
+    background-color: white;
+    color: #2196F3;
+    font-size: 18;
+}
+
+
+
+
