@@ -42,6 +42,9 @@
                     <Button tap="selectView" tag="2"
                             cssClass="{{ selectedViewIndex === 2 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
                             text="Create Event"/>
+                    <Button tap="switchToLogin" tag="3"
+                            cssClass="{{ selectedViewIndex === 3 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
+                            text="Log In"/>
                 </StackLayout>
             </StackLayout>
         </drawer:SideDrawer.drawerContent>

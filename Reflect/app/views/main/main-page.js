@@ -23,3 +23,10 @@ function selectView(args) {
     viewModel.selectView(parseInt(index));
 }
 exports.selectView = selectView;
+
+exports.switchToLogin = switchToLogin;
+
+function switchToLogin(args){
+    var topmost = frameModule.topmost();
+    topmost.navigate("views/login/login-page");
+}
