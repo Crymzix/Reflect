@@ -1,11 +1,12 @@
 {
-	"nativescript": {
-		"id": "org.nativescript.Reflect",
-		"tns-android": {
-			"version": "1.3.0"
-		}
-	},
-	"dependencies": {
-		"tns-core-modules": "1.3.0"
-	}
+  "nativescript": {
+    "id": "org.nativescript.Reflect",
+    "tns-android": {
+      "version": "1.4.0"
+    }
+  },
+  "dependencies": {
+    "nativescript-telerik-ui": "0.0.10",
+    "tns-core-modules": "^1.4.0"
+  }
 }
