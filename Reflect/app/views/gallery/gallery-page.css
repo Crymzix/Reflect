@@ -1,0 +1,19 @@
+.rejectPhoto {
+    background-color: white;
+    border-radius: 10px;
+    color: red;
+    font-size: 14px;
+    bottom: 0px;
+}
+
+.acceptPhoto{
+    background-color: white;
+    border-radius: 10px;
+    color: green;
+    font-size: 14px;
+    bottom: 0px;
+}
+
+.image {
+    max-width: 612px;
+}

@@ -1,0 +1,5 @@
+<Page loaded="loaded" actionBarHidden="true">
+    <GridLayout>
+        <WebView id="webView" />
+    </GridLayout>
+</Page>

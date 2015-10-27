@@ -13,18 +13,46 @@
                         </GridLayout>
                         <Label text="Reflect" cssClass="action-bar-title"/>
                     </GridLayout>
-                    <Label text="{{ mainContentText }}" textWrap="true"/>
                 </StackLayout>
 
                 <!-- Nearby Events View -->
                 <StackLayout row="1" visibility="{{ selectedViewIndex === 0 ? 'visible' : 'collapsed'}}">
-                    <Label text="Nearby Events View" textWrap="true"/>
+                    <Label text="Nearby Events" textWrap="true" cssClass="view-title"/>
+                    <ListView items="{{ nearbyEvents }}"/>
                 </StackLayout>
 
                 <!-- My Events View -->
                 <StackLayout row="1" visibility="{{ selectedViewIndex === 1 ? 'visible' : 'collapsed'}}">
-                    <Label text="My Events View" textWrap="true"/>
+                    <Label text="My Events" textWrap="true" cssClass="view-title"/>
                 </StackLayout>
+
+                <!-- Create Event View -->
+                <StackLayout row="1" visibility="{{ selectedViewIndex === 2 ? 'visible' : 'collapsed'}}">
+                    <Label text="Create Event" textWrap="true" cssClass="view-title"/>
+                    <ScrollView>
+                        <StackLayout>
+                            <Image id="eventCover" src="{{ eventCoverPhoto }}" cssClass="event-photo"
+                                   stretch="aspectFill"/>
+                            <GridLayout cssClass="upload-photo-wrap" tap="choosePhoto" columns="auto"
+                                        horizontalAlignment="left">
+                                <Image stretch="none" cssClass="icon-image" src="res://ic_image_add_to_photos"/>
+                            </GridLayout>
+                            <TextField id="eventTitle" text="{{ title }}" hint="Title" keyboardType="email"
+                                       autocorrect="true" cssClass="event-input-field"/>
+                            <DatePicker year="2015" horizontalAlignment="center"/>
+                            <TimePicker horizontalAlignment="center"/>
+                            <TextField id="eventLocation" text="{{ location }}" hint="Location" keyboardType="email"
+                                       autocorrect="false" cssClass="event-input-field"/>
+                            <TextField id="eventDescription" height="100" text="{{ description }}" hint="Description"
+                                       autocorrect="true" cssClass="event-input-field"/>
+                            <GridLayout cssClass="upload-photo-wrap" tap="" columns="auto"
+                                        horizontalAlignment="right" height="75">
+                                <Image stretch="none" cssClass="icon-image" src="res://add_event"/>
+                            </GridLayout>
+                        </StackLayout>
+                    </ScrollView>
+                </StackLayout>
+
             </StackLayout>
         </drawer:SideDrawer.mainContent>
         <drawer:SideDrawer.drawerContent>

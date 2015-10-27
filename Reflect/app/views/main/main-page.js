@@ -1,11 +1,21 @@
-var viewModelModule = require("./../../shared/view-models/main-view-model");
+var mainViewModelModule = require("./../../shared/view-models/main-view-model");
+var createEventViewModule = require("./../../shared/view-models/create-event-view-model");
+
+var appModule = require("application");
+var applicationSettings = require("application-settings");
 var frameModule = require("ui/frame");
+
 var viewModel;
+var page;
+
 function pageLoaded(args) {
     console.log("Page loaded");
-    var page = args.object;
-    viewModel = new viewModelModule.MainViewModel();
+    page = args.object;
+    viewModel = new mainViewModelModule.MainViewModel();
     page.bindingContext = viewModel;
+    var selectedViewIndex = applicationSettings.getNumber("selectedViewIndex", 0);
+    createViewModel(selectedViewIndex);
+    viewModel.selectView(selectedViewIndex);
 }
 exports.pageLoaded = pageLoaded;
 
@@ -19,9 +29,44 @@ function selectView(args) {
     var drawer = frameModule.topmost().getViewById("sideDrawer");
     drawer.closeDrawer();
 
-    var index = args.object.tag;
-    viewModel.selectView(parseInt(index));
+    // switch view modules for modularity
+    var index = parseInt(args.object.tag);
+    createViewModel(index);
+
+    viewModel.selectView(index);
+    applicationSettings.setNumber("selectedViewIndex", index);
 }
+exports.selectView = selectView;
+
+function createViewModel(index) {
+    switch(index) {
+        case 0:
+            //code block
+            break;
+        case 1:
+            //code block
+            break;
+        case 2:
+            viewModel = new createEventViewModule.CreateEventViewModel();
+            page.bindingContext = viewModel;
+            break;
+        default:
+            //code block
+            break;
+    }
+}
+exports.createViewModel = createViewModel;
+
+function choosePhoto() {
+    var imageView = page.getViewById("eventCover");
+    viewModel.choosePhoto(imageView);
+}
+exports.choosePhoto = choosePhoto;
+
+function addEvent() {
+    
+}
+
 exports.selectView = selectView;
 
 exports.switchToLogin = switchToLogin;
@@ -30,3 +75,6 @@ function switchToLogin(args){
     var topmost = frameModule.topmost();
     topmost.navigate("views/login/login-page");
 }
+
+exports.addEvent = addEvent;
+
