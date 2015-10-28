@@ -88,13 +88,21 @@
 }
 
 .event-label {
-    margin-top: 10;
-    margin-left: 20;
+    margin-top: 20;
     background-color: white;
-    color: #2196F3;
-    font-size: 18;
+    color: #727272;
+    font-size: 12;
+    height: 40;
 }
 
+.event-date {
+    color: #727272;
+    background-color: #BBDEFB;
+    font-size: 10;
+    height: 36;
+    border-radius: 10;
+    margin-top: 20;
+}
 
 
 

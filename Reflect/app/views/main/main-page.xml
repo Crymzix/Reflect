@@ -39,13 +39,19 @@
                             </GridLayout>
                             <TextField id="eventTitle" text="{{ title }}" hint="Title" keyboardType="email"
                                        autocorrect="true" cssClass="event-input-field"/>
-                            <DatePicker year="2015" horizontalAlignment="center"/>
-                            <TimePicker horizontalAlignment="center"/>
+                            <GridLayout columns="5, *, auto" rows="auto, *" >
+                                <Button col="1" text="date" tap="setDate" cssClass="event-date" horizontalAlignment="center"/>
+                                <Button col="4" text="time" tap="setTime" cssClass="event-date" horizontalAlignment="center" style="margin-right:30;"/>
+                            </GridLayout>
+                            <GridLayout columns="5, *, auto" rows="auto, *" >
+                                <Label id="eventDateLabel" col="1" textWrap="true" cssClass="event-label" horizontalAlignment="center"/>
+                                <Label id="eventTimeLabel" col="4" textWrap="true" cssClass="event-label" horizontalAlignment="center" style="margin-right:30;"/>
+                            </GridLayout>
                             <TextField id="eventLocation" text="{{ location }}" hint="Location" keyboardType="email"
                                        autocorrect="false" cssClass="event-input-field"/>
                             <TextField id="eventDescription" height="100" text="{{ description }}" hint="Description"
                                        autocorrect="true" cssClass="event-input-field"/>
-                            <GridLayout cssClass="upload-photo-wrap" tap="" columns="auto"
+                            <GridLayout cssClass="upload-photo-wrap" tap="addEvent" columns="auto"
                                         horizontalAlignment="right" height="75">
                                 <Image stretch="none" cssClass="icon-image" src="res://add_event"/>
                             </GridLayout>

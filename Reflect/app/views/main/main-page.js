@@ -64,6 +64,32 @@ function choosePhoto() {
 exports.choosePhoto = choosePhoto;
 
 function addEvent() {
-    
+    var imageView = page.getViewById("eventCover");
+    var title = page.getViewById("eventTitle");
+    var location = page.getViewById("eventLocation");
+    var description = page.getViewById("eventDescription");
+    var date = page.getViewById("eventDateLabel");
+    var time = page.getViewById("eventTimeLabel");
+    viewModel.addEvent(imageView, title, location, description, date, time);
 }
 exports.addEvent = addEvent;
+
+function showDateModal() {
+    var context = "date";
+    var fullscreen = false;
+    page.showModal("./views/event/date-picker", context, function closeCallback(date) {
+        var dateLabel = page.getViewById("eventDateLabel");
+        dateLabel.text = date;
+    }, fullscreen);
+}
+exports.setDate = showDateModal;
+
+function showTimeModal() {
+    var context = "time";
+    var fullscreen = false;
+    page.showModal("./views/event/time-picker", context, function closeCallback(time) {
+        var timeLabel = page.getViewById("eventTimeLabel");
+        timeLabel.text = time;
+    }, fullscreen);
+}
+exports.setTime = showTimeModal;

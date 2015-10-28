@@ -1,0 +1,9 @@
+<Page loaded="loaded" actionBarHidden="true">
+    <ScrollView>
+        <StackLayout style="background-color: #BBDEFB;">
+
+
+
+        </StackLayout>
+    </ScrollView>
+</Page>
