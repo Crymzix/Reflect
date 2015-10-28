@@ -18,7 +18,14 @@
                 <!-- Nearby Events View -->
                 <StackLayout row="1" visibility="{{ selectedViewIndex === 0 ? 'visible' : 'collapsed'}}">
                     <Label text="Nearby Events" textWrap="true" cssClass="view-title"/>
-                    <ListView items="{{ nearbyEvents }}"/>
+                    <ListView items="{{ nearbyEvents }}" itemTap="listViewItemTap">
+                        <ListView.itemTemplate>
+                            <StackLayout orientation="horizontal">
+                                <Image src="{{ eventItemImage }}" stretch="none" />
+                                <Label text="{{ eventItemTitle }}" />
+                            </StackLayout>
+                        </ListView.itemTemplate>
+                    </ListView>
                 </StackLayout>
 
                 <!-- My Events View -->

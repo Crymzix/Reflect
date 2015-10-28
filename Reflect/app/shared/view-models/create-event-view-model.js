@@ -47,13 +47,13 @@ var CreateEventViewModel = (function (_super) {
     CreateEventViewModel.prototype.addEvent = function (imageView, title, location, description, date, time) {
 
         if (title.text && location.text && description.text && date.text && time.text) {
-            var firebase = new com.firebase.client.Firebase("https://reflect-cpsc410.firebaseio.com/");
+            /*var firebase = new com.firebase.client.Firebase("https://reflect-cpsc410.firebaseio.com/");
             var eventRef = firebase.child("events").push();
             eventRef.child("title").setValue(title.text);
             eventRef.child("location").setValue(location.text);
             eventRef.child("description").setValue(description.text);
             eventRef.child("start_date").setValue(date.text + " " + time.text);
-            eventRef.child("cover_photo").setValue(imageView.imageSource.toBase64String("", 100));
+            eventRef.child("cover_photo").setValue(imageView.imageSource.toBase64String("", 100));*/
 
             //Clear input fields
             title.text = "";

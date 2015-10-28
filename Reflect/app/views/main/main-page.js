@@ -1,5 +1,6 @@
 var mainViewModelModule = require("./../../shared/view-models/main-view-model");
 var createEventViewModule = require("./../../shared/view-models/create-event-view-model");
+var nearbyEventsViewModule = require("./../../shared/view-models/nearby-events-view-model");
 
 var appModule = require("application");
 var applicationSettings = require("application-settings");
@@ -41,7 +42,8 @@ exports.selectView = selectView;
 function createViewModel(index) {
     switch(index) {
         case 0:
-            //code block
+            viewModel = new nearbyEventsViewModule.NearbyEventsViewModel();
+            page.bindingContext = viewModel;
             break;
         case 1:
             //code block
