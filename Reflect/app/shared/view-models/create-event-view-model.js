@@ -4,6 +4,7 @@ var imageModule = require("ui/image");
 var appModule = require("application");
 
 var REQUEST_SELECT_IMAGE = 1234;
+var currentBitmap;
 
 var CreateEventViewModel = (function (_super) {
     __extends(CreateEventViewModel, _super);
@@ -26,12 +27,12 @@ var CreateEventViewModel = (function (_super) {
                         appModule.android.onActivityResult = previousResult;
                         if (requestCode === REQUEST_SELECT_IMAGE && resultCode === android.app.Activity.RESULT_OK) {
                             var selectedImage = data.getData();
-                            var bmp = android.provider.MediaStore.Images.Media.getBitmap(
+                            currentBitmap = android.provider.MediaStore.Images.Media.getBitmap(
                                 appModule.android.context.getContentResolver(),
                                 selectedImage
                             );
-                            resolve(imageSource.fromNativeSource(bmp));
-                            imageView.imageSource = imageSource.fromNativeSource(bmp);
+                            resolve(imageSource.fromNativeSource(currentBitmap));
+                            imageView.imageSource = imageSource.fromNativeSource(currentBitmap);
                         }
                     };
                     appModule.android.foregroundActivity.startActivityForResult(takePictureIntent, REQUEST_SELECT_IMAGE);
@@ -47,21 +48,28 @@ var CreateEventViewModel = (function (_super) {
     CreateEventViewModel.prototype.addEvent = function (imageView, title, location, description, date, time) {
 
         if (title.text && location.text && description.text && date.text && time.text) {
-            /*var firebase = new com.firebase.client.Firebase("https://reflect-cpsc410.firebaseio.com/");
-            var eventRef = firebase.child("events").push();
-            eventRef.child("title").setValue(title.text);
-            eventRef.child("location").setValue(location.text);
-            eventRef.child("description").setValue(description.text);
-            eventRef.child("start_date").setValue(date.text + " " + time.text);
-            eventRef.child("cover_photo").setValue(imageView.imageSource.toBase64String("", 100));*/
 
-            //Clear input fields
-            title.text = "";
-            location.text = "";
-            description.text = "";
-            date.text = "";
-            time.text = "";
-            imageView.imageSource = null;
+            var eventObject = new com.parse.ParseObject("Event");
+            eventObject.put("title", title.text);
+            eventObject.put("location", location.text);
+            eventObject.put("description", description.text);
+            eventObject.put("start_date", date.text + " " + time.text);
+            var outputStream = new java.io.ByteArrayOutputStream();
+            currentBitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, outputStream);
+            var image = outputStream.toByteArray();
+            var imageFile = new com.parse.ParseFile("image.png", image);
+            eventObject.put("cover_photo", imageFile);
+            eventObject.saveInBackground(new com.parse.SaveCallback({
+                done: function (error) {
+                    //Clear input fields
+                    title.text = "";
+                    location.text = "";
+                    description.text = "";
+                    date.text = "";
+                    time.text = "";
+                    imageView.imageSource = null;
+                }
+            }));
         } else {
             console.log("Fill in all fields");
         }
