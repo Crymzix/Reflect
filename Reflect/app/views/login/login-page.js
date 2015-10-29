@@ -1,6 +1,7 @@
 var gesturesModule = require("ui/gestures");
 var frameModule = require("ui/frame");
 var loginViewModel = require("../../shared/view-models/login-view-model");
+var dialogsModule = require("ui/dialogs");
 
 var user = new loginViewModel({
     email: "test123@gmail.com",
@@ -30,6 +31,12 @@ exports.signUp = function() {
 };
 
 exports.asGuest = function(){
+    var topmost = frameModule.topmost();
+    topmost.navigate("views/main/main-page");
+}
+
+exports.signIn = function(){
+    user.signIn();
     var topmost = frameModule.topmost();
     topmost.navigate("views/main/main-page");
 }

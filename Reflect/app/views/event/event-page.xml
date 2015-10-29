@@ -1,0 +1,20 @@
+<Page loaded="loaded" actionBarHidden="true">
+    <StackLayout>
+        <GridLayout cssClass="action-bar">
+            <Label text="Reflect" cssClass="action-bar-title"/>
+        </GridLayout>
+    </StackLayout>
+    <ScrollView>
+        <StackLayout style="background-color: #BBDEFB;">
+            <Image id="eventCover" src="{{ eventCoverPhoto }}" cssClass="event-photo"
+                   stretch="aspectFill"/>
+            <Label id="eventTitle" text="Cool Event"/>
+            <StackLayout  orientation="horizontal">
+                <Label id="eventDate" text="10/2/2016" />
+                <Label id="eventTime" text="07:45" />
+            </StackLayout>
+            <Label id="eventLocation" text="My pants" />
+            <Label id="eventDescription" text="Fun party with lots of fun and cool stuff." />
+        </StackLayout>
+    </ScrollView>
+</Page>

@@ -26,7 +26,8 @@ exports.logIn = function(args){
 }
 
 exports.register = function(args){
-    // user.register();
+    user.register();
+    dialogsModule.alert("You've successfully signed up!");
     var topmost = frameModule.topmost();
     topmost.navigate("views/login/login-page");
 }

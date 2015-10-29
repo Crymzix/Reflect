@@ -4,6 +4,7 @@ var imageModule = require("ui/image");
 var appModule = require("application");
 
 var REQUEST_SELECT_IMAGE = 1234;
+var currentBitmap;
 
 var CreateEventViewModel = (function (_super) {
     __extends(CreateEventViewModel, _super);
@@ -12,11 +13,11 @@ var CreateEventViewModel = (function (_super) {
         this.set("selectedViewIndex", 0);
     }
 
-    CreateEventViewModel.prototype.selectView = function(index) {
+    CreateEventViewModel.prototype.selectView = function (index) {
         this.set("selectedViewIndex", index);
     };
 
-    CreateEventViewModel.prototype.choosePhoto = function(imageView) {
+    CreateEventViewModel.prototype.choosePhoto = function (imageView) {
         new Promise(function (resolve, reject) {
             try {
                 var takePictureIntent = new android.content.Intent(android.content.Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -26,12 +27,12 @@ var CreateEventViewModel = (function (_super) {
                         appModule.android.onActivityResult = previousResult;
                         if (requestCode === REQUEST_SELECT_IMAGE && resultCode === android.app.Activity.RESULT_OK) {
                             var selectedImage = data.getData();
-                            var bmp = android.provider.MediaStore.Images.Media.getBitmap(
+                            currentBitmap = android.provider.MediaStore.Images.Media.getBitmap(
                                 appModule.android.context.getContentResolver(),
                                 selectedImage
                             );
-                            resolve(imageSource.fromNativeSource(bmp));
-                            imageView.imageSource = imageSource.fromNativeSource(bmp);
+                            resolve(imageSource.fromNativeSource(currentBitmap));
+                            imageView.imageSource = imageSource.fromNativeSource(currentBitmap);
                         }
                     };
                     appModule.android.foregroundActivity.startActivityForResult(takePictureIntent, REQUEST_SELECT_IMAGE);
@@ -44,9 +45,35 @@ var CreateEventViewModel = (function (_super) {
         });
     };
 
-    CreateEventViewModel.prototype.addEvent = function() {
+    CreateEventViewModel.prototype.addEvent = function (imageView, title, location, description, date, time) {
 
-    }
+        if (title.text && location.text && description.text && date.text && time.text) {
+
+            var eventObject = new com.parse.ParseObject("Event");
+            eventObject.put("title", title.text);
+            eventObject.put("location", location.text);
+            eventObject.put("description", description.text);
+            eventObject.put("start_date", date.text + " " + time.text);
+            var outputStream = new java.io.ByteArrayOutputStream();
+            currentBitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, outputStream);
+            var image = outputStream.toByteArray();
+            var imageFile = new com.parse.ParseFile("image.png", image);
+            eventObject.put("cover_photo", imageFile);
+            eventObject.saveInBackground(new com.parse.SaveCallback({
+                done: function (error) {
+                    //Clear input fields
+                    title.text = "";
+                    location.text = "";
+                    description.text = "";
+                    date.text = "";
+                    time.text = "";
+                    imageView.imageSource = null;
+                }
+            }));
+        } else {
+            console.log("Fill in all fields");
+        }
+    };
 
     return CreateEventViewModel;
 })(observableModule.Observable);

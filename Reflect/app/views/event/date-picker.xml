@@ -1,0 +1,6 @@
+<Page loaded="loaded" shownModally="onShownModally" actionBarHidden="true">
+    <StackLayout style="background-color: #BBDEFB;">
+        <DatePicker id="eventDate" year="2015" horizontalAlignment="center"/>
+        <Button text="Confirm" tap="confirm" horizontalAlignment="center" style="background-color: #4CAF50;margin-top: 30;border-radius: 10;color: white;font-size: 14;margin-bottom:30"/>
+    </StackLayout>
+</Page>

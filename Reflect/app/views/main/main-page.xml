@@ -18,7 +18,14 @@
                 <!-- Nearby Events View -->
                 <StackLayout row="1" visibility="{{ selectedViewIndex === 0 ? 'visible' : 'collapsed'}}">
                     <Label text="Nearby Events" textWrap="true" cssClass="view-title"/>
-                    <ListView items="{{ nearbyEvents }}"/>
+                    <ListView items="{{ nearbyEvents }}" itemTap="listViewItemTap">
+                        <ListView.itemTemplate>
+                            <StackLayout orientation="horizontal">
+                                <Image src="{{ eventItemImage }}" stretch="none" />
+                                <Label text="{{ eventItemTitle }}" />
+                            </StackLayout>
+                        </ListView.itemTemplate>
+                    </ListView>
                 </StackLayout>
 
                 <!-- My Events View -->
@@ -39,13 +46,19 @@
                             </GridLayout>
                             <TextField id="eventTitle" text="{{ title }}" hint="Title" keyboardType="email"
                                        autocorrect="true" cssClass="event-input-field"/>
-                            <DatePicker year="2015" horizontalAlignment="center"/>
-                            <TimePicker horizontalAlignment="center"/>
+                            <GridLayout columns="5, *, auto" rows="auto, *" >
+                                <Button col="1" text="date" tap="setDate" cssClass="event-date" horizontalAlignment="center"/>
+                                <Button col="4" text="time" tap="setTime" cssClass="event-date" horizontalAlignment="center" style="margin-right:30;"/>
+                            </GridLayout>
+                            <GridLayout columns="5, *, auto" rows="auto, *" >
+                                <Label id="eventDateLabel" col="1" textWrap="true" cssClass="event-label" horizontalAlignment="center"/>
+                                <Label id="eventTimeLabel" col="4" textWrap="true" cssClass="event-label" horizontalAlignment="center" style="margin-right:30;"/>
+                            </GridLayout>
                             <TextField id="eventLocation" text="{{ location }}" hint="Location" keyboardType="email"
                                        autocorrect="false" cssClass="event-input-field"/>
                             <TextField id="eventDescription" height="100" text="{{ description }}" hint="Description"
                                        autocorrect="true" cssClass="event-input-field"/>
-                            <GridLayout cssClass="upload-photo-wrap" tap="" columns="auto"
+                            <GridLayout cssClass="upload-photo-wrap" tap="addEvent" columns="auto"
                                         horizontalAlignment="right" height="75">
                                 <Image stretch="none" cssClass="icon-image" src="res://add_event"/>
                             </GridLayout>
@@ -66,13 +79,16 @@
                             text="Nearby Events"/>
                     <Button tap="selectView" tag="1"
                             cssClass="{{ selectedViewIndex === 1 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
-                            text="My Events"/>
+                            text="My Events" visibility="{{ loggedIn ? 'visible' : 'collapsed' }}"/>
                     <Button tap="selectView" tag="2"
                             cssClass="{{ selectedViewIndex === 2 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
-                            text="Create Event"/>
+                            text="Create Event" visibility="{{ loggedIn ? 'visible' : 'collapsed' }}"/>
                     <Button tap="switchToLogin" tag="3"
                             cssClass="{{ selectedViewIndex === 3 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
-                            text="Log In"/>
+                            text="Log In" visibility="{{ loggedIn ? 'collapsed' : 'visible' }}"/>
+                    <Button tap="logOut" tag="4"
+                            cssClass="{{ selectedViewIndex === 4 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
+                            text="Log Out" visibility="{{ loggedIn ? 'visible' : 'collapsed' }}"/>
                 </StackLayout>
             </StackLayout>
         </drawer:SideDrawer.drawerContent>

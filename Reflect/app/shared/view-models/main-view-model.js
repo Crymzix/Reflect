@@ -10,6 +10,15 @@ var MainViewModel = (function (_super) {
         this.set("selectedViewIndex", index);
     };
 
+    MainViewModel.prototype.checkLoggedIn = function(){
+        var currentUser = com.parse.ParseUser.getCurrentUser();
+        if(currentUser != null){
+            this.set("loggedIn",true);
+        } else {
+            this.set("loggedIn",false);
+        }
+    };
+
     return MainViewModel;
 })(observableModule.Observable);
 exports.MainViewModel = MainViewModel;

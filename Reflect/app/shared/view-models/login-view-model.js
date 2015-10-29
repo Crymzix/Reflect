@@ -3,7 +3,6 @@ var observableModule = require("data/observable");
 
 function User(info) {
     info = info || {};
-    var firebase = new com.firebase.client.Firebase("https://reflect-cpsc410.firebaseio.com/");
 
     // You can add properties to observables on creation
     var viewModel = new observableModule.Observable({
@@ -11,18 +10,36 @@ function User(info) {
         password: info.password || ""
     });
 
-    viewModel.register = function(){
-        firebase.createUser(viewModel.get("email"), viewModel.get("password"),
-            new com.firebase.client.Firebase.ValueResultHandler(),{
-                onSuccess: function(ValueResultHandler){
-                    console.log("Successful!");
-            },
-                onError: function(firebaseError){
-                    console.log("Failure");
+    viewModel.signIn = function(){
+        com.parse.ParseUser.logInInBackground(viewModel.get("email"),
+        viewModel.get("password"), new com.parse.LogInCallback({
+                done: function(ParseUser, ParseException){
+                    if (ParseUser != null){
+
+                    } else {
+
+                    }
+                }
+            }))
+    };
+
+    viewModel.register = function() {
+        var user = new com.parse.ParseUser();
+        user.setUsername(viewModel.get("email"));
+        user.setPassword(viewModel.get("password"));
+        user.setEmail(viewModel.get("email"));
+
+        user.signUpInBackground(new com.parse.SignUpCallback({
+            done: function(ParseException){
+                if(ParseException == null){
+                    console.log("Signup success!");
+                } else {
+                    console.log("Signup Failed!");
+                }
             }
+        }
 
-
-    })};
+        ))};
 
     //viewModel.login = function() {
     //    return fetch(config.apiUrl + "oauth/token", {
