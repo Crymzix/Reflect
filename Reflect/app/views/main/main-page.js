@@ -14,6 +14,9 @@ function pageLoaded(args) {
     page = args.object;
     viewModel = new mainViewModelModule.MainViewModel();
     page.bindingContext = viewModel;
+
+    frameModule.topmost().android.cachePagesOnNavigate = true;
+
     var selectedViewIndex = applicationSettings.getNumber("selectedViewIndex", 0);
     createViewModel(selectedViewIndex);
     viewModel.selectView(selectedViewIndex);
