@@ -1,7 +1,10 @@
 var observableModule = require("data/observable");
 var observableArray = require("data/observable-array");
+var frameModule = require("ui/frame");
 var http = require("http");
-var eventsListview;
+
+var eventList;
+var events;
 var self;
 
 var NearbyEventsViewModel = (function (_super) {
@@ -23,19 +26,32 @@ var NearbyEventsViewModel = (function (_super) {
                 "X-Parse-Application-Id": "UZ348s5Fstpa9stS9q5jsDRxihPbt3PpDxQJDawp",
                 "X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6"
             }
-        }).then(function (response) {;
-            var events = new observableArray.ObservableArray();
+        }).then(function (response) {
 
-            for (var i = 0; i < response.results.length; i++) {
-                var event = response.results[i];
+            eventList = new observableArray.ObservableArray();
+            events = response.results;
+
+            for (var i = 0; i < events.length; i++) {
+                var event = events[i];
                 console.log(event.title);
                 console.log(event.cover_photo.url);
-                events.push({eventItemTitle: event.title, eventItemImage: event.cover_photo.url});
+                eventList.push({eventItemTitle: event.title, eventItemImage: event.cover_photo.url, eventId: event.objectId});
             }
 
-            self.set("nearbyEvents", events);
+            self.set("nearbyEvents", eventList);
         }, function (e) {
             console.log(e);
+        });
+    };
+
+    NearbyEventsViewModel.prototype.listViewItemTap = function(index) {
+
+        var events = this.get("nearbyEvents");
+
+        frameModule.topmost().navigate({
+            moduleName: "views/event/event-page",
+            context: events.getItem(index),
+            backstackVisible: true
         });
     };
 

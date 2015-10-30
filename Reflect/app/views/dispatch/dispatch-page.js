@@ -20,7 +20,7 @@ exports.loaded = function (args) {
         setTimeout(function() {
             frameModule.topmost().navigate({
                 moduleName: "views/main/main-page",
-                backstackVisible: false
+                backstackVisible: true
             });
         }, 2000);
     }

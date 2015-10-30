@@ -98,3 +98,9 @@ function showTimeModal() {
     }, fullscreen);
 }
 exports.setTime = showTimeModal;
+
+function listViewItemTap(args) {
+    //viewModel.listViewItemTap(args);
+    console.log("Tapped index: " + args.index);
+}
+exports.listViewItemTap = listViewItemTap;
