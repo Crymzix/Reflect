@@ -1,9 +1,16 @@
-<Page loaded="loaded" actionBarHidden="true">
-    <StackLayout style="background-color: #000;">
-        <Image src="{{ image_url }}"  id="{{ image_id }}" stretch="none"
+<Page xmlns="http://www.nativescript.org/tns.xsd" loaded="loaded" actionBarHidden="true">
+    <StackLayout cssClass="gallery">
+        <StackLayout>
+            <Image src="res://logo" stretch="none" horizontalAlignment="center" verticalAlignment="center"/>
+        </StackLayout>
+        <StackLayout id="image">
+            <Image src="{{ image_url }}"  id="{{ image_id }}" stretch="none"
                horizontalAlignment="center" swipe="swipePicture" cssClass="image"/>
-
-        <Button text="N" tap="swipeLeft" cssClass="rejectPhoto"/>
-        <Button text="Y" tap="swipeRight" cssClass="acceptPhoto"/>
+        </StackLayout>
+        <GridLayout cssClass="action-buttons" columns="auto, *" rows="auto, *" >
+            <Button row="1" col="0" id="reject" text="N" tap="swipeLeft" cssClass="rejectPhoto"/>
+            <Button row="1" col="2" id="accept" text="Y" tap="swipeRight" cssClass="acceptPhoto"/>
+            <Label row="2" />
+        </GridLayout>
     </StackLayout>
 </Page>

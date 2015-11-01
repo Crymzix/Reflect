@@ -1,19 +1,47 @@
+.gallery{
+    background-color: #2196F3;
+    padding: 15px;
+}
+
+.action-buttons{
+    padding: 20px;
+}
+
 .rejectPhoto {
     background-color: white;
-    border-radius: 10px;
+    border-radius: 50;
+    width: 85px;
+    height: 85px;
     color: red;
-    font-size: 14px;
-    bottom: 0px;
+    font-size: 20px;
+    font-weight: bold;
+    border-color: #ededed;
+    border-width: 5;
+    horizontal-align: left;
+    margin-left: 45;
+    vertical-align: bottom;
+    margin-bottom: 55;
 }
 
 .acceptPhoto{
     background-color: white;
-    border-radius: 10px;
+    border-radius: 50;
+    width: 85px;
+    height: 85px;
     color: green;
-    font-size: 14px;
-    bottom: 0px;
+    font-size: 20px;
+    font-weight: bold;
+    border-color: #ededed;
+    border-width: 5;
+    horizontal-align: right;
+    vertical-align: bottom;
+    margin-right: 45;
+    margin-bottom: 55;
 }
 
 .image {
-    max-width: 612px;
+    padding: 15px;
+    background-color: #ededed;
+    border-radius: 0;
+    margin-top: 0;
 }
