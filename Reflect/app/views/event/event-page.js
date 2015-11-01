@@ -7,7 +7,7 @@ var eventModule;
 function loaded(args){
     var page = args.object;
     var context = page.navigationContext;
-    console.log(context);
+    console.log("TEST   " + JSON.stringify(context));
     eventModule = new eventViewModule.EventViewModel(context);
     page.bindingContext = eventModule;
 }

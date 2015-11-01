@@ -100,7 +100,6 @@ function showTimeModal() {
 exports.setTime = showTimeModal;
 
 function listViewItemTap(args) {
-    //viewModel.listViewItemTap(args);
-    console.log("Tapped index: " + args.index);
+    viewModel.listViewItemTap(args);
 }
 exports.listViewItemTap = listViewItemTap;

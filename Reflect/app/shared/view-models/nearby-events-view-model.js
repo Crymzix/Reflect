@@ -4,15 +4,17 @@ var frameModule = require("ui/frame");
 var http = require("http");
 
 var eventList;
-var events;
-var self;
 
 var NearbyEventsViewModel = (function (_super) {
     __extends(NearbyEventsViewModel , _super);
+
+    var that;
+
     function NearbyEventsViewModel () {
         _super.call(this);
         this.set("selectedViewIndex", 0);
-        self = this;
+        this._events = [];
+        that = this;
     }
 
     NearbyEventsViewModel.prototype.selectView = function(index) {
@@ -29,28 +31,36 @@ var NearbyEventsViewModel = (function (_super) {
         }).then(function (response) {
 
             eventList = new observableArray.ObservableArray();
-            events = response.results;
+            that._events = response.results;
 
-            for (var i = 0; i < events.length; i++) {
-                var event = events[i];
+            for (var i = 0; i < that._events.length; i++) {
+                var event = that.events[i];
                 console.log(event.title);
                 console.log(event.cover_photo.url);
-                eventList.push({eventItemTitle: event.title, eventItemImage: event.cover_photo.url, eventId: event.objectId});
+                eventList.push({eventItemTitle: event.title, eventItemImage: event.cover_photo.url});
             }
 
-            self.set("nearbyEvents", eventList);
+            that.set("nearbyEvents", eventList);
         }, function (e) {
             console.log(e);
         });
     };
 
-    NearbyEventsViewModel.prototype.listViewItemTap = function(index) {
+    Object.defineProperty(NearbyEventsViewModel.prototype, "events", {
+        get: function () {
+            return this._events;
+        },
+        enumerable: true,
+        configurable: true
+    });
 
-        var events = this.get("nearbyEvents");
+    NearbyEventsViewModel.prototype.listViewItemTap = function(args) {
 
+        var event = this._events[args.index];
+        console.log(event.title);
         frameModule.topmost().navigate({
             moduleName: "views/event/event-page",
-            context: events.getItem(index),
+            context: event,
             backstackVisible: true
         });
     };
