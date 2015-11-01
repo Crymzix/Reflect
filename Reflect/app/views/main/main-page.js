@@ -98,3 +98,8 @@ function showTimeModal() {
     }, fullscreen);
 }
 exports.setTime = showTimeModal;
+
+function listViewItemTap(args) {
+    viewModel.listViewItemTap(args);
+}
+exports.listViewItemTap = listViewItemTap;
