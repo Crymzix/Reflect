@@ -1,6 +1,7 @@
 var mainViewModelModule = require("./../../shared/view-models/main-view-model");
 var createEventViewModule = require("./../../shared/view-models/create-event-view-model");
 var nearbyEventsViewModule = require("./../../shared/view-models/nearby-events-view-model");
+var searchEventViewModule = require("./../../shared/view-models/search-view-model");
 
 var appModule = require("application");
 var applicationSettings = require("application-settings");
@@ -54,7 +55,14 @@ function createViewModel(index) {
         case 2:
             viewModel = new createEventViewModule.CreateEventViewModel();
             page.bindingContext = viewModel;
+			break;
+		case 3:
+			viewModel = new searchEventViewModule.SearchEventsViewModel();
+			page.bindingContext = viewModel;
             break;
+		case 4: 
+			viewModel = new searchResultsViewModule.SearchResultsViewModel();
+			break;
         default:
             //code block
             break;
@@ -99,7 +107,23 @@ function showTimeModal() {
 }
 exports.setTime = showTimeModal;
 
+
 function listViewItemTap(args) {
     viewModel.listViewItemTap(args);
 }
 exports.listViewItemTap = listViewItemTap;
+
+function searchEvents() {
+	var hashtagSearch = page.getViewById("hashtagSearch");
+	var locationSearch = page.getViewById("locationSearch");
+	var keywordSearch = page.getViewById("keywordSearch");
+	viewModel.searchEvents(hashtagSearch, locationSearch, keywordSearch);
+}
+exports.searchEvents = searchEvents;
+
+function matchEventIds() {
+	
+	viewModel.matchEventIds();
+}
+exports.searchEvents = searchEvents;
+

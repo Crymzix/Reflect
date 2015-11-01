@@ -65,7 +65,14 @@
                         </StackLayout>
                     </ScrollView>
                 </StackLayout>
-
+				
+				<!-- Search Events View -->
+				<StackLayout visibility="{{ selectedViewIndex === 3 ? 'visible' : 'collapsed'}}">
+					<SearchBar  hint="Hashtag" text="{{ hashtagSearch }}" cssClass="search" textFieldBackgroundColor="white" id="hashtagSearch" />
+					<SearchBar  hint="Location" text="{{ locationSearch }}" cssClass="search" textFieldBackgroundColor="white" id="locationsSearch"/>
+					<SearchBar hint="Keywords" text="{{ keywordSearch }}" cssClass="search" textFieldBackgroundColor="white" id="keywordsSearch" />
+					<Button tap="searchEvents" cssClass="Button" text="Search" />
+				</StackLayout>
             </StackLayout>
         </drawer:SideDrawer.mainContent>
         <drawer:SideDrawer.drawerContent>
@@ -83,6 +90,9 @@
                     <Button tap="selectView" tag="2"
                             cssClass="{{ selectedViewIndex === 2 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
                             text="Create Event"/>
+					<Button tap="selectView" tag="3"
+                            cssClass="{{ selectedViewIndex === 3 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
+                            text="Search Event"/>
                 </StackLayout>
             </StackLayout>
         </drawer:SideDrawer.drawerContent>

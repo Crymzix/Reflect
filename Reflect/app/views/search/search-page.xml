@@ -1,0 +1,50 @@
+<Page loaded="pageLoaded" xmlns:drawer="nativescript-telerik-ui/sidedrawer" xmlns="http://www.nativescript.org/tns.xsd"
+      actionBarHidden="true">
+    <drawer:SideDrawer id="sideDrawer">
+        <drawer:SideDrawer.drawerTransition>
+            <drawer:SlideInOnTopTransition/>
+        </drawer:SideDrawer.drawerTransition>
+		<drawer:SideDrawer.drawerContent>
+            <StackLayout cssClass="drawerContent">
+                <StackLayout cssClass="headerContent">
+                    <Image src="res://logo" stretch="none" horizontalAlignment="center" verticalAlignment="center"/>
+                </StackLayout>
+                <StackLayout cssClass="drawerMenuContent">
+                    <Button tap="selectView" tag="0"
+                            cssClass="{{ selectedViewIndex === 0 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
+                            text="Nearby Events"/>
+                    <Button tap="selectView" tag="1"
+                            cssClass="{{ selectedViewIndex === 1 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
+                            text="My Events"/>
+                    <Button tap="selectView" tag="2"
+                            cssClass="{{ selectedViewIndex === 2 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
+                            text="Create Event"/>
+					<Button tap="switchToSearch" tag="3"
+                            cssClass="{{ selectedViewIndex === 3 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
+                            text="Search Events"/>
+                </StackLayout>
+            </StackLayout>
+        </drawer:SideDrawer.drawerContent>
+		<drawer:SideDrawer.mainContent>
+            <StackLayout>
+                <StackLayout>
+                    <GridLayout cssClass="action-bar">
+                        <GridLayout cssClass="action-wrap" tap="showSlideout" columns="auto" horizontalAlignment="left">
+                            <Image stretch="none" cssClass="icon-image" src="res://ic_menu"/>
+                        </GridLayout>
+                        <Label text="Reflect" cssClass="action-bar-title"/>
+                    </GridLayout>
+                    <!-- <Label text="{{ mainContentText }}" textWrap="true"/> -->
+                </StackLayout>
+				
+				<!-- Search View -->
+				<StackLayout visibility="{{ selectedViewIndex === 3 ? 'visible' : 'collapsed'}}">
+					<SearchBar  hint="Hashtag" text="{{ hashtagSearch }}" cssClass="search" textFieldBackgroundColor="white" id="hashtagSearch" />
+					<SearchBar  hint="Location" cssClass="search" textFieldBackgroundColor="white" id="locationsSearch" text="{{ locationSearch }}"/>
+					<SearchBar hint="Keywords" cssClass="search" textFieldBackgroundColor="white" id="keywordsSearch" text="{{ keywordSearch }}"/>
+					<Button tap="searchPage" text="Search" />
+				</StackLayout>
+            </StackLayout>
+        </drawer:SideDrawer.mainContent>
+	</drawer:SideDrawer>
+</Page>

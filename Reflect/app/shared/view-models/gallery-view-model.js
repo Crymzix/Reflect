@@ -24,7 +24,7 @@ function Gallery(info){
 
     var viewModel = new observableModule.Observable({
         image_url: picture.url || "",
-        image_id: picture.id || ""
+        image_id: picture.id || ""	
     });
 
     viewModel.visitPhoto = function(){
@@ -81,11 +81,8 @@ function loadIGPhotos (tag, eventID){
                 count++;
             }
         }
-
     }
-
     return pictures;
-
 }
 
 // Takes a list of visited photos (JSON Array) and a photo ID (int)

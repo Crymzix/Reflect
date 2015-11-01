@@ -104,9 +104,21 @@
     margin-top: 20;
 }
 
+
 .eventlist-image {
 
 }
 
 
+Button {
+	margin: 10;
+	padding: 10;
+}
 
+
+/* .search {
+    font-size: 14;
+    background-color: #fac950;
+    color: #2196F3;
+}
+ */
