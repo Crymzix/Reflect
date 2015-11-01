@@ -2,6 +2,7 @@ var observableModule = require("data/observable");
 var imageSource = require("image-source");
 var imageModule = require("ui/image");
 var appModule = require("application");
+var applicationSettings = require("application-settings");
 
 var REQUEST_SELECT_IMAGE = 1234;
 var currentBitmap;
@@ -43,6 +44,11 @@ var CreateEventViewModel = (function (_super) {
                 reject(e);
             }
         });
+    };
+
+    CreateEventViewModel.prototype.checkLoggedIn = function(){
+        var currentUser = applicationSettings.hasKey("currentUser");
+        this.set("loggedIn",currentUser);
     };
 
     CreateEventViewModel.prototype.addEvent = function (imageView, title, location, description, date, time) {

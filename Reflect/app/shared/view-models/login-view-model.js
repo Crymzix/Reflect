@@ -25,7 +25,7 @@ function User(info) {
             }
         }).then(function (response) {
             console.log(JSON.stringify(response));
-            applicationSettings.setString("currentUser","test");
+            applicationSettings.setString("currentUser",response.objectId);
         }, function (e) {
             console.log(e);
         });

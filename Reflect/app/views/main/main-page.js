@@ -18,6 +18,7 @@ function pageLoaded(args) {
     var selectedViewIndex = applicationSettings.getNumber("selectedViewIndex", 0);
     createViewModel(selectedViewIndex);
     viewModel.selectView(selectedViewIndex);
+    viewModel.checkLoggedIn();
 }
 exports.pageLoaded = pageLoaded;
 
@@ -45,16 +46,20 @@ function createViewModel(index) {
         case 0:
             viewModel = new nearbyEventsViewModule.NearbyEventsViewModel();
             page.bindingContext = viewModel;
+            viewModel.checkLoggedIn();
             break;
         case 1:
             //code block
+            viewModel.checkLoggedIn();
             break;
         case 2:
             viewModel = new createEventViewModule.CreateEventViewModel();
             page.bindingContext = viewModel;
+            viewModel.checkLoggedIn();
             break;
         default:
             //code block
+            viewModel.checkLoggedIn();
             break;
     }
 }
@@ -106,3 +111,13 @@ function showTimeModal() {
     }, fullscreen);
 }
 exports.setTime = showTimeModal;
+
+function logOut(){
+    applicationSettings.remove("currentUser");
+    createViewModel(0);
+
+    viewModel.selectView(0);
+    applicationSettings.setNumber("selectedViewIndex", 0);
+}
+exports.logOut = logOut;
+

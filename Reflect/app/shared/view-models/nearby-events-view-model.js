@@ -1,5 +1,6 @@
 var observableModule = require("data/observable");
 var http = require("http");
+var applicationSettings = require("application-settings");
 
 var NearbyEventsViewModel = (function (_super) {
     __extends(NearbyEventsViewModel , _super);
@@ -26,6 +27,10 @@ var NearbyEventsViewModel = (function (_super) {
         });
     };
 
+    NearbyEventsViewModel.prototype.checkLoggedIn = function(){
+        var currentUser = applicationSettings.hasKey("currentUser");
+        this.set("loggedIn",currentUser);
+    };
     return NearbyEventsViewModel ;
 })(observableModule.Observable);
 exports.NearbyEventsViewModel  = NearbyEventsViewModel ;
