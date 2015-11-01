@@ -1,9 +1,12 @@
 var observableModule = require("data/observable");
+var application = require("application");
+var applicationSettings = require("application-settings");
 var MainViewModel = (function (_super) {
     __extends(MainViewModel, _super);
     function MainViewModel() {
         _super.call(this);
         this.set("selectedViewIndex", 0);
+        this.set("loggedIn",true);
     }
 
     MainViewModel.prototype.selectView = function(index) {
@@ -11,12 +14,8 @@ var MainViewModel = (function (_super) {
     };
 
     MainViewModel.prototype.checkLoggedIn = function(){
-        var currentUser = com.parse.ParseUser.getCurrentUser();
-        if(currentUser != null){
-            this.set("loggedIn",true);
-        } else {
-            this.set("loggedIn",false);
-        }
+        var currentUser = applicationSettings.hasKey("currentUser");
+        this.set("loggedIn",currentUser);
     };
 
     return MainViewModel;

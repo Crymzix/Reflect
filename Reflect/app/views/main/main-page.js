@@ -1,6 +1,7 @@
 var mainViewModelModule = require("./../../shared/view-models/main-view-model");
 var createEventViewModule = require("./../../shared/view-models/create-event-view-model");
 var nearbyEventsViewModule = require("./../../shared/view-models/nearby-events-view-model");
+var dialogsModule = require("ui/dialogs");
 
 var appModule = require("application");
 var applicationSettings = require("application-settings");
@@ -14,7 +15,6 @@ function pageLoaded(args) {
     page = args.object;
     viewModel = new mainViewModelModule.MainViewModel();
     page.bindingContext = viewModel;
-    viewModel.checkLoggedIn();
     var selectedViewIndex = applicationSettings.getNumber("selectedViewIndex", 0);
     createViewModel(selectedViewIndex);
     viewModel.selectView(selectedViewIndex);
