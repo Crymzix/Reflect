@@ -12,6 +12,7 @@
         </GridLayout>
 
         <Button text="Sign up" tap="signUp" cssClass="signUp"/>
+        <Button text="Continue as guest" tap="asGuest" cssClass="signUp"/>
         <Button text="Forgot password?" tap="forgotPassword" cssClass="forgot"/>
     </StackLayout>
 </ScrollView>

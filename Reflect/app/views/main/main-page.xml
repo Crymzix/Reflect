@@ -79,10 +79,16 @@
                             text="Nearby Events"/>
                     <Button tap="selectView" tag="1"
                             cssClass="{{ selectedViewIndex === 1 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
-                            text="My Events"/>
+                            text="My Events" visibility="{{ loggedIn ? 'visible' : 'collapsed' }}"/>
                     <Button tap="selectView" tag="2"
                             cssClass="{{ selectedViewIndex === 2 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
-                            text="Create Event"/>
+                            text="Create Event" visibility="{{ loggedIn ? 'visible' : 'collapsed' }}"/>
+                    <Button tap="switchToLogin" tag="3"
+                            cssClass="{{ selectedViewIndex === 3 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
+                            text="Log In" visibility="{{ loggedIn ? 'collapsed' : 'visible' }}"/>
+                    <Button tap="logOut" tag="4"
+                            cssClass="{{ selectedViewIndex === 4 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
+                            text="Log Out" visibility="{{ loggedIn ? 'visible' : 'collapsed' }}"/>
                 </StackLayout>
             </StackLayout>
         </drawer:SideDrawer.drawerContent>
