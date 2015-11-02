@@ -5,18 +5,19 @@ var appModule = require("application");
 var observableArray = require("data/observable-array");
 var http = require("http");
 
+
+var events;
+ 
 var SearchResultsViewModel = (function (_super) {
     __extends(SearchResultsViewModel, _super);
-    function SearchResultsViewModel() {
-        _super.call(this);
-        this.set("selectedViewIndex", 0);
-    }
-
-    SearchResultsViewModel.prototype.selectView = function (index) {
-        this.set("selectedViewIndex", index);
-    };
 	
-	SearchResultsViewModel.prototype.matchEventIds = function (arrayOfIds) {
+	var that;
+	
+    function SearchResultsViewModel(context) {
+        _super.call(this);
+		console.log("Array passed? " + context);
+        this.set("selectedViewIndex", 4);
+		that = this;
 		http.getJSON({
             url:"https://api.parse.com/1/classes/Event",
             method: "GET",
@@ -24,21 +25,41 @@ var SearchResultsViewModel = (function (_super) {
                 "X-Parse-Application-Id": "UZ348s5Fstpa9stS9q5jsDRxihPbt3PpDxQJDawp",
                 "X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6"
             }
-        }).then(function (response) {;
-            var events = new observableArray.ObservableArray();
+        }).then(function (response) {
+			
+            events = new observableArray.ObservableArray();
 		
 			for (var i = 0; i < response.results.length; i++) {
-				var event = response.results[i];
-				for (var j = 0; j < arrayOfIds.length; j++) {
-					if (arrayOfIds[j] == event.objectId) {
-						events.push({eventItemTitle: event.title, eventItemImage: event.cover_photo.url});
-					}
+				var event = response.results[i];				
+				if (context == event.objectId) {
+					events.push({eventItemTitle: event.title, eventItemImage: event.cover_photo.url});
+					console.log("got a match!");
 				}
 			}
+			
+			that.set("searchEvents", events);
+			
 		}, function (e) {
             console.log(e);
-        });			
-	}; return SearchResultsViewModel;
+        });
+    }
+
+    SearchResultsViewModel.prototype.selectView = function (index) {
+        this.set("selectedViewIndex", index);
+    };
+
+	SearchResultsViewModel.prototype.listViewItemTap = function(args) {
+		
+		var event = this._events[args.index];
+        console.log(event.title);
+        frameModule.topmost().navigate({
+            moduleName: "views/search/event-page",
+            context: event,
+            backstackVisible: true
+        });
+	};
+	
+	return SearchResultsViewModel;
 	
 })(observableModule.Observable);
 exports.SearchResultsViewModel = SearchResultsViewModel;

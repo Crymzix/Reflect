@@ -69,10 +69,24 @@
 				<!-- Search Events View -->
 				<StackLayout visibility="{{ selectedViewIndex === 3 ? 'visible' : 'collapsed'}}">
 					<SearchBar  hint="Hashtag" text="{{ hashtagSearch }}" cssClass="search" textFieldBackgroundColor="white" id="hashtagSearch" />
-					<SearchBar  hint="Location" text="{{ locationSearch }}" cssClass="search" textFieldBackgroundColor="white" id="locationsSearch"/>
-					<SearchBar hint="Keywords" text="{{ keywordSearch }}" cssClass="search" textFieldBackgroundColor="white" id="keywordsSearch" />
+					<SearchBar  hint="Location" text="{{ locationSearch }}" cssClass="search" textFieldBackgroundColor="white" id="locationSearch"/>
+					<SearchBar hint="Keywords" text="{{ keywordSearch }}" cssClass="search" textFieldBackgroundColor="white" id="keywordSearch" />
 					<Button tap="searchEvents" cssClass="Button" text="Search" />
 				</StackLayout>
+				
+				<!-- Search Results View -->
+                <StackLayout row="1" visibility="{{ selectedViewIndex === 4 ? 'visible' : 'collapsed'}}">
+                    <Label text="Search Results" textWrap="true" cssClass="view-title"/>
+                    <ListView id="eventsListview" items="{{ searchEvents }}" itemTap="listViewItemTap">
+                        <ListView.itemTemplate>
+                            <StackLayout orientation="horizontal">
+                                <Image src="{{ eventItemImage }}" stretch="aspectFill" width="75" height="75" style="padding:10;margin-right:10" />
+                                <Label text="{{ eventItemTitle }}" verticalAlignment="center" style="margin-left:10;"/>
+                            </StackLayout>
+                        </ListView.itemTemplate>
+                    </ListView>
+                </StackLayout>
+				
             </StackLayout>
         </drawer:SideDrawer.mainContent>
         <drawer:SideDrawer.drawerContent>

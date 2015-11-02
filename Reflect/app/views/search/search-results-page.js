@@ -1,14 +1,14 @@
-var dialogsModule = require("ui/dialogs");
+var application = require("application");	
 var frameModule = require("ui/frame");
-var eventViewModule = require("./../../shared/view-models/event-view-model");
+var searchResultsModule = require("./../../shared/view-models/search-results-view-model");
 
 var eventModule;
 
 function loaded(args){
     var page = args.object;
     var context = page.navigationContext;
-    console.log("TEST   " + JSON.stringify(context));
-    eventModule = new eventViewModule.EventViewModel(context);
+	console.log("Array passed? " + context);
+	eventModule = new searchResultsModule.SearchResultsViewModel(context);
     page.bindingContext = eventModule;
 }
 exports.loaded = loaded;
@@ -16,4 +16,4 @@ exports.loaded = loaded;
 function back() {
     frameModule.topmost().goBack();
 }
-exports.loaded = back;
+exports.back = back;
