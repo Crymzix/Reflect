@@ -56,6 +56,7 @@ var CreateEventViewModel = (function (_super) {
         if (title.text && location.text && description.text && date.text && time.text) {
 
             var eventObject = new com.parse.ParseObject("Event");
+            eventObject.put("userId", applicationSettings.getString("currentUser"));
             eventObject.put("title", title.text);
             eventObject.put("location", location.text);
             eventObject.put("description", description.text);

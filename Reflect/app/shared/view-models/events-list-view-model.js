@@ -2,28 +2,44 @@ var observableModule = require("data/observable");
 var observableArray = require("data/observable-array");
 var frameModule = require("ui/frame");
 var http = require("http");
+var qs = require('querystring');
 var applicationSettings = require("application-settings");
 
 var eventList;
 
-var NearbyEventsViewModel = (function (_super) {
-    __extends(NearbyEventsViewModel , _super);
+var EventsViewModel = (function (_super) {
+    __extends(EventsViewModel , _super);
 
     var that;
 
-    function NearbyEventsViewModel () {
+    function EventsViewModel (isUser) {
         _super.call(this);
         this.set("selectedViewIndex", 0);
         this._events = [];
+        this._isUser = isUser;
         that = this;
     }
 
-    NearbyEventsViewModel.prototype.selectView = function(index) {
+    EventsViewModel.prototype.selectView = function(index) {
         this.set("selectedViewIndex", index);
+
+        var url;
+        var userId = applicationSettings.getString("currentUser");
+        if (this._isUser) {
+            var query = qs.stringify({
+                where: JSON.stringify({
+                    userId: userId
+                })
+            });
+            url = "https://api.parse.com/1/classes/Event?" + query;
+            console.log(url);
+        } else {
+            url = "https://api.parse.com/1/classes/Event";
+        }
 
         //Retrieve events
         http.getJSON({
-            url:"https://api.parse.com/1/classes/Event",
+            url: url,
             method: "GET",
             headers: {
                 "X-Parse-Application-Id": "UZ348s5Fstpa9stS9q5jsDRxihPbt3PpDxQJDawp",
@@ -47,7 +63,7 @@ var NearbyEventsViewModel = (function (_super) {
         });
     };
 
-    Object.defineProperty(NearbyEventsViewModel.prototype, "events", {
+    Object.defineProperty(EventsViewModel.prototype, "events", {
         get: function () {
             return this._events;
         },
@@ -55,7 +71,7 @@ var NearbyEventsViewModel = (function (_super) {
         configurable: true
     });
 
-    NearbyEventsViewModel.prototype.listViewItemTap = function(args) {
+    EventsViewModel.prototype.listViewItemTap = function(args) {
 
         var event = this._events[args.index];
         console.log(event.title);
@@ -66,10 +82,10 @@ var NearbyEventsViewModel = (function (_super) {
         });
     };
 
-    NearbyEventsViewModel.prototype.checkLoggedIn = function(){
+    EventsViewModel.prototype.checkLoggedIn = function(){
         var currentUser = applicationSettings.hasKey("currentUser");
         this.set("loggedIn",currentUser);
     };
-    return NearbyEventsViewModel ;
+    return EventsViewModel ;
 })(observableModule.Observable);
-exports.NearbyEventsViewModel  = NearbyEventsViewModel ;
+exports.EventsViewModel = EventsViewModel ;

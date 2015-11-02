@@ -4,8 +4,8 @@ var loginViewModel = require("../../shared/view-models/login-view-model");
 var dialogsModule = require("ui/dialogs");
 
 var user = new loginViewModel({
-    email: "test123@gmail.com",
-    password: "test123",
+    email: "test@hotmail.ca",
+    password: "test",
     authenticating: false
 });
 var email;

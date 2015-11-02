@@ -31,6 +31,14 @@
                 <!-- My Events View -->
                 <StackLayout row="1" visibility="{{ selectedViewIndex === 1 ? 'visible' : 'collapsed'}}">
                     <Label text="My Events" textWrap="true" cssClass="view-title"/>
+                    <ListView id="eventsListview" items="{{ nearbyEvents }}" itemTap="listViewItemTap">
+                        <ListView.itemTemplate>
+                            <StackLayout orientation="horizontal">
+                                <Image src="{{ eventItemImage }}" stretch="aspectFill" width="75" height="75" style="padding:10;margin-right:10" />
+                                <Label text="{{ eventItemTitle }}" verticalAlignment="center" style="margin-left:10;"/>
+                            </StackLayout>
+                        </ListView.itemTemplate>
+                    </ListView>
                 </StackLayout>
 
                 <!-- Create Event View -->

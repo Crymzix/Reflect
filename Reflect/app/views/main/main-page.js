@@ -1,10 +1,8 @@
 var mainViewModelModule = require("./../../shared/view-models/main-view-model");
 var createEventViewModule = require("./../../shared/view-models/create-event-view-model");
-var nearbyEventsViewModule = require("./../../shared/view-models/nearby-events-view-model");
-
 var searchEventViewModule = require("./../../shared/view-models/search-view-model");
 var searchResultsViewModule = require("./../../shared/view-models/search-results-view-model");
-
+var eventsViewModule = require("./../../shared/view-models/events-list-view-model");
 var dialogsModule = require("ui/dialogs");
 
 
@@ -52,12 +50,13 @@ exports.selectView = selectView;
 function createViewModel(index) {
     switch(index) {
         case 0:
-            viewModel = new nearbyEventsViewModule.NearbyEventsViewModel();
+            viewModel = new eventsViewModule.EventsViewModel(false);
             page.bindingContext = viewModel;
             viewModel.checkLoggedIn();
             break;
         case 1:
-            //code block
+            viewModel = new eventsViewModule.EventsViewModel(true);
+            page.bindingContext = viewModel;
             viewModel.checkLoggedIn();
             break;
         case 2:
