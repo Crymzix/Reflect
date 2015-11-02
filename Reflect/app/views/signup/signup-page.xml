@@ -7,9 +7,10 @@
             <TextField text="{{ password }}" id="password" secure="true" hint="Password" cssClass="inputField"/>
 
             <GridLayout>
-                <Button text="Sign Up" tap="signUp" cssClass="signUp" />
+                <Button text="Sign Up" tap="register" cssClass="signUp" />
                 <ActivityIndicator busy="{{ authenticating }}" />
             </GridLayout>
+            <Button text="Already have an account? Sign in" tap="logIn" cssClass="signUp"/>
         </StackLayout>
     </ScrollView>
 </Page>

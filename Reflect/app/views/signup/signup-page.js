@@ -1,6 +1,37 @@
 var dialogsModule = require("ui/dialogs");
 var frameModule = require("ui/frame");
 var gesturesModule = require("ui/gestures");
+var loginViewModel = require("../../shared/view-models/login-view-model");
+var applicationSettings = require("application-settings");
+
+var user = new loginViewModel({ authenticating: false });
+
+var email;
+var password;
+exports.loaded = function(args){
+    console.log("Page loaded");
+    var page = args.object;
+    page.bindingContext = user;
+
+    email = page.getViewById("email");
+    password = page.getViewById("password");
+
+}
+
+
+
+exports.logIn = function(args){
+    frameModule.topmost().navigate({
+        moduleName: "views/login/login-page",
+    });
+}
+
+exports.register = function(args){
+    user.register()
+    dialogsModule.alert("You've successfully signed up!");
+    var topmost = frameModule.topmost();
+    topmost.navigate("views/login/login-page");
+}
 
 //var UserViewModel = require("../../shared/view-models/user-view-model");
 //var user = new UserViewModel({ authenticating: false });

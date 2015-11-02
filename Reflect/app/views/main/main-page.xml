@@ -100,13 +100,23 @@
                             text="Nearby Events"/>
                     <Button tap="selectView" tag="1"
                             cssClass="{{ selectedViewIndex === 1 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
-                            text="My Events"/>
+                            text="My Events" visibility="{{ loggedIn ? 'visible' : 'collapsed' }}"/>
                     <Button tap="selectView" tag="2"
                             cssClass="{{ selectedViewIndex === 2 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
                             text="Create Event"/>
 					<Button tap="selectView" tag="3"
                             cssClass="{{ selectedViewIndex === 3 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
                             text="Search Event"/>
+					<Button tap="selectView" tag="4"
+                            cssClass="{{ selectedViewIndex === 4 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
+                            text="Search Results"/>
+                    <Button tap="switchToLogin" tag="5"
+                            cssClass="{{ selectedViewIndex === 5 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
+                            text="Log In" visibility="{{ loggedIn ? 'collapsed' : 'visible' }}"/>
+                    <Button tap="logOut" tag="6"
+                            cssClass="{{ selectedViewIndex === 6 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
+                            text="Log Out" visibility="{{ loggedIn ? 'visible' : 'collapsed' }}"/>
+
                 </StackLayout>
             </StackLayout>
         </drawer:SideDrawer.drawerContent>

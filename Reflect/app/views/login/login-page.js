@@ -1,11 +1,22 @@
 var gesturesModule = require("ui/gestures");
 var frameModule = require("ui/frame");
+var loginViewModel = require("../../shared/view-models/login-view-model");
+var dialogsModule = require("ui/dialogs");
 
+var user = new loginViewModel({
+    email: "test123@gmail.com",
+    password: "test123",
+    authenticating: false
+});
+var email;
+var password;
 exports.loaded = function(args) {
     var page = args.object;
+    page.bindingContext = user;
 
-    var email = page.getViewById("email_address");
-    var password = page.getViewById("password");
+    email = page.getViewById("email_address");
+    password = page.getViewById("password");
+
 
     //Dismiss the keyboard when the user taps outside of the two textfields
     page.observe(gesturesModule.GestureTypes.tap, function() {
@@ -15,11 +26,20 @@ exports.loaded = function(args) {
 };
 
 exports.signUp = function() {
-    frameModule.topmost().navigate({
-        moduleName: "views/signup/signup-page",
-        backstackVisible: true
-    });
+    var topmost = frameModule.topmost();
+    topmost.navigate("views/signup/signup-page");
 };
+
+exports.asGuest = function(){
+    var topmost = frameModule.topmost();
+    topmost.navigate("views/main/main-page");
+}
+
+exports.signIn = function(){
+    user.signIn();
+    var topmost = frameModule.topmost();
+    topmost.navigate("views/main/main-page");
+}
 
 //var dialogsModule = require("ui/dialogs");
 //var frameModule = require("ui/frame");
