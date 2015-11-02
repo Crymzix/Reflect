@@ -4,6 +4,7 @@ var imageModule = require("ui/image");
 var appModule = require("application");
 var observableArray = require("data/observable-array");
 var http = require("http");
+var applicationSettings = require("application-settings");
 
 
 var events;
@@ -44,6 +45,11 @@ var SearchResultsViewModel = (function (_super) {
         });
     }
 
+	SearchResultsViewModel.prototype.checkLoggedIn = function(){
+        var currentUser = applicationSettings.hasKey("currentUser");
+        this.set("loggedIn",currentUser);
+    };
+	
     SearchResultsViewModel.prototype.selectView = function (index) {
         this.set("selectedViewIndex", index);
     };

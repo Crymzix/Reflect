@@ -63,14 +63,17 @@ function createViewModel(index) {
         case 2:
             viewModel = new createEventViewModule.CreateEventViewModel();
             page.bindingContext = viewModel;
+			viewModel.checkLoggedIn();
 			break;
 		case 3:
 			viewModel = new searchEventViewModule.SearchEventsViewModel();
 			page.bindingContext = viewModel;
+			viewModel.checkLoggedIn();
             break;
 		case 4: 
 			viewModel = new searchResultsViewModule.SearchResultsViewModel();
 			page.bindingContext = viewModel;
+			viewModel.checkLoggedIn();
 			break;
 		case 5:
 			viewModel.checkLoggedIn();

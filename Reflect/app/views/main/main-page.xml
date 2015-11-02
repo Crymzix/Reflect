@@ -107,9 +107,7 @@
 					<Button tap="selectView" tag="3"
                             cssClass="{{ selectedViewIndex === 3 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
                             text="Search Event"/>
-					<Button tap="selectView" tag="4"
-                            cssClass="{{ selectedViewIndex === 4 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
-                            text="Search Results"/>
+					
                     <Button tap="switchToLogin" tag="5"
                             cssClass="{{ selectedViewIndex === 5 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
                             text="Log In" visibility="{{ loggedIn ? 'collapsed' : 'visible' }}"/>

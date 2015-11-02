@@ -5,6 +5,7 @@ var frameModule = require("ui/frame");
 var geocoder;
 var map;
 var http = require("http");
+var applicationSettings = require("application-settings");
 
 var arrayOfMatchingIDs = [];
 
@@ -19,6 +20,11 @@ var SearchEventsViewModel = (function (_super) {
 		this._events = [];
 		that = this;
 	}
+
+	SearchEventsViewModel.prototype.checkLoggedIn = function(){
+        var currentUser = applicationSettings.hasKey("currentUser");
+        this.set("loggedIn",currentUser);
+    };
 
 	SearchEventsViewModel.prototype.selectView = function (index) {
 		this.set("selectedViewIndex", index);
