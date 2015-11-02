@@ -54,7 +54,7 @@ var EventsViewModel = (function (_super) {
                 var event = that.events[i];
                 console.log(event.title);
                 console.log(event.cover_photo.url);
-                eventList.push({eventItemTitle: event.title, eventItemImage: event.cover_photo.url});
+                eventList.push({eventItemTitle: event.title, eventItemImage: event.cover_photo.url, eventItemHashtags: event.hashtags});
             }
 
             that.set("nearbyEvents", eventList);

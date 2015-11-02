@@ -98,7 +98,8 @@ function addEvent() {
     var description = page.getViewById("eventDescription");
     var date = page.getViewById("eventDateLabel");
     var time = page.getViewById("eventTimeLabel");
-    viewModel.addEvent(imageView, title, location, description, date, time);
+    var hashtags = page.getViewById("eventHashtags");
+    viewModel.addEvent(imageView, title, location, description, date, time, hashtags);
 }
 
 exports.selectView = selectView;

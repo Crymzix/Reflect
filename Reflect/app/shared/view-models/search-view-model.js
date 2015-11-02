@@ -2,6 +2,8 @@ var observableModule = require("data/observable");
 var observableArray = require("data/observable-array");
 var appModule = require("application");
 var frameModule = require("ui/frame");
+var qs = require('querystring');
+
 var geocoder;
 var map;
 var http = require("http");
@@ -31,9 +33,36 @@ var SearchEventsViewModel = (function (_super) {
 	};
 
 	SearchEventsViewModel.prototype.searchEvents = function (hashtagSearch, locationSearch, keywordSearch) {
-		var arrayOfMatchingIDs = [];
+
+		var query = qs.stringify({
+			where: JSON.stringify({
+				title: {
+					$regex: "^" + keywordSearch.text
+				}
+			})
+		});
+		var url = "https://api.parse.com/1/classes/Event?" + query;
+
+		//Retrieve events
+		http.getJSON({
+			url: url,
+			method: "GET",
+			headers: {
+				"X-Parse-Application-Id": "UZ348s5Fstpa9stS9q5jsDRxihPbt3PpDxQJDawp",
+				"X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6"
+			}
+		}).then(function (response) {
+			frameModule.topmost().navigate ({
+				moduleName: "views/search/search-results-page",
+				context: response,
+				backstackVisible:true
+			});
+		}, function (e) {
+			console.log(e);
+		});
+
+/*		var arrayOfMatchingIDs = [];
 		var count = 0;
-		
 		http.getJSON({
 			url:"https://api.parse.com/1/classes/Event",
 			method: "GET",
@@ -78,19 +107,9 @@ var SearchEventsViewModel = (function (_super) {
 					}
 				} 		
 			}
-			
-				frameModule.topmost().navigate ({
-					moduleName: "views/search/search-results-page",
-					context: arrayOfMatchingIDs[0],
-					backstackVisible:true
-				});
-			
-			
 		}, function (e) {
 			console.log(e);
-		});
-		
-
+		});*/
 	}; 
 	
 	return SearchEventsViewModel;

@@ -51,7 +51,7 @@ var CreateEventViewModel = (function (_super) {
         this.set("loggedIn",currentUser);
     };
 
-    CreateEventViewModel.prototype.addEvent = function (imageView, title, location, description, date, time) {
+    CreateEventViewModel.prototype.addEvent = function (imageView, title, location, description, date, time, hashtags) {
 
         if (title.text && location.text && description.text && date.text && time.text) {
 
@@ -61,6 +61,7 @@ var CreateEventViewModel = (function (_super) {
             eventObject.put("location", location.text);
             eventObject.put("description", description.text);
             eventObject.put("start_date", date.text + " " + time.text);
+            eventObject.put("hashtags", hashtags.text);
             var outputStream = new java.io.ByteArrayOutputStream();
             currentBitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, outputStream);
             var image = outputStream.toByteArray();
@@ -74,6 +75,7 @@ var CreateEventViewModel = (function (_super) {
                     description.text = "";
                     date.text = "";
                     time.text = "";
+                    hashtags.text = "";
                     imageView.imageSource = null;
                 }
             }));
