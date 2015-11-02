@@ -10,6 +10,7 @@ var EventViewModel = (function (_super) {
         _super.call(this);
         that = this;
 
+        this.set("isOwner", event.isOwner);
         this.set("eventCoverPhoto", event.cover_photo.url);
         this.set("eventTitle", event.title);
         this.set("eventDate", event.start_date);

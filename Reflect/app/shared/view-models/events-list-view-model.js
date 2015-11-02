@@ -74,6 +74,13 @@ var EventsViewModel = (function (_super) {
     EventsViewModel.prototype.listViewItemTap = function(args) {
 
         var event = this._events[args.index];
+
+        if (this._isUser) {
+            event["isOwner"] = true;
+        } else {
+            event["isOwner"] = false;
+        }
+
         console.log(event.title);
         frameModule.topmost().navigate({
             moduleName: "views/event/event-page",

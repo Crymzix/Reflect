@@ -39,3 +39,9 @@ function upload() {
 
 }
 exports.upload = upload;
+
+function goToGallery() {
+    var topmost = frameModule.topmost();
+    topmost.navigate("views/gallery/gallery-page");
+}
+exports.goToGallery = goToGallery;

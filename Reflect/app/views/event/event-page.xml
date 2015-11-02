@@ -17,15 +17,19 @@
                 <Label id="eventDate" text="{{ eventDate }}" cssClass="event-label"/>
                 <Label id="eventLocation" text="{{ eventLocation }}" cssClass="event-label"/>
                 <Label id="eventDescription" text="{{ eventDescription }}" cssClass="event-label"/>
-                <GridLayout tap="takePicture">
+                <GridLayout tap="takePicture" visibility="{{ isOwner ? 'collapsed' : 'visible'}}">
                     <Image stretch="none" horizontalAlignment="left" style="margin-left:20;vertical-align:center;"
                            src="res://ic_image_camera_alt"/>
                 </GridLayout>
                 <Image id="uploadedImage" stretch="none" width="100" height="100" style="margin-top:20;margin-right:20;vertical-align:center;"
                        src="{{ uploadedPhoto }}"/>
-                <GridLayout id="uploadButton" tap="upload" style="margin-bottom:20;">
+                <GridLayout id="uploadButton" tap="upload" style="margin-bottom:20;" visibility="{{ isOwner ? 'collapsed' : 'visible'}}">
                     <Image stretch="none" horizontalAlignment="right" style="margin-right:20;vertical-align:center;"
                            src="res://ic_file_file_upload"/>
+                </GridLayout>
+                <GridLayout id="galleryButton" tap="goToGallery" style="margin-bottom:20;" visibility="{{ isOwner ? 'visible' : 'collapsed'}}">
+                    <Image stretch="none" horizontalAlignment="right" style="margin-right:20;vertical-align:center;"
+                           src="res://ic_image_photo_library"/>
                 </GridLayout>
             </StackLayout>
         </ScrollView>
