@@ -16,6 +16,22 @@ function Gallery(info){
         "url" : "https://scontent.cdninstagram.com/hphotos-xaf1/t51.2885-15/s640x640/sh0.08/e35/12142092_897304940350450_842467889_n.jpg",
         "id" : 2
     };
+    pictures[2] = {
+        "url" : "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s640x640/sh0.08/e35/12139676_630293537110529_2144025458_n.jpg",
+        "id" : 3
+    };
+    pictures[3] ={
+        "url" : "https://scontent.cdninstagram.com/hphotos-xaf1/t51.2885-15/s480x480/e35/12093590_521038218065721_2002722606_n.jpg",
+        "id" : 4
+    };
+    pictures[4] = {
+        "url" : "https://scontent.cdninstagram.com/hphotos-xaf1/t51.2885-15/s640x640/sh0.08/e35/11244957_1701891956707480_195953570_n.jpg",
+        "id" : 5
+    };
+    pictures[5] ={
+        "url" : "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s640x640/sh0.08/e35/11253758_575598775925682_2048203660_n.jpg",
+        "id" : 6
+    };
     info = info || "";
 
     //var pictures = loadIGPhotos(info.tag, info.eventID);
