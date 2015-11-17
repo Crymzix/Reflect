@@ -147,6 +147,14 @@ function showSearch() {
 }
 exports.showSearch = showSearch;
 
+function showMap() {
+    frameModule.topmost().navigate ({
+        moduleName: "views/map/map-page",
+        backstackVisible: true
+    });
+}
+exports.showMap = showMap;
+
 /* function matchEventIds(array) {
 	viewModel = new searchResultsViewModule.SearchResultsViewModel();
 	page.bindingContext = viewModel;

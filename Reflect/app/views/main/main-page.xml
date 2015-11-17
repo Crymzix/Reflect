@@ -15,6 +15,9 @@
                         <GridLayout cssClass="action-wrap" tap="showSearch" columns="auto" horizontalAlignment="right" visibility="{{ selectedViewIndex === 0 ? 'visible' : 'collapsed'}}">
                             <Image stretch="none" cssClass="icon-image" src="res://ic_action_action_search"/>
                         </GridLayout>
+                        <GridLayout cssClass="action-wrap" tap="showMap" columns="auto" horizontalAlignment="center" visibility="{{ selectedViewIndex === 0 ? 'visible' : 'collapsed'}}">
+                            <Image stretch="none" cssClass="icon-image" src="res://ic_action_maps_pin_drop"/>
+                        </GridLayout>
                     </GridLayout>
                 </StackLayout>
 
