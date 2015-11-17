@@ -6,21 +6,14 @@
                     <Image stretch="none" style="margin-left:20;vertical-align:center;horizontal-align:left;"
                            src="res://ic_action_navigation_arrow_back"/>
                 </GridLayout>
-                <Label text="Event" cssClass="action-bar-title"/>
+                <Label text="Search" cssClass="action-bar-title"/>
             </GridLayout>
         </StackLayout>
-        <ScrollView>
-            <StackLayout>
-                <Image id="eventCover" src="{{ eventCoverPhoto }}" cssClass="event-photo"
-                       stretch="aspectFill"/>
-                <Label id="eventTitle" text="Cool Event"/>
-                <StackLayout orientation="horizontal">
-                    <Label id="eventDate" text="10/2/2016"/>
-                    <Label id="eventTime" text="07:45"/>
-                </StackLayout>
-                <Label id="eventLocation" text="My pants"/>
-                <Label id="eventDescription" text="Fun party with lots of fun and cool stuff."/>
-            </StackLayout>
-        </ScrollView>
+        <StackLayout>
+            <SearchBar  hint="Hashtag" text="{{ hashtagSearch }}" cssClass="search" textFieldBackgroundColor="white" id="hashtagSearch" />
+            <SearchBar  hint="Location" text="{{ locationSearch }}" cssClass="search" textFieldBackgroundColor="white" id="locationSearch"/>
+            <SearchBar hint="Keywords" text="{{ keywordSearch }}" cssClass="search" textFieldBackgroundColor="white" id="keywordSearch" />
+            <Button tap="searchEvents" cssClass="Button" text="Search" />
+        </StackLayout>
     </StackLayout>
 </Page>

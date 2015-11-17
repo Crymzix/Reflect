@@ -12,6 +12,9 @@
                             <Image stretch="none" cssClass="icon-image" src="res://ic_menu"/>
                         </GridLayout>
                         <Label text="Reflect" cssClass="action-bar-title"/>
+                        <GridLayout cssClass="action-wrap" tap="showSearch" columns="auto" horizontalAlignment="right" visibility="{{ selectedViewIndex === 0 ? 'visible' : 'collapsed'}}">
+                            <Image stretch="none" cssClass="icon-image" src="res://ic_action_action_search"/>
+                        </GridLayout>
                     </GridLayout>
                 </StackLayout>
 
@@ -81,30 +84,7 @@
                         </StackLayout>
                     </ScrollView>
                 </StackLayout>
-				
-				<!-- Search Events View -->
-				<StackLayout visibility="{{ selectedViewIndex === 3 ? 'visible' : 'collapsed'}}">
-					<SearchBar  hint="Hashtag" text="{{ hashtagSearch }}" cssClass="search" textFieldBackgroundColor="white" id="hashtagSearch" />
-					<SearchBar  hint="Location" text="{{ locationSearch }}" cssClass="search" textFieldBackgroundColor="white" id="locationSearch"/>
-					<SearchBar hint="Keywords" text="{{ keywordSearch }}" cssClass="search" textFieldBackgroundColor="white" id="keywordSearch" />
-					<Button tap="searchEvents" cssClass="Button" text="Search" />
-				</StackLayout>
-				
-				<!-- Search Results View -->
-                <StackLayout row="1" visibility="{{ selectedViewIndex === 4 ? 'visible' : 'collapsed'}}">
-                    <Label text="Search Results" textWrap="true" cssClass="view-title"/>
-                    <ListView id="eventsListview" items="{{ searchEvents }}" itemTap="listViewItemTap">
-                        <ListView.itemTemplate>
-                            <StackLayout>
-                                <StackLayout orientation="horizontal">
-                                    <Image src="{{ eventItemImage }}" stretch="aspectFill" width="75" height="75" style="padding:10;margin-right:10" />
-                                    <Label text="{{ eventItemTitle }}" verticalAlignment="center" style="margin-left:10;"/>
-                                </StackLayout>
-                                <Label text="{{ eventItemHashtags }}" verticalAlignment="center" textWrap="false" style="margin-left:10;font-size: 10;"/>
-                            </StackLayout>
-                        </ListView.itemTemplate>
-                    </ListView>
-                </StackLayout>
+
 				
             </StackLayout>
         </drawer:SideDrawer.mainContent>
@@ -123,10 +103,6 @@
                     <Button tap="selectView" tag="2"
                             cssClass="{{ selectedViewIndex === 2 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
                             text="Create Event"/>
-					<Button tap="selectView" tag="3"
-                            cssClass="{{ selectedViewIndex === 3 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
-                            text="Search Event"/>
-					
                     <Button tap="switchToLogin" tag="5"
                             cssClass="{{ selectedViewIndex === 5 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
                             text="Log In" visibility="{{ loggedIn ? 'collapsed' : 'visible' }}"/>

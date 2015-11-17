@@ -138,14 +138,14 @@ function listViewItemTap(args) {
 }
 exports.listViewItemTap = listViewItemTap;
 
-function searchEvents() {
-	var hashtagSearch = page.getViewById("hashtagSearch");
-	var locationSearch = page.getViewById("locationSearch");
-	var keywordSearch = page.getViewById("keywordSearch");
-	
-	viewModel.searchEvents(hashtagSearch, locationSearch, keywordSearch);
+function showSearch() {
+
+    frameModule.topmost().navigate ({
+        moduleName: "views/search/search-page",
+        backstackVisible: true
+    });
 }
-exports.searchEvents = searchEvents;
+exports.showSearch = showSearch;
 
 /* function matchEventIds(array) {
 	viewModel = new searchResultsViewModule.SearchResultsViewModel();
