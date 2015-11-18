@@ -1,3 +1,5 @@
+var frameModule = require("ui/frame");
+
 function OnMapReady(args) {
     var mapView = args.object;
     var gMap = mapView.gMap;
@@ -14,3 +16,8 @@ function OnMapReady(args) {
     }
 }
 exports.OnMapReady = OnMapReady;
+
+function back() {
+    frameModule.topmost().goBack();
+}
+exports.back = back;

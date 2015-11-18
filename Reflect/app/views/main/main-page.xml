@@ -12,11 +12,11 @@
                             <Image stretch="none" cssClass="icon-image" src="res://ic_menu"/>
                         </GridLayout>
                         <Label text="Reflect" cssClass="action-bar-title"/>
-                        <GridLayout cssClass="action-wrap" tap="showSearch" columns="auto" horizontalAlignment="right" visibility="{{ selectedViewIndex === 0 ? 'visible' : 'collapsed'}}">
-                            <Image stretch="none" cssClass="icon-image" src="res://ic_action_action_search"/>
-                        </GridLayout>
-                        <GridLayout cssClass="action-wrap" tap="showMap" columns="auto" horizontalAlignment="center" visibility="{{ selectedViewIndex === 0 ? 'visible' : 'collapsed'}}">
-                            <Image stretch="none" cssClass="icon-image" src="res://ic_action_maps_pin_drop"/>
+                        <GridLayout cssClass="action-wrap" tap="showSearch" columns="auto,auto,auto,auto,auto" horizontalAlignment="right" visibility="{{ selectedViewIndex === 0 ? 'visible' : 'collapsed'}}">
+                            <Image stretch="none" cssClass="icon-image" src="res://ic_action_action_search" col="4"/>
+                            <GridLayout cssClass="action-wrap" tap="showMap" columns="auto" horizontalAlignment="center" col="3" visibility="{{ selectedViewIndex === 0 ? 'visible' : 'collapsed'}}">
+                                <Image stretch="none" cssClass="icon-image" src="res://ic_action_maps_pin_drop"/>
+                            </GridLayout>
                         </GridLayout>
                     </GridLayout>
                 </StackLayout>
