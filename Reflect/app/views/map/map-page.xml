@@ -1,4 +1,4 @@
-<Page xmlns="http://www.nativescript.org/tns.xsd" xmlns:maps="nativescript-google-maps-sdk" actionBarHidden="true">
+<Page loaded="pageLoaded" xmlns="http://www.nativescript.org/tns.xsd" xmlns:maps="nativescript-google-maps-sdk" actionBarHidden="true">
     <StackLayout>
         <GridLayout cssClass="action-bar">
             <GridLayout cssClass="action-wrap" tap="back" columns="auto" horizontalAlignment="left">

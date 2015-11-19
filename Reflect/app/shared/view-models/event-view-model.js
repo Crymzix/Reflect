@@ -14,7 +14,7 @@ var EventViewModel = (function (_super) {
         this.set("eventCoverPhoto", event.cover_photo.url);
         this.set("eventTitle", event.title);
         this.set("eventDate", event.start_date);
-        this.set("eventLocation", event.location);
+        this.set("eventLocation", event.locationTitle);
         this.set("eventDescription", event.description);
     }
 

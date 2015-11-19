@@ -74,8 +74,11 @@
                                 <Label id="eventDateLabel" col="1" textWrap="true" cssClass="event-label" horizontalAlignment="center"/>
                                 <Label id="eventTimeLabel" col="4" textWrap="true" cssClass="event-label" horizontalAlignment="center" style="margin-right:30;"/>
                             </GridLayout>
-                            <TextField id="eventLocation" text="{{ location }}" hint="Location" keyboardType="email"
-                                       autocorrect="false" cssClass="event-input-field"/>
+                            <GridLayout cssClass="upload-photo-wrap" tap="chooseLocation" columns="auto"
+                                        horizontalAlignment="left">
+                                <Image stretch="none" cssClass="icon-image" src="res://ic_action_maps_place"/>
+                            </GridLayout>
+                            <Label id="eventLocation" textWrap="true" text="Location" cssClass="event-location-label"/>
                             <TextField id="eventDescription" height="100" text="{{ description }}" hint="Description"
                                        autocorrect="true" cssClass="event-input-field"/>
                             <TextField id="eventHashtags" text="{{ hashtags }}" hint="#Hashtags" keyboardType="email"
@@ -105,7 +108,7 @@
                             text="My Events" visibility="{{ loggedIn ? 'visible' : 'collapsed' }}"/>
                     <Button tap="selectView" tag="2"
                             cssClass="{{ selectedViewIndex === 2 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
-                            text="Create Event"/>
+                            text="Create Event" visibility="{{ loggedIn ? 'visible' : 'collapsed' }}"/>
                     <Button tap="switchToLogin" tag="5"
                             cssClass="{{ selectedViewIndex === 5 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
                             text="Log In" visibility="{{ loggedIn ? 'collapsed' : 'visible' }}"/>

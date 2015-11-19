@@ -5,7 +5,9 @@ var appModule = require("application");
 var applicationSettings = require("application-settings");
 
 var REQUEST_SELECT_IMAGE = 1234;
+var REQUEST_LOCATION = 1235;
 var currentBitmap;
+var currentLocation;
 
 var CreateEventViewModel = (function (_super) {
     __extends(CreateEventViewModel, _super);
@@ -38,7 +40,28 @@ var CreateEventViewModel = (function (_super) {
                     };
                     appModule.android.foregroundActivity.startActivityForResult(takePictureIntent, REQUEST_SELECT_IMAGE);
                 }
+            }
+            catch (e) {
+                reject(e);
+            }
+        });
+    };
 
+    CreateEventViewModel.prototype.chooseLocation = function(locationLabel) {
+        new Promise(function (resolve, reject) {
+            try {
+                var intentBuilder = new com.google.android.gms.location.places.ui.PlacePicker.IntentBuilder();
+                var previousResult = appModule.android.onActivityResult;
+                appModule.android.onActivityResult = function (requestCode, resultCode, data) {
+                        appModule.android.onActivityResult = previousResult;
+                        if (requestCode === REQUEST_LOCATION && resultCode === android.app.Activity.RESULT_OK) {
+                            var place = com.google.android.gms.location.places.ui.PlacePicker.getPlace(data, appModule.android.context);
+                            currentLocation = place.getLatLng();
+                            locationLabel.text = place.getName();
+                            resolve(place.getName());
+                        }
+                    };
+                appModule.android.foregroundActivity.startActivityForResult(intentBuilder.build(appModule.android.context), REQUEST_LOCATION);
             }
             catch (e) {
                 reject(e);
@@ -58,10 +81,12 @@ var CreateEventViewModel = (function (_super) {
             var eventObject = new com.parse.ParseObject("Event");
             eventObject.put("userId", applicationSettings.getString("currentUser"));
             eventObject.put("title", title.text);
-            eventObject.put("location", location.text);
+            eventObject.put("locationTitle", location.text);
             eventObject.put("description", description.text);
             eventObject.put("start_date", date.text + " " + time.text);
             eventObject.put("hashtags", hashtags.text);
+            var geoLocation = new com.parse.ParseGeoPoint(currentLocation.latitude, currentLocation.longitude);
+            eventObject.put("location", geoLocation);
             var outputStream = new java.io.ByteArrayOutputStream();
             currentBitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, outputStream);
             var image = outputStream.toByteArray();

@@ -148,19 +148,15 @@ function showSearch() {
 exports.showSearch = showSearch;
 
 function showMap() {
-    frameModule.topmost().navigate ({
-        moduleName: "views/map/map-page",
-        backstackVisible: true
-    });
+    viewModel.showMap();
 }
 exports.showMap = showMap;
 
-/* function matchEventIds(array) {
-	viewModel = new searchResultsViewModule.SearchResultsViewModel();
-	page.bindingContext = viewModel;
-	viewModel.matchEventIds(array);
+function chooseLocation() {
+    var locationLabel = page.getViewById("eventLocation");
+    viewModel.chooseLocation(locationLabel);
 }
-exports.matchEventIds = matchEventIds; */
+exports.chooseLocation = chooseLocation;
 
 function logOut(){
     applicationSettings.remove("currentUser");
