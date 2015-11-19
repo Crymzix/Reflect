@@ -1,19 +1,34 @@
 var dialogsModule = require("ui/dialogs");
 var frameModule = require("ui/frame");
-var eventViewModule = require("./../../shared/view-models/event-view-model");
-
-var eventModule;
+var searchEventsViewModule = require("./../../shared/view-models/search-view-model");
+var page;
+var viewModule;
 
 function loaded(args){
-    var page = args.object;
-    var context = page.navigationContext;
-    console.log("TEST   " + JSON.stringify(context));
-    eventModule = new eventViewModule.EventViewModel(context);
-    page.bindingContext = eventModule;
+    page = args.object;
+    viewModule = new searchEventsViewModule.SearchEventsViewModel();
+
+    if (android) {
+        page.getViewById("hashtagSearch").android.clearFocus();
+        page.getViewById("locationSearch").android.clearFocus();
+        page.getViewById("keywordSearch").android.clearFocus();
+    }
+
+    page.bindingContext = viewModule;
 }
 exports.loaded = loaded;
 
 function back() {
     frameModule.topmost().goBack();
 }
-exports.loaded = back;
+exports.back = back;
+
+function searchEvents() {
+
+    var hashtagSearch = page.getViewById("hashtagSearch");
+    var locationSearch = page.getViewById("locationSearch");
+    var keywordSearch = page.getViewById("keywordSearch");
+
+    viewModule.searchEvents(hashtagSearch, locationSearch, keywordSearch);
+}
+exports.searchEvents = searchEvents;

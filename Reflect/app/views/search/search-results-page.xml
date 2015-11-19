@@ -1,12 +1,21 @@
 <Page loaded="loaded" actionBarHidden="true">
     <StackLayout style="background-color: #BBDEFB;">
         <StackLayout row="1" visibility="{{ selectedViewIndex === 4 ? 'visible' : 'collapsed'}}">
-            <Label text="Search Results" textWrap="true" cssClass="view-title"/>
+            <GridLayout cssClass="action-bar">
+                <GridLayout cssClass="action-wrap" tap="back" columns="auto" horizontalAlignment="left">
+                    <Image stretch="none" style="margin-left:10;vertical-align:center;horizontal-align:left;"
+                           src="res://ic_action_navigation_arrow_back"/>
+                </GridLayout>
+                <Label text="Search Results" cssClass="action-bar-title"/>
+            </GridLayout>
                     <ListView id="searchEvents" items="{{ searchEvents }}" itemTap="listViewItemTap">
                         <ListView.itemTemplate>
-                            <StackLayout orientation="horizontal">
-                                <Image src="{{ eventItemImage }}" stretch="aspectFill" width="75" height="75" style="padding:10;margin-right:10" />
-                                <Label text="{{ eventItemTitle }}" verticalAlignment="center" style="margin-left:10;"/>
+                            <StackLayout>
+                                <StackLayout orientation="horizontal">
+                                    <Image src="{{ eventItemImage }}" stretch="aspectFill" width="75" height="75" style="padding:10;margin-right:10" />
+                                    <Label text="{{ eventItemTitle }}" verticalAlignment="center" style="margin-left:10;"/>
+                                </StackLayout>
+                                <Label text="{{ eventItemHashtags }}" verticalAlignment="center" textWrap="false" style="margin-left:10;font-size: 10;"/>
                             </StackLayout>
                         </ListView.itemTemplate>
                     </ListView>

@@ -98,7 +98,8 @@ function addEvent() {
     var description = page.getViewById("eventDescription");
     var date = page.getViewById("eventDateLabel");
     var time = page.getViewById("eventTimeLabel");
-    viewModel.addEvent(imageView, title, location, description, date, time);
+    var hashtags = page.getViewById("eventHashtags");
+    viewModel.addEvent(imageView, title, location, description, date, time, hashtags);
 }
 
 exports.selectView = selectView;
@@ -137,14 +138,14 @@ function listViewItemTap(args) {
 }
 exports.listViewItemTap = listViewItemTap;
 
-function searchEvents() {
-	var hashtagSearch = page.getViewById("hashtagSearch");
-	var locationSearch = page.getViewById("locationSearch");
-	var keywordSearch = page.getViewById("keywordSearch");
-	
-	viewModel.searchEvents(hashtagSearch, locationSearch, keywordSearch);
+function showSearch() {
+
+    frameModule.topmost().navigate ({
+        moduleName: "views/search/search-page",
+        backstackVisible: true
+    });
 }
-exports.searchEvents = searchEvents;
+exports.showSearch = showSearch;
 
 /* function matchEventIds(array) {
 	viewModel = new searchResultsViewModule.SearchResultsViewModel();
