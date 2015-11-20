@@ -1,46 +1,38 @@
 /**
  * Created by Vineet on 2015-10-25.
  */
-var config = require("../../shared/config");
+var config = require("../config");
 var fetchModule = require("fetch");
 var igRest = require("../../helpers/instagram-rest.js");
 var observableModule = require("data/observable");
+var igAPI = config.instagramAPIURL;
+var http = require("http");
+
+var pictures;
+var picture;
 
 function Gallery(info){
-    var pictures = [];
-    pictures[0] = {
-        "url" : "http://distillery.s3.amazonaws.com/media/2011/02/02/f9443f3443484c40b4792fa7c76214d5_7.jpg",
-        "id" : 1
-    };
-    pictures[1] ={
-        "url" : "https://scontent.cdninstagram.com/hphotos-xaf1/t51.2885-15/s640x640/sh0.08/e35/12142092_897304940350450_842467889_n.jpg",
-        "id" : 2
-    };
-    pictures[2] = {
-        "url" : "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s640x640/sh0.08/e35/12139676_630293537110529_2144025458_n.jpg",
-        "id" : 3
-    };
-    pictures[3] ={
-        "url" : "https://scontent.cdninstagram.com/hphotos-xaf1/t51.2885-15/s480x480/e35/12093590_521038218065721_2002722606_n.jpg",
-        "id" : 4
-    };
-    pictures[4] = {
-        "url" : "https://scontent.cdninstagram.com/hphotos-xaf1/t51.2885-15/s640x640/sh0.08/e35/11244957_1701891956707480_195953570_n.jpg",
-        "id" : 5
-    };
-    pictures[5] ={
-        "url" : "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s640x640/sh0.08/e35/11253758_575598775925682_2048203660_n.jpg",
-        "id" : 6
-    };
     info = info || "";
 
     //var pictures = loadIGPhotos(info.tag, info.eventID);
 
-    var picture = pictures.pop();
+    loadIGPhotos("iamubc", "event").then(function(response) {
+        console.log("In IG Photos promise");
+        pictures = response;
+
+        picture = pictures.pop();
+
+        console.log(picture.url);
+        viewModel.set("image_url" , picture.url);
+        viewModel.set("image_id", picture.id);
+
+    }, function(err){
+        console.log(err);
+    });
 
     var viewModel = new observableModule.Observable({
-        image_url: picture.url || "",
-        image_id: picture.id || ""	
+        image_url: "",
+        image_id:  ""
     });
 
     viewModel.visitPhoto = function(){
@@ -69,36 +61,46 @@ function Gallery(info){
     };
 
     return viewModel;
-}
 
+}
 
 // This function takes the a hashtag (string) associated with Event and fills
 // global picture array with photos from Instagram that haven't already been visited
 function loadIGPhotos (tag, eventID){
-    var dataJSON = igRest.searchTags(tag).data;
-    var pictures = [];
-    if(dataJSON != null){
-        for(var picture in dataJSON){
-            if(picture.hasOwnProperty(dataJSON)){
-                var count = 0;
+    return new Promise(function(resolve, reject){
+        searchTags(tag).then(function(response){
+            console.log("in_search_tags_promise");
+            var jsresp = response;
+            var dataJSON = jsresp.data;
+            var pictures = [];
+            var count = 0;
+            console.log(dataJSON.length);
+            for( ;count < dataJSON.length; count++){
+                console.log("in_loop");
                 //Get visited column in event-gallery table
                 //var visited = eventModel.getVisited(eventID);
-                var id = parseInt(picture.id);
-                if(findIfVisited(visited, id)){
-                    // We break here because the photos are in order of newest to oldest
-                    // So a visited photo would be the newest possible visted photo
-                    break;
-                }
+                var id = parseInt(dataJSON[count].id);
+                //console.log(dataJSON[count].images.standard_resolution.url);
+                //if(findIfVisited(visited, id)){
+                // We break here because the photos are in order of newest to oldest
+                // So a visited photo would be the newest possible visted photo
+                //  break;
+                //}
+                //console.log(picture.url);
                 var pictureDefinition = {
-                    "url" : picture.url,
-                    "id" : parseInt(id)
+                    "url" : dataJSON[count].images.standard_resolution.url,
+                    "id" : id
                 };
                 pictures[count] = pictureDefinition;
-                count++;
             }
-        }
-    }
-    return pictures;
+            console.log("out of loop");
+            resolve(pictures);
+
+        }, function(err) {
+            console.log(err);
+            reject("NO PICTURES");
+        });
+    });
 }
 
 // Takes a list of visited photos (JSON Array) and a photo ID (int)
@@ -115,6 +117,30 @@ function findIfVisited(visited, id){
         }
     }
     return isVisited;
+}
+
+function searchTags(tag){
+    return new Promise(function(resolve, reject){
+        //var accessToken = appSettings.getString("instagram_access_token");
+        var accessToken = "305911773.eaf0871.ebf52d56320d45e8b275fc53f1948129";
+        var getURL = igAPI + "v1/tags/" + tag + "/media/recent?access_token=" + accessToken;
+        console.log(getURL);
+        if (accessToken) {
+            console.log("inside_access_token");
+            http.getJSON({
+                url: getURL,
+                method: "GET"
+            }).then(function (response) {
+                //console.log(JSON.stringify(response));
+                //applicationSettings.setString("currentUser",response.objectId);
+                resolve(response);
+            }, function (e) {
+                reject("SEARCHING DIDNT WORK");
+            });
+        } else {
+            reject("couldn't get access token");
+        }
+    });
 }
 
 module.exports = Gallery;

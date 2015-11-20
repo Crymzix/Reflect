@@ -2,6 +2,8 @@ var gesturesModule = require("ui/gestures");
 var frameModule = require("ui/frame");
 var loginViewModel = require("../../shared/view-models/login-view-model");
 var dialogsModule = require("ui/dialogs");
+var appSettings = require("application-settings");
+
 
 var user = new loginViewModel({
     email: "test@hotmail.ca",
@@ -38,7 +40,11 @@ exports.asGuest = function(){
 exports.signIn = function(){
     user.signIn();
     var topmost = frameModule.topmost();
-    topmost.navigate("views/main/main-page");
+    //if(appSettings.getString("instagram_access_token")) {
+        topmost.navigate("views/main/main-page");
+    //}else {
+    //    topmost.navigate("views/webview/instagram-webview");
+    //}
 }
 
 //var dialogsModule = require("ui/dialogs");
