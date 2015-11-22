@@ -9,8 +9,7 @@ function loaded(args){
     viewModule = new searchEventsViewModule.SearchEventsViewModel();
 
     if (android) {
-        page.getViewById("hashtagSearch").android.clearFocus();
-        page.getViewById("locationSearch").android.clearFocus();
+
         page.getViewById("keywordSearch").android.clearFocus();
     }
 
@@ -25,10 +24,9 @@ exports.back = back;
 
 function searchEvents() {
 
-    var hashtagSearch = page.getViewById("hashtagSearch");
-    var locationSearch = page.getViewById("locationSearch");
+ 
     var keywordSearch = page.getViewById("keywordSearch");
 
-    viewModule.searchEvents(hashtagSearch, locationSearch, keywordSearch);
+    viewModule.searchEvents(keywordSearch);
 }
 exports.searchEvents = searchEvents;

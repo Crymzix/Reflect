@@ -180,6 +180,7 @@ function chooseLocation() {
 }
 exports.chooseLocation = chooseLocation;
 
+
 function logOut(){
     applicationSettings.remove("currentUser");
     createViewModel(0);
