@@ -147,13 +147,6 @@ function showSearch() {
 }
 exports.showSearch = showSearch;
 
-/* function matchEventIds(array) {
-	viewModel = new searchResultsViewModule.SearchResultsViewModel();
-	page.bindingContext = viewModel;
-	viewModel.matchEventIds(array);
-}
-exports.matchEventIds = matchEventIds; */
-
 function logOut(){
     applicationSettings.remove("currentUser");
     createViewModel(0);
