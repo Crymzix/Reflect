@@ -33,11 +33,23 @@ var SearchEventsViewModel = (function (_super) {
 	};
 
 	SearchEventsViewModel.prototype.searchEvents = function (keywordSearch) {
+		var keywordArray = keywordSearch.text.split(" ");
+		console.log("the search terms are: " + keywordArray);
+		var regexArray = [];
+		for (var i = 0; i<keywordArray.length; i++) {
+			var term = {};
+			term["$regex"] = "^" + keywordArray[i]; 
+			regexArray[i] = term; 
+			console.log("the content of regexArray: " + regexArray[i]);
+		}
+		console.log("the content of regexArray: " + regexArray);
 		
 		var query = qs.stringify({
 			where: JSON.stringify({
 				title: {
-					$regex: "^" + keywordSearch.text
+						$regex: "^" regexArray[0];
+						
+						//$or: regexArray
 				}
 			})
 		});
