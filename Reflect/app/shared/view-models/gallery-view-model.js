@@ -7,91 +7,141 @@ var igRest = require("../../helpers/instagram-rest.js");
 var observableModule = require("data/observable");
 var igAPI = config.instagramAPIURL;
 var http = require("http");
+//var qs = require('querystring');
+
 
 var pictures;
 var picture;
+var eventObject;
+var eventInfo;
+var visitedPhotos;
+var paginationUrl;
+
+var viewModel;
 
 function Gallery(info){
-    info = info || "";
+    eventInfo = info || "";
+    var hashtags = getListOfHashtags(eventInfo.hashtags);
 
-    //var pictures = loadIGPhotos(info.tag, info.eventID);
+    visitedPhotos = JSON.parse(eventInfo.viewedPhotos);
 
-    loadIGPhotos("iamubc", "event").then(function(response) {
-        console.log("In IG Photos promise");
-        pictures = response;
+    paginationUrl = eventInfo.curIGUrl;
 
-        picture = pictures.pop();
+    loadPhotos(hashtags, "eventId", paginationUrl);
 
-        console.log(picture.url);
-        viewModel.set("image_url" , picture.url);
-        viewModel.set("image_id", picture.id);
+    eventObject = com.parse.ParseObject.createWithoutData("Event", eventInfo.objectId);
+    try {
+        eventObject = eventObject.fetchIfNeeded();
+        //Can't do this because loading photos is trying to read from visitedPhotos at the same time this is being
+        // set from Parse
+        //visitedPhotos = eventObject.get("viewedPhotos");
+    } catch(e){
+        console.log(e);
+    }
 
-    }, function(err){
-        console.log(err);
-    });
 
-    var viewModel = new observableModule.Observable({
+    viewModel = new observableModule.Observable({
         image_url: "",
         image_id:  ""
     });
 
     viewModel.visitPhoto = function(){
-        console.log("Here");
-        //Update visited column in firebase db for event table
-        //var visited = eventModel.getVisited(eventID);
-        //
-        //visited.push(photoID.toString());
-        //
-        //eventModel.updateVisited(eventID, visited);
+        console.log("Visit Photo");
+
+        visitPhoto(picture.id, picture.isUploaded);
+
     };
 
     viewModel.swipeLeft = function(){
         console.log("swipe_left");
         picture = pictures.pop();
-        viewModel.set("image_url" , picture.url);
-        viewModel.set("image_id", picture.id);
+        if(picture){
+            viewModel.set("image_url" , picture.url);
+            viewModel.set("image_id", picture.id);
+        }else if(paginationUrl) {
+            eventObject.put("curIGUrl", paginationUrl);
+            eventObject.saveInBackground(new com.parse.SaveCallback({
+                done: function (error) {
+                    console.log("new pagination link added for instagram");
+                    loadPhotos(hashtags, "eventId", paginationUrl);
+                }
+            }));
+        }else{
+            //set photo to NO MORE PHOTOS;
+        }
     };
 
     viewModel.swipeRight = function(){
         //Add to event-gallery table
         console.log("swipe_right");
         picture = pictures.pop();
-        viewModel.set("image_url" , picture.url);
-        viewModel.set("image_id", picture.id);
+        if(picture){
+            viewModel.set("image_url" , picture.url);
+            viewModel.set("image_id", picture.id);
+        }else if(paginationUrl) {
+            eventObject.put("curIGUrl", paginationUrl);
+            eventObject.saveInBackground(new com.parse.SaveCallback({
+                done: function (error) {
+                    console.log("new pagination link added for instagram");
+                    loadPhotos(hashtags, "eventId", paginationUrl);
+                }
+            }));
+        }else{
+            //set photo to NO MORE PHOTOS;
+        }
+
     };
 
     return viewModel;
 
 }
 
+function loadPhotos(tag, eventId, url){
+    loadIGPhotos(tag, "event", url).then(function (response) {
+        console.log("In IG Photos promise");
+        pictures = response;
+
+        picture = pictures.pop();
+
+        console.log(picture.url);
+        viewModel.set("image_url", picture.url);
+        viewModel.set("image_id", picture.id);
+
+    }, function (err) {
+        console.log(err);
+    });
+}
+
 // This function takes the a hashtag (string) associated with Event and fills
 // global picture array with photos from Instagram that haven't already been visited
-function loadIGPhotos (tag, eventID){
+function loadIGPhotos (tags, eventID, url){
     return new Promise(function(resolve, reject){
-        searchTags(tag).then(function(response){
+        searchTags(tags, url).then(function(response){
             console.log("in_search_tags_promise");
+            var count = 0;
             var jsresp = response;
             var dataJSON = jsresp.data;
+            paginationUrl = jsresp.pagination.next_url;
             var pictures = [];
-            var count = 0;
             console.log(dataJSON.length);
-            for( ;count < dataJSON.length; count++){
+            for (var i = 0; i < dataJSON.length; i++) {
                 console.log("in_loop");
                 //Get visited column in event-gallery table
                 //var visited = eventModel.getVisited(eventID);
                 var id = parseInt(dataJSON[count].id);
                 //console.log(dataJSON[count].images.standard_resolution.url);
-                //if(findIfVisited(visited, id)){
-                // We break here because the photos are in order of newest to oldest
-                // So a visited photo would be the newest possible visted photo
-                //  break;
-                //}
-                //console.log(picture.url);
-                var pictureDefinition = {
-                    "url" : dataJSON[count].images.standard_resolution.url,
-                    "id" : id
-                };
-                pictures[count] = pictureDefinition;
+                if(findIfVisited(id)){
+                    //  do nothing;
+                    console.log(id);
+                }else {
+                    var pictureDefinition = {
+                        "url": dataJSON[count].images.standard_resolution.url,
+                        "id": id,
+                        "isUploaded" : 0
+                    };
+                    pictures[count] = pictureDefinition;
+                    count++;
+                }
             }
             console.log("out of loop");
             resolve(pictures);
@@ -103,44 +153,70 @@ function loadIGPhotos (tag, eventID){
     });
 }
 
+function visitPhoto(id , uploaded){
+    if(uploaded > 0) {
+        visitedPhotos.upload.push(id);
+    }else {
+        visitedPhotos.ig.push(id);
+    }
+    eventObject.put("viewedPhotos", JSON.stringify(visitedPhotos));
+    eventObject.saveInBackground(new com.parse.SaveCallback({
+        done: function (error) {
+            console.log("photo visited");
+        }
+    }));
+}
+
 // Takes a list of visited photos (JSON Array) and a photo ID (int)
 //
 // Returns true if ID is in visited photos, else returns false
-function findIfVisited(visited, id){
+function findIfVisited(id){
     var isVisited = false;
-    for(var picture in visited){
-        if(picture.hasOwnProperty(visited)){
-            if(parseInt(picture.id) === id){
-                isVisited = true;
-                break;
-            }
+    var visited  = visitedPhotos.ig;
+    for(var i = 0; i < visited.length; i++){
+        if(parseInt(visited[i]) == id){
+            console.log("visited = true");
+            isVisited = true;
+            break;
         }
     }
     return isVisited;
 }
 
-function searchTags(tag){
+function searchTags(tags, url){
     return new Promise(function(resolve, reject){
         //var accessToken = appSettings.getString("instagram_access_token");
         var accessToken = "305911773.eaf0871.ebf52d56320d45e8b275fc53f1948129";
-        var getURL = igAPI + "v1/tags/" + tag + "/media/recent?access_token=" + accessToken;
-        console.log(getURL);
+        var responses = [];
+        var getURL;
+        if(url){
+            getURL = url;
+        }else{
+            getURL = igAPI + "v1/tags/" + tags[1].trim() + "/media/recent?access_token=" + accessToken;
+        }
+        console.log(tags);
         if (accessToken) {
-            console.log("inside_access_token");
-            http.getJSON({
-                url: getURL,
-                method: "GET"
-            }).then(function (response) {
-                //console.log(JSON.stringify(response));
-                //applicationSettings.setString("currentUser",response.objectId);
-                resolve(response);
-            }, function (e) {
-                reject("SEARCHING DIDNT WORK");
-            });
+                console.log(getURL);
+                console.log("inside_access_token");
+                http.getJSON({
+                    url: getURL,
+                    method: "GET"
+                }).then(function (response) {
+                    //console.log(JSON.stringify(response));
+                    //applicationSettings.setString("currentUser",response.objectId);
+                     resolve(response);
+                }, function (e) {
+                    reject("SEARCHING DIDN'T WORK");
+                });
         } else {
             reject("couldn't get access token");
         }
     });
+}
+
+function getListOfHashtags(hashtags){
+    console.log(hashtags);
+    return hashtags.split("#");
 }
 
 module.exports = Gallery;

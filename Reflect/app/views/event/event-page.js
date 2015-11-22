@@ -5,11 +5,12 @@ var eventViewModule = require("./../../shared/view-models/event-view-model");
 
 var eventModel;
 var page;
+var context;
 
 function loaded(args){
 
     page = args.object;
-    var context = page.navigationContext;
+    context = page.navigationContext;
     eventModel = new eventViewModule.EventViewModel(context);
     page.bindingContext = eventModel;
 }
@@ -42,6 +43,10 @@ exports.upload = upload;
 
 function goToGallery() {
     var topmost = frameModule.topmost();
-    topmost.navigate("views/gallery/gallery-page");
+    topmost.navigate({
+        moduleName: "views/gallery/gallery-page",
+        context: context,
+        backstackVisible: true
+    });
 }
 exports.goToGallery = goToGallery;

@@ -8,11 +8,12 @@ var borderModule = require("ui/border");
 var GalleryViewModel = require("../../shared/view-models/gallery-view-model");
 var gallery;
 var image, reject, accept;
+var eventInfo;
 
 function loaded(args){
     var page = args.object;
-    //eventInfo = page.navigationContext;
-    gallery = new GalleryViewModel();
+    eventInfo = page.navigationContext;
+    gallery = new GalleryViewModel(eventInfo);
     image = page.getViewById("image");
     reject = page.getViewById("reject");
     accept = page.getViewById("accept");
