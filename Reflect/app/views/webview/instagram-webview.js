@@ -4,10 +4,10 @@
 var webViewModule = require("ui/web-view");
 var config = require("../../shared/config.js");
 var fetchModule = require("fetch");
+var frameModule = require("ui/frame");
 var appSettings = require("application-settings");
 
 var clientID = config.clientID;
-var clientSecret = config.clientSecret;
 var redirectURI = config.redirectURI;
 var instagramAPIURL = config.instagramAPIURL;
 
@@ -19,9 +19,9 @@ function getCodeFromURI(uri){
     return code[1];
 }
 
-function getTokenFromUri(uri) {
+function getTokenFromURI(uri) {
     var token = uri.split("#access_token=");
-    console.log("Code split 0:" + code[0] + " Code Split 1: " + code[1]);
+    console.log("Code split 0:" + token[0] + " Code Split 1: " + token[1]);
     return token[1];
 }
 
@@ -39,6 +39,7 @@ exports.loaded = function(args) {
     // TODO: Use two step client side process
     web.on(webViewModule.WebView.loadFinishedEvent, function (args) {
         var message;
+        var topmost = frameModule.topmost();
         console.log("made it to on function");
         if (!args.error) {
             console.log(args.url);
@@ -49,7 +50,8 @@ exports.loaded = function(args) {
                     moduleName: "views/main/main-page",
                     backstackVisible: false
                 };
-                topmost.navigate(navigationEntry);
+                appSettings.setString("instagram_access_token", token);
+                //topmost.navigate(navigationEntry);
                 //var apiCode = getCodeFromURI(args.url);
                 //console.log("just before fetch");
                 //var result;

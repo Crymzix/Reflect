@@ -2,7 +2,9 @@ var gesturesModule = require("ui/gestures");
 var frameModule = require("ui/frame");
 var loginViewModel = require("../../shared/view-models/login-view-model");
 var dialogsModule = require("ui/dialogs");
+
 var applicationSettings = require("application-settings");
+
 
 var user = new loginViewModel({
     email: "test@hotmail.ca",

@@ -54,7 +54,11 @@ var CreateEventViewModel = (function (_super) {
     CreateEventViewModel.prototype.addEvent = function (imageView, title, location, description, date, time, hashtags) {
 
         if (title.text && location.text && description.text && date.text && time.text) {
-
+            var viewedPhotos = {
+                "ig" : [],
+                "upload" : []
+            };
+            viewedPhotos = JSON.stringify(viewedPhotos);
             var eventObject = new com.parse.ParseObject("Event");
             eventObject.put("userId", applicationSettings.getString("currentUser"));
             eventObject.put("title", title.text);
@@ -62,6 +66,9 @@ var CreateEventViewModel = (function (_super) {
             eventObject.put("description", description.text);
             eventObject.put("start_date", date.text + " " + time.text);
             eventObject.put("hashtags", hashtags.text);
+            eventObject.put("viewedPhotos", viewedPhotos);
+            eventObject.put("imgurDeleteHash", "");
+            eventObject.put("curIGUrl", "");
             var outputStream = new java.io.ByteArrayOutputStream();
             currentBitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, outputStream);
             var image = outputStream.toByteArray();

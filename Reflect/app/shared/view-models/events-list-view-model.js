@@ -38,6 +38,8 @@ var EventsViewModel = (function (_super) {
             url = "https://api.parse.com/1/classes/Event";
         }
 
+        console.log(url);
+
         //Retrieve events
         http.getJSON({
             url: url,
@@ -53,8 +55,7 @@ var EventsViewModel = (function (_super) {
 
             for (var i = 0; i < that._events.length; i++) {
                 var event = that.events[i];
-                console.log(event.title);
-                console.log(event.cover_photo.url);
+                console.log(url);
 
                 var firstChar = event.title.charAt(0);
                 var image = null;
