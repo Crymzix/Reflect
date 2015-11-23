@@ -7,7 +7,6 @@ var igRest = require("../../helpers/instagram-rest.js");
 var observableModule = require("data/observable");
 var igAPI = config.instagramAPIURL;
 var http = require("http");
-//var qs = require('querystring');
 
 
 var pictures;
@@ -59,6 +58,7 @@ function Gallery(info){
             viewModel.set("image_url" , picture.url);
             viewModel.set("image_id", picture.id);
         }else if(paginationUrl) {
+            eventInfo.curIGUrl = paginationUrl;
             eventObject.put("curIGUrl", paginationUrl);
             eventObject.saveInBackground(new com.parse.SaveCallback({
                 done: function (error) {
@@ -79,6 +79,7 @@ function Gallery(info){
             viewModel.set("image_url" , picture.url);
             viewModel.set("image_id", picture.id);
         }else if(paginationUrl) {
+            eventInfo.curIGUrl = paginationUrl;
             eventObject.put("curIGUrl", paginationUrl);
             eventObject.saveInBackground(new com.parse.SaveCallback({
                 done: function (error) {
@@ -159,6 +160,7 @@ function visitPhoto(id , uploaded){
     }else {
         visitedPhotos.ig.push(id);
     }
+    eventInfo.viewedPhotos = JSON.stringify(visitedPhotos);
     eventObject.put("viewedPhotos", JSON.stringify(visitedPhotos));
     eventObject.saveInBackground(new com.parse.SaveCallback({
         done: function (error) {
