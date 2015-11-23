@@ -136,14 +136,10 @@ function swipeRight(eventData){
 exports.swipeRight = swipeRight;
 
 function reportPicture(){
-    gallery.reportPicture().then(function(){
-        dialogsModule.alert("Administrators have been notified.");
-    }).catch(function(e){
-        dialogsModule.alert("Reporting failed");
-    });
+    gallery.reportPicture();
 }
 
-exports.reportPicture = reportPicture();
+exports.reportPicture = reportPicture;
 
 
 
