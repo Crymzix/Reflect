@@ -94,7 +94,20 @@ function Gallery(info){
     };
 
     viewModel.reportPicture = function(){
-      // TODO
+        // TODO ip addresses
+        var reportedPhoto = new com.parse.ParseObject("ReportedPhotos");
+        reportedPhoto.put("img_url",picture.url);
+        reportedPhoto.saveInBackground(new com.parse.SaveCallback({
+            done: function(error){
+                console.log("Reported photo saved");
+            }
+        }));
+        picture = pictures.pop();
+        if(picture){
+            viewModel.set("image_url" , picture.url);
+            viewModel.set("image_id", picture.id);
+
+        }
     };
 
     return viewModel;
