@@ -2,6 +2,7 @@
     <StackLayout cssClass="gallery">
         <StackLayout>
             <Image src="res://logo" stretch="none" horizontalAlignment="center" verticalAlignment="center"/>
+            <Button text="Report Picture" id="report" tap ="reportPicture" cssClass="report"/>
         </StackLayout>
         <StackLayout id="image">
             <Image src="{{ image_url }}"  id="{{ image_id }}" stretch="none"

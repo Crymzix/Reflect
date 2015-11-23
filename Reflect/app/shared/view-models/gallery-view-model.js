@@ -68,6 +68,10 @@ function Gallery(info){
         viewModel.set("image_id", picture.id);
     };
 
+    viewModel.reportPicture = function(){
+      // TODO
+    };
+
     return viewModel;
 }
 

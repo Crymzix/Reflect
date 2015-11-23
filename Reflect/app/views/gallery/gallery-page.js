@@ -8,6 +8,7 @@ var borderModule = require("ui/border");
 var GalleryViewModel = require("../../shared/view-models/gallery-view-model");
 var gallery = new GalleryViewModel();
 var image, reject, accept;
+var dialogsModule = require("ui/dialogs");
 
 function loaded(args){
     var page = args.object;
@@ -129,6 +130,16 @@ function swipeRight(eventData){
 }
 
 exports.swipeRight = swipeRight;
+
+function reportPicture(){
+    gallery.reportPicture().then(function(){
+        dialogsModule.alert("Administrators have been notified.");
+    }).catch(function(e){
+        dialogsModule.alert("Reporting failed");
+    });
+}
+
+exports.reportPicture = reportPicture();
 
 
 

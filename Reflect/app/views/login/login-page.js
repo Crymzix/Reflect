@@ -2,6 +2,7 @@ var gesturesModule = require("ui/gestures");
 var frameModule = require("ui/frame");
 var loginViewModel = require("../../shared/view-models/login-view-model");
 var dialogsModule = require("ui/dialogs");
+var applicationSettings = require("application-settings");
 
 var user = new loginViewModel({
     email: "test@hotmail.ca",
@@ -33,13 +34,19 @@ exports.signUp = function() {
 exports.asGuest = function(){
     var topmost = frameModule.topmost();
     topmost.navigate("views/main/main-page");
-}
+};
 
 exports.signIn = function(){
-    user.signIn();
-    var topmost = frameModule.topmost();
-    topmost.navigate("views/main/main-page");
-}
+    user.signIn().then(function(){
+        dialogsModule.alert("You've successfully signed in!");
+        var topmost = frameModule.topmost();
+        topmost.navigate("views/main/main-page");
+    }).catch(function(e){
+        dialogsModule.alert("Login Failed! Try again");
+    });
+
+};
+
 
 //var dialogsModule = require("ui/dialogs");
 //var frameModule = require("ui/frame");

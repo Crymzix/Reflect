@@ -16,22 +16,25 @@ exports.loaded = function(args){
     email = page.getViewById("email");
     password = page.getViewById("password");
 
-}
+};
 
 
 
 exports.logIn = function(args){
     frameModule.topmost().navigate({
-        moduleName: "views/login/login-page",
+        moduleName: "views/login/login-page"
     });
-}
+};
 
 exports.register = function(args){
-    user.register()
-    dialogsModule.alert("You've successfully signed up!");
-    var topmost = frameModule.topmost();
-    topmost.navigate("views/login/login-page");
-}
+        user.register().then(function() {
+            dialogsModule.alert("Sign up Successful!");
+            var topmost = frameModule.topmost();
+            topmost.navigate("views/login/login-page");
+        }).catch(function(e) {
+            dialogsModule.alert("Signup failed. Username may be already taken. Please try again.");
+        });
+};
 
 //var UserViewModel = require("../../shared/view-models/user-view-model");
 //var user = new UserViewModel({ authenticating: false });
@@ -84,3 +87,13 @@ exports.register = function(args){
 //        });
 //    }
 //};
+
+//user.register();
+//if(applicationSettings.hasKey("errorCode")){
+//    dialogsModule.alert("Signup failed. Username may be already taken. Please try again.")
+//    applicationSettings.remove("errorCode");
+//} else {
+//    dialogsModule.alert("You've successfully signed up!");
+//    var topmost = frameModule.topmost();
+//    topmost.navigate("views/login/login-page");
+//}
