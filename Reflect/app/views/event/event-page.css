@@ -35,7 +35,8 @@
 }
 
 .event-label {
-    margin-top: 20;
+    margin-left: 25;
+    margin-right: 25;
     background-color: white;
     color: #727272;
     font-size: 12;
