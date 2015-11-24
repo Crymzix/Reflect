@@ -29,7 +29,7 @@ var SearchResultsViewModel = (function (_super) {
 				console.log(event.title);
 				console.log(event.cover_photo.url);
 				eventList.push({eventItemTitle: event.title, eventItemImage: event.cover_photo.url, eventItemHashtags: event.hashtags});
-				}
+			}
         this.set("searchEvents", eventList);
 		}
         
