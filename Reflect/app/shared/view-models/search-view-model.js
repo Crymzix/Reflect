@@ -36,21 +36,34 @@ var SearchEventsViewModel = (function (_super) {
 		var keywordArray = keywordSearch.text.split(" ");
 		console.log("the search terms are: " + keywordArray);
 		var regexArray = [];
+		var j = 0;
 		for (var i = 0; i<keywordArray.length; i++) {
-			var term = {};
-			term["$regex"] = "^" + keywordArray[i]; 
-			regexArray[i] = term; 
-			console.log("the content of regexArray: " + regexArray[i]);
+			
+			var uppercase = {};
+			var uppercaseString = keywordArray[i].charAt(0).toUpperCase() + keywordArray[i].slice(1);
+			uppercase["title"] = {
+				$regex : uppercaseString
+			};
+			regexArray[j] = uppercase; 
+			j++;
+			
+			var lowercase = {};
+			var lowercaseString = keywordArray[i].toLowerCase();
+			lowercase["title"] = {
+				$regex : lowercaseString
+			};
+			regexArray[j] = lowercase;
+			j++
 		}
-		console.log("the content of regexArray: " + regexArray);
+		console.log("the content of regexArray: " + JSON.stringify(regexArray));
 		
 		var query = qs.stringify({
 			where: JSON.stringify({
-				title: {
-						$regex: "^" regexArray[0];
-						
-						//$or: regexArray
-				}
+				$or: regexArray
+				/* title: {
+						//$regex: "^" regexArray[0];
+						$or: regexArray
+				} */
 			})
 		});
 		var url = "https://api.parse.com/1/classes/Event?" + query;
