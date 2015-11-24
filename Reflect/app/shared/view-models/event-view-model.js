@@ -26,7 +26,7 @@ var EventViewModel = (function (_super) {
             this.set("eventEndDate", event.end_date);
         }
 
-        this.set("eventLocation", event.location);
+        this.set("eventLocation", event.locationTitle);
         this.set("eventDescription", event.description);
         this.set("eventHashtag", event.hashtags);
     }

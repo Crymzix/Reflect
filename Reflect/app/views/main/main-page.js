@@ -169,12 +169,16 @@ function showSearch() {
 }
 exports.showSearch = showSearch;
 
-/* function matchEventIds(array) {
-	viewModel = new searchResultsViewModule.SearchResultsViewModel();
-	page.bindingContext = viewModel;
-	viewModel.matchEventIds(array);
+function showMap() {
+    viewModel.showMap();
 }
-exports.matchEventIds = matchEventIds; */
+exports.showMap = showMap;
+
+function chooseLocation() {
+    var locationLabel = page.getViewById("eventLocation");
+    viewModel.chooseLocation(locationLabel);
+}
+exports.chooseLocation = chooseLocation;
 
 function logOut(){
     applicationSettings.remove("currentUser");

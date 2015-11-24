@@ -45,7 +45,7 @@
                     <TextField id="eventHashtags" text="{{ eventHashtag }}" hint="#Hashtags" keyboardType="email"
                                autocorrect="false" cssClass="event-input-field"/>
                     <GridLayout id="galleryButton" tap="goToGallery" style="margin-bottom:20;">
-                        <Image stretch="none" horizontalAlignment="right" style="margin-right:20;vertical-align:center;"
+                        <Image stretch="none" horizontalAlignment="right" style="margin-top:15;margin-right:20;width:40;height:40;vertical-align:center;"
                                src="res://ic_image_photo_library"/>
                     </GridLayout>
                 </StackLayout>

@@ -87,6 +87,17 @@
     border-radius: 5;
 }
 
+.event-location-label {
+    margin-top: 10;
+    margin-left: 20;
+    padding: 10;
+    margin-right: 20;
+    color: #727272;
+    background-color: #71b0fb;
+    border-radius: 5;
+    font-size: 18;
+}
+
 .event-label {
     margin-top: 20;
     background-color: white;

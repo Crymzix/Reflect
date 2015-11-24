@@ -1,0 +1,16 @@
+<Page loaded="pageLoaded" xmlns="http://www.nativescript.org/tns.xsd" xmlns:maps="nativescript-google-maps-sdk" actionBarHidden="true">
+    <StackLayout>
+        <GridLayout cssClass="action-bar">
+            <GridLayout cssClass="action-wrap" tap="back" columns="auto" horizontalAlignment="left">
+                <Image stretch="none" style="margin-left:20;vertical-align:center;horizontal-align:left;"
+                       src="res://ic_action_navigation_arrow_back"/>
+            </GridLayout>
+            <Label text="Nearby Events" cssClass="action-bar-title"/>
+        </GridLayout>
+        <GridLayout>
+            <maps:mapView latitude="{{ latitude }}" longitude="{{ latitude }}"
+                          zoom="{{ zoom }}" bearing="{{ bearing }}"
+                          tilt="{{ tilt }}" mapReady="OnMapReady" />
+        </GridLayout>
+    </StackLayout>
+</Page>
