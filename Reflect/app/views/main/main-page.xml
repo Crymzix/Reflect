@@ -63,14 +63,23 @@
                             </GridLayout>
                             <TextField id="eventTitle" text="{{ title }}" hint="Title" keyboardType="email"
                                        autocorrect="true" cssClass="event-input-field"/>
-                            <GridLayout columns="5, *, auto" rows="auto, *" >
-                                <Button col="1" text="date" tap="setDate" cssClass="event-date" horizontalAlignment="center"/>
-                                <Button col="4" text="time" tap="setTime" cssClass="event-date" horizontalAlignment="center" style="margin-right:30;"/>
+
+                            <GridLayout columns="*, *, *" rows="auto, auto" >
+                                <Button col="1" text="date" tap="setStartDate" cssClass="event-date"/>
+                                <Button col="2" text="time" tap="setStartTime" cssClass="event-date"/>
+                                <Label col="0" text="Start Date:" row="1" cssClass="event-label" style="margin-left:20;"/>
+                                <Label id="eventStartDateLabel" col="1" row="1" cssClass="event-label" style="margin-left:20;"/>
+                                <Label id="eventStartTimeLabel" col="2" row="1" cssClass="event-label" style="margin-left:20;"/>
                             </GridLayout>
-                            <GridLayout columns="5, *, auto" rows="auto, *" >
-                                <Label id="eventDateLabel" col="1" textWrap="true" cssClass="event-label" horizontalAlignment="center"/>
-                                <Label id="eventTimeLabel" col="4" textWrap="true" cssClass="event-label" horizontalAlignment="center" style="margin-right:30;"/>
+
+                            <GridLayout columns="*, *, *" rows="auto, auto" >
+                                <Button col="1" text="date" tap="setEndDate" cssClass="event-date"/>
+                                <Button col="2" text="time" tap="setEndTime" cssClass="event-date"/>
+                                <Label col="0" text="End Date:" row="1" cssClass="event-label" style="margin-left:20;"/>
+                                <Label id="eventEndDateLabel" col="1" row="1" cssClass="event-label" style="margin-left:20;"/>
+                                <Label id="eventEndTimeLabel" col="2" row="1" cssClass="event-label" style="margin-left:20;"/>
                             </GridLayout>
+
                             <TextField id="eventLocation" text="{{ location }}" hint="Location" keyboardType="email"
                                        autocorrect="false" cssClass="event-input-field"/>
                             <TextField id="eventDescription" height="100" text="{{ description }}" hint="Description"

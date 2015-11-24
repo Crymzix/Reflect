@@ -51,9 +51,9 @@ var CreateEventViewModel = (function (_super) {
         this.set("loggedIn",currentUser);
     };
 
-    CreateEventViewModel.prototype.addEvent = function (imageView, title, location, description, date, time, hashtags) {
+    CreateEventViewModel.prototype.addEvent = function (imageView, title, location, description, startDate, startTime, endDate, endTime, hashtags) {
 
-        if (title.text && location.text && description.text && date.text && time.text) {
+        if (title.text && location.text && description.text && startDate.text && startTime.text && endDate.text && endTime.text) {
             var viewedPhotos = {
                 "ig" : [],
                 "upload" : []
@@ -64,7 +64,8 @@ var CreateEventViewModel = (function (_super) {
             eventObject.put("title", title.text);
             eventObject.put("location", location.text);
             eventObject.put("description", description.text);
-            eventObject.put("start_date", date.text + " " + time.text);
+            eventObject.put("start_date", startDate.text + " " + startTime.text);
+            eventObject.put("end_date", endDate.text + " " + endTime.text);
             eventObject.put("hashtags", hashtags.text);
             eventObject.put("viewedPhotos", viewedPhotos);
             eventObject.put("imgurDeleteHash", "");

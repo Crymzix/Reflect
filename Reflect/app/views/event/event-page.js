@@ -50,3 +50,43 @@ function goToGallery() {
     });
 }
 exports.goToGallery = goToGallery;
+
+function showStartDateModal() {
+    var context = "date";
+    var fullscreen = false;
+    page.showModal("./views/event/date-picker", context, function closeCallback(date) {
+        var dateLabel = page.getViewById("eventStartDateLabel");
+        dateLabel.text = date;
+    }, fullscreen);
+}
+exports.setStartDate = showStartDateModal;
+
+function showStartTimeModal() {
+    var context = "time";
+    var fullscreen = false;
+    page.showModal("./views/event/time-picker", context, function closeCallback(time) {
+        var timeLabel = page.getViewById("eventStartTimeLabel");
+        timeLabel.text = time;
+    }, fullscreen);
+}
+exports.setStartTime = showStartTimeModal;
+
+function showEndDateModal() {
+    var context = "date";
+    var fullscreen = false;
+    page.showModal("./views/event/date-picker", context, function closeCallback(date) {
+        var dateLabel = page.getViewById("eventEndDateLabel");
+        dateLabel.text = date;
+    }, fullscreen);
+}
+exports.setEndDate = showEndDateModal;
+
+function showEndTimeModal() {
+    var context = "time";
+    var fullscreen = false;
+    page.showModal("./views/event/time-picker", context, function closeCallback(time) {
+        var timeLabel = page.getViewById("eventEndTimeLabel");
+        timeLabel.text = time;
+    }, fullscreen);
+}
+exports.setEndTime = showEndTimeModal;

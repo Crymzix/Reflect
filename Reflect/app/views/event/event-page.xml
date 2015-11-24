@@ -9,29 +9,73 @@
                 <Label text="Event" cssClass="action-bar-title"/>
             </GridLayout>
         </StackLayout>
-        <ScrollView>
-            <StackLayout>
-                <Image id="eventCover" src="{{ eventCoverPhoto }}" cssClass="event-photo"
-                       stretch="aspectFill"/>
-                <Label id="eventTitle" text="{{ eventTitle }}" cssClass="event-label" style="margin-top:15;"/>
-                <Label id="eventDate" text="{{ eventDate }}" cssClass="event-label"/>
-                <Label id="eventLocation" text="{{ eventLocation }}" cssClass="event-label"/>
-                <Label id="eventDescription" text="{{ eventDescription }}" cssClass="event-label"/>
-                <GridLayout tap="takePicture" visibility="{{ isOwner ? 'collapsed' : 'visible'}}">
-                    <Image stretch="none" horizontalAlignment="left" style="margin-left:20;vertical-align:center;"
-                           src="res://ic_image_camera_alt"/>
-                </GridLayout>
-                <Image id="uploadedImage" stretch="none" width="100" height="100" style="margin-top:20;margin-right:20;vertical-align:center;"
-                       src="{{ uploadedPhoto }}"/>
-                <GridLayout id="uploadButton" tap="upload" style="margin-bottom:20;" visibility="{{ isOwner ? 'collapsed' : 'visible'}}">
-                    <Image stretch="none" horizontalAlignment="right" style="margin-right:20;vertical-align:center;"
-                           src="res://ic_file_file_upload"/>
-                </GridLayout>
-                <GridLayout id="galleryButton" tap="goToGallery" style="margin-bottom:20;" visibility="{{ isOwner ? 'visible' : 'collapsed'}}">
-                    <Image stretch="none" horizontalAlignment="right" style="margin-right:20;vertical-align:center;"
-                           src="res://ic_image_photo_library"/>
-                </GridLayout>
-            </StackLayout>
-        </ScrollView>
+
+        <StackLayout visibility="{{ isOwner ? 'visible' : 'collapsed'}}">
+            <ScrollView>
+                <StackLayout>
+                    <Image id="eventCover" src="{{ eventCoverPhoto }}" cssClass="event-photo"
+                           stretch="aspectFill"/>
+                    <GridLayout cssClass="upload-photo-wrap" tap="choosePhoto" columns="auto"
+                                horizontalAlignment="left">
+                        <Image stretch="none" cssClass="icon-image" src="res://ic_image_add_to_photos"/>
+                    </GridLayout>
+                    <TextField id="eventTitle" text="{{ eventTitle }}" hint="Title" keyboardType="email"
+                               autocorrect="true" cssClass="event-input-field"/>
+
+                    <GridLayout columns="*, *, *" rows="auto, auto">
+                        <Button col="1" text="date" tap="setStartDate" cssClass="event-date"/>
+                        <Button col="2" text="time" tap="setStartTime" cssClass="event-date"/>
+                        <Label col="0" text="Start Date:" row="1" cssClass="event-label" style="margin-left:20;"/>
+                        <Label id="eventStartDateLabel" text="{{ eventStartDate }}" col="1" row="1" cssClass="event-label" style="margin-left:20;"/>
+                        <Label id="eventStartTimeLabel" text="{{ eventStartTime }}" col="2" row="1" cssClass="event-label" style="margin-left:20;"/>
+                    </GridLayout>
+
+                    <GridLayout columns="*, *, *" rows="auto, auto">
+                        <Button col="1" text="date" tap="setEndDate" cssClass="event-date"/>
+                        <Button col="2" text="time" tap="setEndTime" cssClass="event-date"/>
+                        <Label col="0" text="End Date:" row="1" cssClass="event-label" style="margin-left:20;"/>
+                        <Label id="eventEndDateLabel" text="{{ eventEndDate }}" col="1" row="1" cssClass="event-label" style="margin-left:20;"/>
+                        <Label id="eventEndTimeLabel" text="{{ eventEndTime }}" col="2" row="1" cssClass="event-label" style="margin-left:20;"/>
+                    </GridLayout>
+
+                    <TextField id="eventLocation" text="{{ eventLocation }}" hint="Location" keyboardType="email"
+                               autocorrect="false" cssClass="event-input-field"/>
+                    <TextField id="eventDescription" height="100" text="{{ eventDescription }}" hint="Description"
+                               autocorrect="true" cssClass="event-input-field"/>
+                    <TextField id="eventHashtags" text="{{ eventHashtag }}" hint="#Hashtags" keyboardType="email"
+                               autocorrect="false" cssClass="event-input-field"/>
+                    <GridLayout id="galleryButton" tap="goToGallery" style="margin-bottom:20;">
+                        <Image stretch="none" horizontalAlignment="right" style="margin-right:20;vertical-align:center;"
+                               src="res://ic_image_photo_library"/>
+                    </GridLayout>
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
+
+        <StackLayout visibility="{{ isOwner ? 'collapsed' : 'visible'}}">
+            <ScrollView>
+                <StackLayout>
+                    <Image id="eventCover" src="{{ eventCoverPhoto }}" cssClass="event-photo"
+                           stretch="aspectFill"/>
+                    <Label id="eventTitle" text="{{ eventTitle }}" cssClass="event-label" style="margin-top:15;"/>
+                    <Label id="eventStartDate" text="{{ eventStartDate }}" cssClass="event-label"/>
+                    <Label id="eventEndDate" text="{{ eventEndDate }}" cssClass="event-label"/>
+                    <Label id="eventLocation" text="{{ eventLocation }}" cssClass="event-label"/>
+                    <Label id="eventDescription" text="{{ eventDescription }}" cssClass="event-label"/>
+                    <Label id="eventHashtag" text="{{ eventHashtag }}" cssClass="event-label"/>
+                    <GridLayout tap="takePicture" visibility="{{ isOwner ? 'collapsed' : 'visible'}}">
+                        <Image stretch="none" horizontalAlignment="left" style="margin-left:20;vertical-align:center;"
+                               src="res://ic_image_camera_alt"/>
+                    </GridLayout>
+                    <Image id="uploadedImage" stretch="none" width="100" height="100"
+                           style="margin-top:20;margin-right:20;vertical-align:center;"
+                           src="{{ uploadedPhoto }}"/>
+                    <GridLayout id="uploadButton" tap="upload" style="margin-bottom:20;">
+                        <Image stretch="none" horizontalAlignment="right" style="margin-right:20;vertical-align:center;"
+                               src="res://ic_file_file_upload"/>
+                    </GridLayout>
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
     </StackLayout>
 </Page>

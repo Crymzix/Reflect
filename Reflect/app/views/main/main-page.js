@@ -96,10 +96,12 @@ function addEvent() {
     var title = page.getViewById("eventTitle");
     var location = page.getViewById("eventLocation");
     var description = page.getViewById("eventDescription");
-    var date = page.getViewById("eventDateLabel");
-    var time = page.getViewById("eventTimeLabel");
+    var startDate = page.getViewById("eventStartDateLabel");
+    var startTime = page.getViewById("eventStartTimeLabel");
+    var endDate = page.getViewById("eventEndDateLabel");
+    var endTime = page.getViewById("eventEndTimeLabel");
     var hashtags = page.getViewById("eventHashtags");
-    viewModel.addEvent(imageView, title, location, description, date, time, hashtags);
+    viewModel.addEvent(imageView, title, location, description, startDate, startTime, endDate, endTime, hashtags);
 }
 
 exports.selectView = selectView;
@@ -113,25 +115,45 @@ function switchToLogin(args){
 
 exports.addEvent = addEvent;
 
-function showDateModal() {
+function showStartDateModal() {
     var context = "date";
     var fullscreen = false;
     page.showModal("./views/event/date-picker", context, function closeCallback(date) {
-        var dateLabel = page.getViewById("eventDateLabel");
+        var dateLabel = page.getViewById("eventStartDateLabel");
         dateLabel.text = date;
     }, fullscreen);
 }
-exports.setDate = showDateModal;
+exports.setStartDate = showStartDateModal;
 
-function showTimeModal() {
+function showStartTimeModal() {
     var context = "time";
     var fullscreen = false;
     page.showModal("./views/event/time-picker", context, function closeCallback(time) {
-        var timeLabel = page.getViewById("eventTimeLabel");
+        var timeLabel = page.getViewById("eventStartTimeLabel");
         timeLabel.text = time;
     }, fullscreen);
 }
-exports.setTime = showTimeModal;
+exports.setStartTime = showStartTimeModal;
+
+function showEndDateModal() {
+    var context = "date";
+    var fullscreen = false;
+    page.showModal("./views/event/date-picker", context, function closeCallback(date) {
+        var dateLabel = page.getViewById("eventEndDateLabel");
+        dateLabel.text = date;
+    }, fullscreen);
+}
+exports.setEndDate = showEndDateModal;
+
+function showEndTimeModal() {
+    var context = "time";
+    var fullscreen = false;
+    page.showModal("./views/event/time-picker", context, function closeCallback(time) {
+        var timeLabel = page.getViewById("eventEndTimeLabel");
+        timeLabel.text = time;
+    }, fullscreen);
+}
+exports.setEndTime = showEndTimeModal;
 
 function listViewItemTap(args) {
     viewModel.listViewItemTap(args);

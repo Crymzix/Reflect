@@ -16,9 +16,38 @@
     height: 200;
 }
 
-.event-label {
-    margin-left: 25;
-    margin-right: 25;
+.upload-photo-wrap {
     margin-top: 10;
-    margin-bottom: 10;
+    padding-left: 16;
+    padding-right: 16;
+    height: 50;
+}
+
+.event-input-field {
+    margin-top: 10;
+    margin-left: 20;
+    padding-left: 10;
+    padding-right: 10;
+    margin-right: 20;
+    color: #727272;
+    background-color: #BBDEFB;
+    border-radius: 5;
+}
+
+.event-label {
+    margin-top: 20;
+    background-color: white;
+    color: #727272;
+    font-size: 12;
+    height: 40;
+}
+
+.event-date {
+    color: #727272;
+    background-color: #BBDEFB;
+    font-size: 10;
+    height: 36;
+    width: 52;
+    border-radius: 10;
+    margin-top: 20;
 }
