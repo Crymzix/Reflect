@@ -22,15 +22,17 @@ var SearchResultsViewModel = (function (_super) {
 
         var eventList = new observableArray.ObservableArray();
         this._events = context.results;
-
-        for (var i = 0; i < this._events.length; i++) {
-            var event = this._events[i];
-            console.log(event.title);
-            console.log(event.cover_photo.url);
-            eventList.push({eventItemTitle: event.title, eventItemImage: event.cover_photo.url, eventItemHashtags: event.hashtags});
-        }
-
+		
+		if (this._events) {
+				for (var i = 0; i < this._events.length; i++) {
+				var event = this._events[i];
+				console.log(event.title);
+				console.log(event.cover_photo.url);
+				eventList.push({eventItemTitle: event.title, eventItemImage: event.cover_photo.url, eventItemHashtags: event.hashtags});
+				}
         this.set("searchEvents", eventList);
+		}
+        
     }
 
 	SearchResultsViewModel.prototype.checkLoggedIn = function(){

@@ -34,26 +34,39 @@ var SearchEventsViewModel = (function (_super) {
 
 	SearchEventsViewModel.prototype.searchEvents = function (keywordSearch) {
 		var keywordArray = keywordSearch.text.split(" ");
-		console.log("the search terms are: " + keywordArray);
+		console.log("the search terms are: " + keywordArray + "and the number of entries in array are" + keywordArray.length);
 		var regexArray = [];
-		var j = 0;
-		for (var i = 0; i<keywordArray.length; i++) {
+		for (var i = 0; i<keywordArray.length*4; i+=4) {
+			
+			// converts search word to capitalized word 
+			var uppercaseString = keywordArray[i/4].charAt(0).toUpperCase() + keywordArray[i/4].slice(1);
+			// converts search word to lower case word
+			var lowercaseString = keywordArray[i/4].toLowerCase();
 			
 			var uppercase = {};
-			var uppercaseString = keywordArray[i].charAt(0).toUpperCase() + keywordArray[i].slice(1);
 			uppercase["title"] = {
 				$regex : uppercaseString
 			};
-			regexArray[j] = uppercase; 
-			j++;
+			regexArray[i] = uppercase; 
 			
 			var lowercase = {};
-			var lowercaseString = keywordArray[i].toLowerCase();
 			lowercase["title"] = {
 				$regex : lowercaseString
 			};
-			regexArray[j] = lowercase;
-			j++
+			regexArray[i+1] = lowercase;
+
+			var hashtagUpperCase = {};
+			hashtagUpperCase["hashtags"] = {
+				$regex: uppercaseString
+			};
+			regexArray[i+2] = hashtagUpperCase;
+			
+			var hashtagLowerCase = {};
+			hashtagLowerCase["hashtags"] = {
+				$regex: lowercaseString
+			};
+			regexArray[i+3] = hashtagLowerCase;
+			//j++;
 		}
 		console.log("the content of regexArray: " + JSON.stringify(regexArray));
 		
