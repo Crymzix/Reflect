@@ -8,7 +8,11 @@ var borderModule = require("ui/border");
 var GalleryViewModel = require("../../shared/view-models/gallery-view-model");
 var gallery;
 var image, reject, accept;
+
+var dialogsModule = require("ui/dialogs");
+
 var eventInfo;
+
 
 function loaded(args){
     var page = args.object;
@@ -130,6 +134,33 @@ function swipeRight(eventData){
 }
 
 exports.swipeRight = swipeRight;
+
+function reportPicture(){
+    image.animate({
+        translate: { x: -300, y: 0 },
+        duration: 200
+    }).then(function(){
+        return image.animate({ opacity: 0 });
+    }).then(function(){
+        gallery.visitPhoto();
+        gallery.reportPicture();
+        return image.animate({
+            translate: {x: 0, y: 0},
+            duration: 1
+        });
+    }).then(function () {
+        return image.animate({ opacity: 1, duration: 1500 });
+    });
+
+    reject.animate({
+        scale: {x: 1.25, y: 1.25},
+        duration: 200
+    }).then(function(){
+        return reject.animate({ scale :  {x: 1, y: 1}, duration: 200});
+    });
+}
+
+exports.reportPicture = reportPicture;
 
 
 
