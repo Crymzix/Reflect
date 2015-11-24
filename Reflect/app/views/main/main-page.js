@@ -169,6 +169,7 @@ function showSearch() {
 }
 exports.showSearch = showSearch;
 
+
 function showMap() {
     viewModel.showMap();
 }
