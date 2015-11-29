@@ -1,16 +1,17 @@
 <Page xmlns="http://www.nativescript.org/tns.xsd" loaded="loaded" actionBarHidden="true">
     <StackLayout cssClass="gallery">
         <StackLayout>
-            <Image src="res://logo" stretch="none" horizontalAlignment="center" verticalAlignment="center"/>
+            <!--<Image src="res://logo" stretch="none" horizontalAlignment="center" verticalAlignment="center"/>-->
             <Button text="Report Picture" id="report" tap ="reportPicture" cssClass="report"/>
         </StackLayout>
-        <StackLayout id="image">
-            <Image src="{{ image_url }}"  id="{{ image_id }}" stretch="none"
-               horizontalAlignment="center" swipe="swipePicture" cssClass="image"/>
+        <StackLayout id="image" cssClass="image">
+            <Image src="{{ image_url }}"  id="{{ image_id }}"
+                   horizontalAlignment="center" swipe="swipePicture" cssClass="image-pic" />
+            <ActivityIndicator busy="{{ isLoading }}" />
         </StackLayout>
         <GridLayout cssClass="action-buttons" columns="auto, *" rows="auto, *" >
-            <Button row="1" col="0" id="reject" text="N" tap="swipeLeft" cssClass="rejectPhoto"/>
-            <Button row="1" col="2" id="accept" text="Y" tap="swipeRight" cssClass="acceptPhoto"/>
+            <Button row="0" col="0" id="reject" text="N" tap="swipeLeft" cssClass="rejectPhoto"/>
+            <Button row="0" col="2" id="accept" text="Y" tap="swipeRight" cssClass="acceptPhoto"/>
             <Label row="2" />
         </GridLayout>
     </StackLayout>

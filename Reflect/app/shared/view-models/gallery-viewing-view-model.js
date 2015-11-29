@@ -32,7 +32,7 @@ function GalleryViewing(info) {
         image_url: "",
         image_id: ""
     });
-
+    viewModel.set("isLoading", true);
     loadPhotos(imgurAlbumId);
 
 
@@ -125,7 +125,9 @@ function loadPhotos(albumId){
         pictures = picturesArray;
         picture = pictures[picturePosition];
         console.log(pictureCount);
+
         if(picture){
+            viewModel.set("isLoading", false);
             viewModel.image_id = picture.id;
             viewModel.image_url = picture.url;
         }else{

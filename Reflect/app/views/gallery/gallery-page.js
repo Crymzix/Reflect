@@ -5,6 +5,7 @@
 var observableModule = require("data/observable");
 var view = require("ui/core/view");
 var borderModule = require("ui/border");
+var activityIndicatorModule = require("ui/activity-indicator");
 var GalleryViewModel = require("../../shared/view-models/gallery-view-model");
 var gallery;
 var image, reject, accept;
@@ -30,7 +31,7 @@ function swipePicture(eventData){
     console.log("Picture Swiped" +  eventData.direction);
     if(eventData.direction === 8  || eventData.direction === 2){
         image.animate({
-            translate: { x: -300, y: 0 },
+            translate: { x: -600, y: 0 },
             duration: 200
         }).then(function(){
             return image.animate({ opacity: 0 });
@@ -46,7 +47,7 @@ function swipePicture(eventData){
         });
 
         reject.animate({
-            scale: {x: 1.25, y: 1.25},
+            scale: {x: 1.15, y: 1.15},
             duration: 200
         }).then(function(){
             return reject.animate({ scale :  {x: 1, y: 1}, duration: 200});
@@ -57,7 +58,7 @@ function swipePicture(eventData){
 
     if(eventData.direction === 4  || eventData.direction === 1){
         image.animate({
-            translate: { x: 300, y: 0 },
+            translate: { x: 600, y: 0 },
             duration: 200
         }).then(function(){
             return image.animate({ opacity: 0 });
@@ -73,7 +74,7 @@ function swipePicture(eventData){
         });
 
         accept.animate({
-            scale: {x: 1.25, y: 1.25},
+            scale: {x: 1.15, y: 1.15},
             duration: 200
         }).then(function(){ return accept.animate({ scale :  {x: 1, y: 1}, duration: 200}); });
 
@@ -85,7 +86,7 @@ exports.swipePicture = swipePicture;
 
 function swipeLeft(eventData){
     image.animate({
-        translate: { x: -300, y: 0 },
+        translate: { x: -600, y: 0 },
         duration: 200
     }).then(function(){
         return image.animate({ opacity: 0 });
@@ -101,7 +102,7 @@ function swipeLeft(eventData){
     });
 
     reject.animate({
-        scale: {x: 1.25, y: 1.25},
+        scale: {x: 1.15, y: 1.15},
         duration: 200
     }).then(function(){
         return reject.animate({ scale :  {x: 1, y: 1}, duration: 200});
@@ -111,7 +112,7 @@ exports.swipeLeft = swipeLeft;
 
 function swipeRight(eventData){
     image.animate({
-        translate: { x: 300, y: 0 },
+        translate: { x: 600, y: 0 },
         duration: 200
     }).then(function(){
         return image.animate({ opacity: 0 });
@@ -127,7 +128,7 @@ function swipeRight(eventData){
     });
 
     accept.animate({
-        scale: {x: 1.25, y: 1.25},
+        scale: {x: 1.15, y: 1.15},
         duration: 200
     }).then(function(){ return accept.animate({ scale :  {x: 1, y: 1}, duration: 200}); });
 

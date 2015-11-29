@@ -19,13 +19,17 @@
     border-width: 5;
     margin-left: 45;
     vertical-align: bottom;
-    margin-bottom: 55;
 }
 
 
 .image {
-    padding: 15px;
     background-color: #ededed;
     border-radius: 0;
-    margin-top: 0;
+    width: 310;
+    height: 310;
+    margin-top: 10;
+}
+
+.image-pic{
+    margin: 15;
 }

@@ -7,6 +7,9 @@ var GalleryViewingViewModel = require("../../shared/view-models/gallery-viewing-
 var gallery_viewing;
 var image, del;
 
+var dialogs = require("ui/dialogs");
+var progressModule = require("ui/progress");
+
 var eventInfo;
 
 var picturePosition;
@@ -35,7 +38,7 @@ function swipePicture(eventData){
         if(picturePosition < gallery_viewing.getPictureCount() - 1) {
             picturePosition ++;
             image.animate({
-                translate: {x: -500, y: 0},
+                translate: {x: -600, y: 0},
                 duration: 200
             }).then(function () {
                 return image.animate({opacity: 0});
@@ -55,7 +58,7 @@ function swipePicture(eventData){
         if(picturePosition > 0) {
             picturePosition--;
             image.animate({
-                translate: {x: 500, y: 0},
+                translate: {x: 600, y: 0},
                 duration: 200
             }).then(function () {
                 return image.animate({opacity: 0});
@@ -76,42 +79,57 @@ function swipePicture(eventData){
 exports.swipePicture = swipePicture;
 
 function deletePhoto(eventData){
+    var options = {
+        title: "Delete Photo",
+        message: "Are you sure you want to remove this photo from your gallery?",
+        okButtonText: "Yes",
+        cancelButtonText: "No"
+    };
     if(picturePosition < gallery_viewing.getPictureCount() - 1){
-        image.animate({
-            translate: { x: -500, y: 0 },
-            duration: 200
-        }).then(function(){
-            return image.animate({ opacity: 0 });
-        }).then(function(){
-            gallery_viewing.deletePicture();
-            return image.animate({
-                translate: {x: 0, y: 0},
-                duration: 1
-            });
-        }).then(function () {
-            return image.animate({ opacity: 1, duration: 1500 });
+        dialogs.confirm(options).then(function (result) {
+            if(result == true){
+                image.animate({
+                    translate: { x: -600, y: 0 },
+                    duration: 200
+                }).then(function(){
+                    return image.animate({ opacity: 0 });
+                }).then(function(){
+                    gallery_viewing.deletePicture();
+                    return image.animate({
+                        translate: {x: 0, y: 0},
+                        duration: 1
+                    });
+                }).then(function () {
+                    return image.animate({ opacity: 1, duration: 1500 });
+                });
+            }
         });
+
     }else if(gallery_viewing.getPictureCount() != 0){
         picturePosition--;
-        image.animate({
-            translate: { x: 500, y: 0 },
-            duration: 200
-        }).then(function(){
-            return image.animate({ opacity: 0 });
-        }).then(function(){
-            gallery_viewing.deletePicture();
-            return image.animate({
-                translate: {x: 0, y: 0},
-                duration: 1
-            });
-        }).then(function () {
-            return image.animate({ opacity: 1, duration: 1500 });
+        dialogs.confirm(options).then(function (result) {
+            if(result == true) {
+                image.animate({
+                    translate: {x: 600, y: 0},
+                    duration: 200
+                }).then(function () {
+                    return image.animate({opacity: 0});
+                }).then(function () {
+                    gallery_viewing.deletePicture();
+                    return image.animate({
+                        translate: {x: 0, y: 0},
+                        duration: 1
+                    });
+                }).then(function () {
+                    return image.animate({opacity: 1, duration: 1500});
+                });
+            }
         });
     }
 
 
     del.animate({
-        scale: {x: 1.25, y: 1.25},
+        scale: {x: 1.15, y: 1.15},
         duration: 200
     }).then(function(){ return del.animate({ scale :  {x: 1, y: 1}, duration: 200}); });
 

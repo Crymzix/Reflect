@@ -47,7 +47,7 @@ function Gallery(info){
         image_url: "",
         image_id:  ""
     });
-
+    viewModel.set("isLoading", true);
     viewModel.visitPhoto = function(){
         console.log("Visit Photo");
 
@@ -63,7 +63,7 @@ function Gallery(info){
             viewModel.set("image_url" , picture.url);
             viewModel.set("image_id", picture.id);
         }else if(paginationUrl) {
-            //set loading gif
+            viewModel.set("isLoading", true);
             eventInfo.curIGUrl = paginationUrl;
             eventObject.put("curIGUrl", paginationUrl);
             eventObject.saveInBackground(new com.parse.SaveCallback({
@@ -90,7 +90,7 @@ function Gallery(info){
             viewModel.set("image_url" , picture.url);
             viewModel.set("image_id", picture.id);
         }else{
-            //set loading gif
+            viewModel.set("isLoading", true);
         }
         //Add to event-gallery table
         addToImgur(savedPicture).then(function(resp){
@@ -156,6 +156,7 @@ function loadPhotos(tag, eventId, url){
         console.log("In IG Photos promise");
         pictures = response;
         loadParsePhotos(eventId).then(function(response){
+            viewModel.set("isLoading", false);
             pictures = response;
             picture = pictures.pop();
 

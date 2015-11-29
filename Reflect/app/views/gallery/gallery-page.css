@@ -1,10 +1,15 @@
 .gallery{
     background-color: #2196F3;
-    padding: 15px;
+    padding: 10px;
 }
 
 .action-buttons{
-    padding: 20px;
+    padding: 30px;
+    /*margin-: 30;*/
+}
+
+.logo{
+    margin: -30;
 }
 
 .rejectPhoto {
@@ -20,7 +25,6 @@
     horizontal-align: left;
     margin-left: 45;
     vertical-align: bottom;
-    margin-bottom: 55;
 }
 
 .acceptPhoto{
@@ -36,14 +40,19 @@
     horizontal-align: right;
     vertical-align: bottom;
     margin-right: 45;
-    margin-bottom: 55;
 }
 
 .image {
-    padding: 15px;
     background-color: #ededed;
     border-radius: 0;
-    margin-top: 0;
+    width: 310;
+    height: 310;
+    margin-top: 10;
+}
+
+
+.image-pic{
+    margin: 15;
 }
 
 .report {
@@ -51,6 +60,6 @@
     border-radius: 10;
     color: white;
     font-size: 12;
-    margin-top: 5;
-    margin-bottom: 50;
+    margin-top: 20;
+    margin-bottom: 10;
 }
