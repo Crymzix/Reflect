@@ -1,5 +1,36 @@
 var frameModule = require("ui/frame");
 var eventObjects;
+var locationModule = require("location");
+//var locationManager = new locationModule.LocationManager();
+var locationOptions = {
+    desiredAccuracy: 3,
+    updateDistance: 0,
+    minimumUpdateTime: 5000,
+    maximumAge: 20000
+};
+var buttonModule = require("ui/button");
+var appModule = require("application");
+var platformModule = require("platform");
+
+var LocationManager = require("location").LocationManager;
+var isEnabled = LocationManager.isEnabled();
+var Location = require("location").Location;
+var userLocation = new Location();
+
+var LocationManager = require("location").LocationManager;
+var locationManager = new LocationManager();
+
+var locationManager = new LocationManager();
+locationManager.startLocationMonitoring(function (location) {
+    console.log('Location received: ' + location);
+}, function (error) {
+    console.log('Location error received: ' + error);
+});
+
+//var userLocation = locationManager.lastKnownLocation;
+userLocation.latitude = 49.2827;
+userLocation.longitude = 123.1207;
+
 
 function pageLoaded(args) {
     page = args.object;
@@ -8,6 +39,7 @@ function pageLoaded(args) {
 }
 exports.pageLoaded = pageLoaded;
 
+console.log ("my location is: " )
 function OnMapReady(args) {
     var mapView = args.object;
     var gMap = mapView.gMap;
@@ -30,6 +62,11 @@ function OnMapReady(args) {
             markerOptions.position(latLng);
             gMap.addMarker(markerOptions);
             gMap.setMyLocationEnabled(true);
+			
+			var distance = LocationManager.distance(userLocation, eventObject);
+			
+			console.log("Distance to events are: " + distance);
+			
         }
     }
 }

@@ -12,7 +12,7 @@
         <StackLayout>
             <SearchBar hint="Keywords" text="{{ search for hashtags, descriptions, and titles }}" cssClass="search" textFieldBackgroundColor="white" id="keywordSearch" />
             <Button tap="searchEvents" cssClass="Button" text="Search" />
-			<Button tap="locationSearch" cssClass="Button" text="Location Search">
+			<!-- <Button tap="locationSearch" cssClass="Button" text="Search for Nearby Events"/> -->
         </StackLayout>
     </StackLayout>
 </Page>

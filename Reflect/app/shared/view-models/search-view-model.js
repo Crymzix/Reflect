@@ -112,6 +112,23 @@ var SearchEventsViewModel = (function (_super) {
 	}; 
 	
 	return SearchEventsViewModel;
+	
+	/* SearchEventsViewModel.prototype.locationSearch = function () {
+		
+
+		var query = qs.stringify({
+			where: JSON.stringify({
+				locationL: {
+					
+				}
+				/* title: {
+						//$regex: "^" regexArray[0];
+						$or: regexArray
+				} */
+	/* 		})
+		});
+		var url = "https://api.parse.com/1/classes/Event?" + query;
+	}  */
 
 	//SearchEventsViewModel.prototype.locationToLagLong = function ();
 	
