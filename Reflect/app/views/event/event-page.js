@@ -23,7 +23,7 @@ exports.back = back;
 
 function takePicture() {
 
-    cameraModule.takePicture({width: 300, height: 300, keepAspectRatio: true}).then(function(picture) {
+    cameraModule.takePicture({width: 400, height: 400, keepAspectRatio: true}).then(function(picture) {
         var image = page.getViewById("uploadedImage");
         image.imageSource = picture;
 
@@ -50,6 +50,11 @@ function goToGallery() {
     });
 }
 exports.goToGallery = goToGallery;
+
+function showLocation() {
+    eventModel.showLocation();
+}
+exports.showLocation = showLocation;
 
 function showStartDateModal() {
     var context = "date";
@@ -90,3 +95,27 @@ function showEndTimeModal() {
     }, fullscreen);
 }
 exports.setEndTime = showEndTimeModal;
+
+function save() {
+    var imageView = page.getViewById("eventCover");
+    var title = page.getViewById("eventTitle");
+    var location = page.getViewById("eventLocation");
+    var description = page.getViewById("eventDescription");
+    var startDate = page.getViewById("eventStartDateLabel");
+    var startTime = page.getViewById("eventStartTimeLabel");
+    var endDate = page.getViewById("eventEndDateLabel");
+    var endTime = page.getViewById("eventEndTimeLabel");
+    var hashtags = page.getViewById("eventHashtags");
+    eventModel.save(imageView, title, location, description, startDate, startTime, endDate, endTime, hashtags);
+}
+exports.save = save;
+
+function publish() {
+    eventModel.publish();
+}
+exports.publish = publish;
+
+function viewGallery() {
+    eventModel.viewGallery();
+}
+exports.viewGallery = viewGallery;

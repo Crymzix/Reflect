@@ -184,7 +184,7 @@ function loadParsePhotos(eventId){
     return new Promise(function(resolve, reject){
         var query = qs.stringify({
             where: JSON.stringify({
-                userUpload: 1,
+                userUpload1: "1",
                 eventId: eventId
             })
         });
@@ -368,7 +368,7 @@ function addToEventGallery(response, picture){
                 photoObject = photoObject.fetchIfNeeded();
                 photoObject.put("photoUrl", response.link);
                 photoObject.put("imgurDeleteHash", response.deletehash);
-                photoObject.put("userUpload", 0);
+                photoObject.put("userUpload1", "0");
                 photoObject.saveInBackground(new com.parse.SaveCallback({
                     done: function (error) {
                         if(error) {

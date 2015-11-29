@@ -52,3 +52,13 @@
     border-radius: 10;
     margin-top: 20;
 }
+
+.event-button {
+    color: #ffffff;
+    background-color: #1ca4fb;
+    font-size: 10;
+    height: 36;
+    width: 80;
+    border-radius: 10;
+    margin-top: 20;
+}

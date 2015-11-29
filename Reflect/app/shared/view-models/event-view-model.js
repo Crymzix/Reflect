@@ -2,6 +2,8 @@ var observableModule = require("data/observable");
 var frameModule = require("ui/frame");
 var config = require("../config");
 var http = require("http");
+var appModule = require("application");
+
 
 var EventViewModel = (function (_super) {
     __extends(EventViewModel, _super);
@@ -10,11 +12,22 @@ var EventViewModel = (function (_super) {
 
     function EventViewModel(event) {
         _super.call(this);
+        this._event = event;
         that = this;
 
         this.set("isOwner", event.isOwner);
         this.set("eventCoverPhoto", event.cover_photo.url);
         this.set("eventTitle", event.title);
+
+        if (event.isGalleryPublished) {
+          if (event.isGalleryPublished == "1") {
+              this.set("isGalleryPublished", true);
+          } else {
+              this.set("isGalleryPublished", false);
+          }
+        } else {
+            this.set("isGalleryPublished", false);
+        }
 
         if (event.isOwner) {
             var eventStartDate = String(event.start_date).split(" ");
@@ -57,23 +70,92 @@ var EventViewModel = (function (_super) {
 
     EventViewModel.prototype.upload = function(imageView) {
 
-        var bitmap = imageView.imageSource.android;
+        if (imageView.imageSource) {
 
-        var outputStream = new java.io.ByteArrayOutputStream();
-        bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, outputStream);
-        var image = outputStream.toByteArray();
-        var imageFile = new com.parse.ParseFile("image.png", image);
-        imageFile.saveInBackground(new com.parse.SaveCallback({
-            done: function (error) {
+            //var progressDialog = new android.app.ProgressDialog(appModule.android.context);
+            //progressDialog.setMessage("Uploading photo");
+            //progressDialog.setCancelable(false);
+            //progressDialog.show();
 
-                console.log(imageFile.getUrl());
+            var bitmap = imageView.imageSource.android;
 
-            }
-        }));
+            var outputStream = new java.io.ByteArrayOutputStream();
+            bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, outputStream);
+            var image = outputStream.toByteArray();
+            var imageFile = new com.parse.ParseFile("image.png", image);
+            imageFile.saveInBackground(new com.parse.SaveCallback({
+                done: function (error) {
+                    var eventObject = new com.parse.ParseObject("Event_Gallery");
+                    eventObject.put("eventId", that._event.objectId);
+                    eventObject.put("photoUrl",imageFile.getUrl());
+                    eventObject.put("userUpload1", "1");
+                    eventObject.saveInBackground(new com.parse.SaveCallback({
+                        done: function (error) {
+                            console.log("Saved image.");
+                            android.widget.Toast.makeText(appModule.android.context, "Uploaded photo", 0).show();
+                            imageView.imageSource = null;
+                        }
+                    }));
+                }
+            }));
+        } else {
+            android.widget.Toast.makeText(appModule.android.context, "Please take a picture to upload.", 0).show();
+        }
     };
 
     EventViewModel.prototype.makeUploadVisible = function() {
 
+    };
+
+    EventViewModel.prototype.showLocation = function() {
+
+        var event = this._event;
+        var uri = "geo:" + event.location.latitude + "," + event.location.longitude;
+        var mapIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(uri));
+        appModule.android.foregroundActivity.startActivity(mapIntent);
+    };
+
+    EventViewModel.prototype.save = function(imageView, title, location, description, startDate, startTime, endDate, endTime, hashtags) {
+
+        var eventObject = com.parse.ParseObject.createWithoutData("Event", this._event.objectId);
+        eventObject.put("title", title.text);
+        eventObject.put("locationTitle", location.text);
+        eventObject.put("description", description.text);
+        eventObject.put("start_date", startDate.text + " " + startTime.text);
+        eventObject.put("end_date", endDate.text + " " + endTime.text);
+        eventObject.put("hashtags", hashtags.text);
+        eventObject.saveInBackground(new com.parse.SaveCallback({
+            done: function (error) {
+                android.widget.Toast.makeText(appModule.android.context, "Saved changes.", 0).show();
+            }
+        }));
+    };
+
+    EventViewModel.prototype.publish = function() {
+
+        var eventObject = com.parse.ParseObject.createWithoutData("Event", this._event.objectId);
+        eventObject.put("isGalleryPublished", "1");
+        eventObject.saveInBackground(new com.parse.SaveCallback({
+            done: function (error) {
+                that.set("isGalleryPublished", true);
+                this._event.isGalleryPusblished = "1";
+                android.widget.Toast.makeText(appModule.android.context, "Published gallery!", 0).show();
+            }
+        }));
+    };
+
+    EventViewModel.prototype.viewGallery = function() {
+
+        if (this._event.isGalleryPublished) {
+            if (this._event.isGalleryPublished == "1") {
+
+                if (this._event.imgurDeleteHash) {
+                    var uri = "http://imgur.com/a/" + this._event.imgurDeleteHash.id;
+                    var webIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(uri));
+                    appModule.android.foregroundActivity.startActivity(webIntent);
+                }
+            }
+        }
     };
 
     return EventViewModel;

@@ -99,8 +99,8 @@ var CreateEventViewModel = (function (_super) {
             eventObject.put("viewedPhotos", viewedPhotos);
             eventObject.put("imgurDeleteHash", "");
             eventObject.put("curIGUrl", "");
-            //var geoLocation = new com.parse.ParseGeoPoint(currentLocation.latitude, currentLocation.longitude);
-            //eventObject.put("location", geoLocation);
+            var geoLocation = new com.parse.ParseGeoPoint(currentLocation.latitude, currentLocation.longitude);
+            eventObject.put("location", geoLocation);
             var outputStream = new java.io.ByteArrayOutputStream();
             currentBitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, outputStream);
             var image = outputStream.toByteArray();
