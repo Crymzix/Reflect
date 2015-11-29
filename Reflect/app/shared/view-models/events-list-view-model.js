@@ -170,8 +170,7 @@ var EventsViewModel = (function (_super) {
         console.log(event.title);
         frameModule.topmost().navigate({
             moduleName: "views/event/event-page",
-            context: event,
-            backstackVisible: true
+            context: event
         });
     };
 
