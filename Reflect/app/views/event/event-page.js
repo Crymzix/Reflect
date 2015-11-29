@@ -23,7 +23,7 @@ exports.back = back;
 
 function takePicture() {
 
-    cameraModule.takePicture({width: 400, height: 400, keepAspectRatio: true}).then(function(picture) {
+    cameraModule.takePicture({width: 612, height: 612, keepAspectRatio: true}).then(function(picture) {
         var image = page.getViewById("uploadedImage");
         image.imageSource = picture;
 
