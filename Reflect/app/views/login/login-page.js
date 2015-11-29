@@ -44,7 +44,7 @@ exports.signIn = function(){
         var topmost = frameModule.topmost();
         topmost.navigate({
             moduleName: "views/main/main-page",
-            backstackVisible: false
+            clearHistory: true
         });
     }).catch(function(e){
         dialogsModule.alert("Login Failed! Try again");
