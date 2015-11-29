@@ -10,10 +10,9 @@
             </GridLayout>
         </StackLayout>
         <StackLayout>
-            <SearchBar  hint="Hashtag" text="{{ hashtagSearch }}" cssClass="search" textFieldBackgroundColor="white" id="hashtagSearch" />
-            <SearchBar  hint="Location" text="{{ locationSearch }}" cssClass="search" textFieldBackgroundColor="white" id="locationSearch"/>
-            <SearchBar hint="Keywords" text="{{ keywordSearch }}" cssClass="search" textFieldBackgroundColor="white" id="keywordSearch" />
+            <SearchBar hint="Keywords" text="{{ search for hashtags, descriptions, and titles }}" cssClass="search" textFieldBackgroundColor="white" id="keywordSearch" />
             <Button tap="searchEvents" cssClass="Button" text="Search" />
+			<Button tap="locationSearch" cssClass="Button" text="Location Search">
         </StackLayout>
     </StackLayout>
 </Page>

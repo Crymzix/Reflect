@@ -169,6 +169,7 @@ function showSearch() {
 }
 exports.showSearch = showSearch;
 
+
 function showMap() {
     viewModel.showMap();
 }
@@ -179,6 +180,7 @@ function chooseLocation() {
     viewModel.chooseLocation(locationLabel);
 }
 exports.chooseLocation = chooseLocation;
+
 
 function logOut(){
     applicationSettings.remove("currentUser");

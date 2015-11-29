@@ -5,7 +5,7 @@ var appModule = require("application");
 var observableArray = require("data/observable-array");
 var http = require("http");
 var applicationSettings = require("application-settings");
-
+var dialogsModule = require("ui/dialogs");
 
 var events;
  
@@ -22,15 +22,23 @@ var SearchResultsViewModel = (function (_super) {
 
         var eventList = new observableArray.ObservableArray();
         this._events = context.results;
-
-        for (var i = 0; i < this._events.length; i++) {
-            var event = this._events[i];
-            console.log(event.title);
-            console.log(event.cover_photo.url);
-            eventList.push({eventItemTitle: event.title, eventItemImage: event.cover_photo.url, eventItemHashtags: event.hashtags});
-        }
-
+		
+		if (this._events) {
+				for (var i = 0; i < this._events.length; i++) {
+				var event = this._events[i];
+				console.log(event.title);
+				console.log(event.cover_photo.url);
+				eventList.push({eventItemTitle: event.title, eventItemImage: event.cover_photo.url, eventItemHashtags: event.hashtags});
+			}
         this.set("searchEvents", eventList);
+		}
+		if (this._events.length == 0) {
+			dialogsModule.alert ({
+				message: "Unforunately, no search results were found...",
+				okButtonText: "OK"
+			});
+		}
+        
     }
 
 	SearchResultsViewModel.prototype.checkLoggedIn = function(){
