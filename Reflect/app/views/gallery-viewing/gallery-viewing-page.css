@@ -1,0 +1,31 @@
+.gallery-viewing{
+    background-color: #2196F3;
+    padding: 15px;
+}
+
+.action-buttons{
+    padding: 20px;
+}
+
+.deletePhoto {
+    background-color: white;
+    border-radius: 50;
+    width: 85px;
+    height: 85px;
+    color: red;
+    font-size: 20px;
+    font-weight: bold;
+    border-color: #ededed;
+    border-width: 5;
+    margin-left: 45;
+    vertical-align: bottom;
+    margin-bottom: 55;
+}
+
+
+.image {
+    padding: 15px;
+    background-color: #ededed;
+    border-radius: 0;
+    margin-top: 0;
+}

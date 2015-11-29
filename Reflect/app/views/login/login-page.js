@@ -42,7 +42,10 @@ exports.signIn = function(){
     user.signIn().then(function(){
         dialogsModule.alert("You've successfully signed in!");
         var topmost = frameModule.topmost();
-        topmost.navigate("views/main/main-page");
+        topmost.navigate({
+            moduleName: "views/main/main-page",
+            backstackVisible: false
+        });
     }).catch(function(e){
         dialogsModule.alert("Login Failed! Try again");
     });

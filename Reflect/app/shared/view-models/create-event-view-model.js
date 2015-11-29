@@ -3,6 +3,8 @@ var imageSource = require("image-source");
 var imageModule = require("ui/image");
 var appModule = require("application");
 var applicationSettings = require("application-settings");
+var config = require("../config");
+var http = require("http");
 
 var REQUEST_SELECT_IMAGE = 1234;
 var REQUEST_LOCATION = 1235;
@@ -81,6 +83,10 @@ var CreateEventViewModel = (function (_super) {
                 "ig" : [],
                 "upload" : []
             };
+            var imgurDeleteHash ={
+                "deleteHash" : "",
+                "id": ""
+            };
             viewedPhotos = JSON.stringify(viewedPhotos);
             var eventObject = new com.parse.ParseObject("Event");
             eventObject.put("userId", applicationSettings.getString("currentUser"));
@@ -93,25 +99,43 @@ var CreateEventViewModel = (function (_super) {
             eventObject.put("viewedPhotos", viewedPhotos);
             eventObject.put("imgurDeleteHash", "");
             eventObject.put("curIGUrl", "");
-            var geoLocation = new com.parse.ParseGeoPoint(currentLocation.latitude, currentLocation.longitude);
-            eventObject.put("location", geoLocation);
+            //var geoLocation = new com.parse.ParseGeoPoint(currentLocation.latitude, currentLocation.longitude);
+            //eventObject.put("location", geoLocation);
             var outputStream = new java.io.ByteArrayOutputStream();
             currentBitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, outputStream);
             var image = outputStream.toByteArray();
             var imageFile = new com.parse.ParseFile("image.png", image);
             eventObject.put("cover_photo", imageFile);
-            eventObject.saveInBackground(new com.parse.SaveCallback({
-                done: function (error) {
-                    //Clear input fields
-                    title.text = "";
-                    location.text = "";
-                    description.text = "";
-                    date.text = "";
-                    time.text = "";
-                    hashtags.text = "";
-                    imageView.imageSource = null;
-                }
-            }));
+            http.request({
+                url: "https://api.imgur.com/3/album",
+                method: "POST",
+                headers: {
+                    "Authorization" : "Client-ID " + config.imgurClientID,
+                    "Content-Type" : "application/json"
+                },
+                content: JSON.stringify({
+                    "title": title.text
+                })
+            }).then(function(response){
+                var resp = response.content.toJSON();
+
+                imgurDeleteHash.deleteHash = resp.data.deletehash;
+                imgurDeleteHash.id = resp.data.id;
+                imgurDeleteHash = JSON.stringify(imgurDeleteHash);
+                eventObject.put("imgurDeleteHash", imgurDeleteHash);
+                eventObject.saveInBackground(new com.parse.SaveCallback({
+                    done: function (error) {
+                        //Clear input fields
+                        title.text = "";
+                        location.text = "";
+                        description.text = "";
+                        hashtags.text = "";
+                        imageView.imageSource = null;
+                    }
+                }));
+            } , function(e){
+                console.log("imgur album was not created" + e);
+            });
         } else {
             console.log("Fill in all fields");
         }

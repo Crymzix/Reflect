@@ -1,5 +1,7 @@
 var observableModule = require("data/observable");
 var frameModule = require("ui/frame");
+var config = require("../config");
+var http = require("http");
 
 var EventViewModel = (function (_super) {
     __extends(EventViewModel, _super);
@@ -29,6 +31,28 @@ var EventViewModel = (function (_super) {
         this.set("eventLocation", event.locationTitle);
         this.set("eventDescription", event.description);
         this.set("eventHashtag", event.hashtags);
+
+        var eventObject = com.parse.ParseObject.createWithoutData("Event", event.objectId);
+        console.log("event obj id " + event.objectId);
+        try {
+            eventObject = eventObject.fetchIfNeeded();
+        } catch(e){
+            console.log(e);
+        }
+
+        if(event.imgurDeleteHash == null || event.imgurDeleteHash == ""){
+            getImgurAlbum(event.title).then(function(response){
+                eventObject.put("imgurDeleteHash", JSON.stringify(response));
+                eventObject.saveInBackground(new com.parse.SaveCallback({
+                    done: function (error) {
+                        event.imgurDeleteHash = JSON.stringify(response);
+                    }
+                }));
+            }, function(e){
+                    console.log(e);
+                }
+            );
+        }
     }
 
     EventViewModel.prototype.upload = function(imageView) {
@@ -54,4 +78,34 @@ var EventViewModel = (function (_super) {
 
     return EventViewModel;
 })(observableModule.Observable);
+
+function getImgurAlbum(title){
+    return new Promise(function(resolve, reject){
+        var imgurDeleteHash ={
+            "deleteHash" : "",
+            "id": ""
+        };
+        http.request({
+            url: "https://api.imgur.com/3/album",
+            method: "POST",
+            headers: {
+                "Authorization" : "Client-ID " + config.imgurClientID,
+                "Content-Type" : "application/json"
+            },
+            content: JSON.stringify({
+                "title": title
+            })
+        }).then(function(response){
+            var resp = response.content.toJSON();
+            console.log(JSON.stringify(response));
+            imgurDeleteHash.deleteHash = resp.data.deletehash;
+            imgurDeleteHash.id = resp.data.id;
+            resolve(imgurDeleteHash);
+        }, function(e){
+            reject("couldn't post album");
+        });
+    })
+
+}
+
 exports.EventViewModel = EventViewModel;
