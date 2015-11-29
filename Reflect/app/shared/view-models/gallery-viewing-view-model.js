@@ -235,4 +235,7 @@ function shiftPhotos(){
     pictureCount--;
 }
 
-module.exports = GalleryViewing;
+module.exports = {
+    galleryViewing: GalleryViewing,
+    loadFromImgur : loadFromImgur
+};
