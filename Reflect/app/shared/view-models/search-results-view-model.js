@@ -5,7 +5,7 @@ var appModule = require("application");
 var observableArray = require("data/observable-array");
 var http = require("http");
 var applicationSettings = require("application-settings");
-
+var dialogsModule = require("ui/dialogs");
 
 var events;
  
@@ -31,6 +31,12 @@ var SearchResultsViewModel = (function (_super) {
 				eventList.push({eventItemTitle: event.title, eventItemImage: event.cover_photo.url, eventItemHashtags: event.hashtags});
 			}
         this.set("searchEvents", eventList);
+		}
+		if (this._events.length == 0) {
+			dialogsModule.alert ({
+				message: "Unforunately, no search results were found...",
+				okButtonText: "OK"
+			});
 		}
         
     }

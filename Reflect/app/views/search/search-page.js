@@ -29,4 +29,8 @@ function searchEvents() {
 
     viewModule.searchEvents(keywordSearch);
 }
+
+function locationSearch() {
+	
+}
 exports.searchEvents = searchEvents;
