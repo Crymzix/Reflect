@@ -150,7 +150,8 @@ var EventViewModel = (function (_super) {
             if (this._event.isGalleryPublished == "1") {
 
                 if (this._event.imgurDeleteHash) {
-                    var uri = "http://imgur.com/a/" + this._event.imgurDeleteHash.id;
+                    var json = JSON.parse(this._event.imgurDeleteHash);
+                    var uri = "http://imgur.com/a/" + json.id;
                     var webIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(uri));
                     appModule.android.foregroundActivity.startActivity(webIntent);
                 }
