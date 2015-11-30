@@ -108,21 +108,23 @@ function getParsePicture(imgUrl){
 
 function loadPhotos(albumId){
     loadFromImgur(albumId).then(function(response){
-        var dataJSON = response.data;
-        var imageArray = dataJSON.images;
-        var picturesArray = [];
-        for (pictureCount = 0; pictureCount < imageArray.length; pictureCount++) {
-            var id = imageArray[pictureCount].id;
-            var pictureDefinition = {
-                "url": imageArray[pictureCount].link,
-                "id": id,
-                "deleteHash" : imageArray[pictureCount].deletehash
-            };
-            console.log(pictureDefinition.url);
-            picturesArray[pictureCount] = pictureDefinition;
+        if(response){
+            var imageArray = response.images;
+            var picturesArray = [];
+            for (pictureCount = 0; pictureCount < imageArray.length; pictureCount++) {
+                var id = imageArray[pictureCount].id;
+                var pictureDefinition = {
+                    "url": imageArray[pictureCount].link,
+                    "id": id,
+                    "deleteHash" : imageArray[pictureCount].deletehash
+                };
+                console.log(pictureDefinition.url);
+                picturesArray[pictureCount] = pictureDefinition;
+            }
+
+            pictures = picturesArray;
         }
 
-        pictures = picturesArray;
         picture = pictures[picturePosition];
         console.log(pictureCount);
 
@@ -154,7 +156,12 @@ function loadFromImgur(albumId){
         }).then(function (response) {
             //console.log(JSON.stringify(response));
             //applicationSettings.setString("currentUser",response.objectId);
-            resolve(response);
+            if(response.data.image_count > 0){
+                resolve(response.data);
+            }else{
+                var empty= null;
+                resolve(empty);
+            }
         }, function (e) {
             reject("LOADING FROM IMGUR DIDN'T WORK");
         });

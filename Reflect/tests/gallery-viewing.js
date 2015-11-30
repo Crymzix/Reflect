@@ -28,13 +28,46 @@ describe('gallery-view', function(){
         request.withArgs(expectedEndpoint).yields(null, null, body);
 
         gallery_view.loadFromImgur("3XP0K").then(function(response){
-            expect(response.data).to.equal(JSON.stringify({
+            expect(response).to.equal(JSON.stringify({
                 "images_count" : 4
             }));
         },function (e){
             expect(e).to.be.null;
         });
-       done();
+        done();
+    });
+
+    it('should return an error if URL for request is incorrect', function(done){
+        var expectedEndpoint = config.imgurAPI + "album/3XP0KSSSSSSS";
+
+        var error = new Error("Incorrect URL");
+
+        request.withArgs(expectedEndpoint).yields(error, null, null);
+
+        gallery_view.loadFromImgur("3XP0K").then(function(response){
+            expect(response).to.be.null;
+        },function (e){
+            expect(e).to.equal(error);
+        });
+        done();
+    });
+
+    it('should return no photos if the album is empty', function(done){
+        var expectedEndpoint = config.imgurAPI + "album/3XP0KSSSSSSS";
+
+        var error = new Error("Incorrect URL");
+
+        var body = JSON.stringify({
+            "images_count" : 0
+        });
+        request.withArgs(expectedEndpoint).yields(null, null, body);
+
+        gallery_view.loadFromImgur("3XP0K").then(function(response){
+            expect(response.data).to.be.null;
+        },function (e){
+            expect(e).to.be.null;
+        });
+        done();
     });
 
 
