@@ -154,9 +154,8 @@ function loadFromImgur(albumId){
                 "Content-Type" : "application/json"
             }
         }).then(function (response) {
-            //console.log(JSON.stringify(response));
             //applicationSettings.setString("currentUser",response.objectId);
-            if(response.data.image_count > 0){
+            if(response.data.images_count > 0){
                 resolve(response.data);
             }else{
                 var empty= null;
@@ -194,12 +193,11 @@ function deleteFromImgur(){
             }
         }).then(function(response){
             var resp = response.content.toJSON();
-            console.log(JSON.stringify(response));
-            //if(resp.statusCode == 200){
-            resolve("deleting image worked!");
-            //}else{
-            //    reject("adding image didn't work!")
-            //}
+            if(resp.statusCode == 200){
+                resolve("deleting image worked!");
+            }else{
+                reject("adding image didn't work!")
+            }
         }, function(e){
             reject("COUDLNT DELETE FROM IMGUR:  " + e);
         });
@@ -217,12 +215,12 @@ function deleteFromParse(){
                     "X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6"
                 }
             }).then(function(response){
-                var resp = response.content.toJSON();
-                //if(resp.statusCode == 200){
-                resolve("successfully deleted from parse!");
-                //}else{
-                //    reject("adding image didn't work!")
-                //}
+                var resp = response.toJSON();
+                if(resp.statusCode == 200){
+                    resolve("successfully deleted from parse!");
+                }else{
+                    reject("deleting image didn't work!")
+                }
             }, function(e){
                 reject("COULDNT DELETE FROM PARSE:  " + e );
             });
@@ -244,5 +242,5 @@ function shiftPhotos(){
 
 module.exports = {
     galleryViewing: GalleryViewing,
-    loadFromImgur : loadFromImgur
+    loadFromImgur: loadFromImgur
 };
