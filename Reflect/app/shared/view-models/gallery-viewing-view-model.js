@@ -5,6 +5,7 @@ var config = require("../config");
 var http = require("http");
 var qs = require('querystring');
 var observableModule = require("data/observable");
+var appModule = require("application");
 
 var eventInfo;
 
@@ -135,6 +136,8 @@ function loadPhotos(albumId){
         }else{
             console.log("no photos to show");
             // show no photos image
+            viewModel.set("isLoading", false);
+            android.widget.Toast.makeText(appModule.android.context, "No photos to show!", 0).show();
         }
 
         pictureObject = getParsePicture(picture.url);

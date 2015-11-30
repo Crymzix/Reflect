@@ -159,6 +159,16 @@ var EventViewModel = (function (_super) {
         }
     };
 
+    EventViewModel.prototype.editGallery = function() {
+
+        var event = this._event;
+        frameModule.topmost().navigate({
+            moduleName: "views/gallery-viewing/gallery-viewing-page",
+            context: event,
+            backstackVisible: true
+        });
+    };
+
     return EventViewModel;
 })(observableModule.Observable);
 

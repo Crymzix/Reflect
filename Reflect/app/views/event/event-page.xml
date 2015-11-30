@@ -44,6 +44,7 @@
                                autocorrect="true" cssClass="event-input-field"/>
                     <TextField id="eventHashtags" text="{{ eventHashtag }}" hint="#Hashtags" keyboardType="email"
                                autocorrect="false" cssClass="event-input-field"/>
+                    <Button text="edit gallery" tap="editGallery" visibility="{{ isGalleryPublished ? 'visible' : 'collapsed'}}" cssClass="event-button1" style="margin-top:20;margin-left:20;margin-right:20;width:110;"/>
                     <GridLayout id="galleryButton" columns="*, *, *" rows="auto" tap="goToGallery" style="margin-left:20;margin-bottom:20;">
                         <Button col="0" text="save" tap="save" cssClass="event-button" style="margin-right:20;"/>
                         <Button col="1" text="publish" visibility="{{ isGalleryPublished ? 'collapsed' : 'visible'}}" tap="publish" cssClass="event-button" style="margin-right:20;"/>

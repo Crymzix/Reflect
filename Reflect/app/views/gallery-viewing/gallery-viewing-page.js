@@ -22,7 +22,7 @@ function loaded(args){
     picturePosition = 0;
     var page = args.object;
     eventInfo = page.navigationContext;
-    gallery_viewing = new GalleryViewingViewModel(eventInfo);
+    gallery_viewing = GalleryViewingViewModel.galleryViewing(eventInfo);
     image = page.getViewById("image");
     del = page.getViewById("delete");
     page.bindingContext = gallery_viewing;
