@@ -4,7 +4,7 @@ var searchEventViewModule = require("./../../shared/view-models/search-view-mode
 var searchResultsViewModule = require("./../../shared/view-models/search-results-view-model");
 var eventsViewModule = require("./../../shared/view-models/events-list-view-model");
 var dialogsModule = require("ui/dialogs");
-
+var locationModule = require("location");
 
 var appModule = require("application");
 var applicationSettings = require("application-settings");
@@ -23,6 +23,12 @@ function pageLoaded(args) {
     createViewModel(selectedViewIndex);
     viewModel.selectView(selectedViewIndex);
     viewModel.checkLoggedIn();
+    var locationManager = new locationModule.LocationManager();
+    locationManager.startLocationMonitoring(function (location) {
+        console.log('Location received: ' + location);
+    }, function (error) {
+        console.log('Location error received: ' + error);
+    });
 }
 exports.pageLoaded = pageLoaded;
 
