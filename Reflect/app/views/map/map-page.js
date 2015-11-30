@@ -29,6 +29,7 @@ function OnMapReady(args) {
             var latLng = new com.google.android.gms.maps.model.LatLng(latitude, longitude);
             markerOptions.position(latLng);
             gMap.addMarker(markerOptions);
+            gMap.setMyLocationEnabled(true);
         }
     }
 }

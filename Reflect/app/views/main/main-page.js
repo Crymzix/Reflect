@@ -12,6 +12,7 @@ var frameModule = require("ui/frame");
 
 var viewModel;
 var page;
+var currentLocation;
 
 function pageLoaded(args) {
     console.log("Page loaded");
@@ -26,8 +27,10 @@ function pageLoaded(args) {
     var locationManager = new locationModule.LocationManager();
     locationManager.startLocationMonitoring(function (location) {
         console.log('Location received: ' + location);
+        currentLocation = location;
     }, function (error) {
         console.log('Location error received: ' + error);
+        currentLocation = null;
     });
 }
 exports.pageLoaded = pageLoaded;
@@ -54,12 +57,12 @@ exports.selectView = selectView;
 function createViewModel(index) {
     switch(index) {
         case 0:
-            viewModel = new eventsViewModule.EventsViewModel(false);
+            viewModel = new eventsViewModule.EventsViewModel(false, currentLocation);
             page.bindingContext = viewModel;
             viewModel.checkLoggedIn();
             break;
         case 1:
-            viewModel = new eventsViewModule.EventsViewModel(true);
+            viewModel = new eventsViewModule.EventsViewModel(true, null);
             page.bindingContext = viewModel;
             viewModel.checkLoggedIn();
             break;

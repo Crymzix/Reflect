@@ -13,11 +13,12 @@ var EventsViewModel = (function (_super) {
 
     var that;
 
-    function EventsViewModel (isUser) {
+    function EventsViewModel (isUser, currentLocation) {
         _super.call(this);
         this.set("selectedViewIndex", 0);
         this._events = [];
         this._isUser = isUser;
+        this._currentLocation = currentLocation;
         that = this;
     }
 
@@ -35,7 +36,25 @@ var EventsViewModel = (function (_super) {
             url = "https://api.parse.com/1/classes/Event?" + query;
             console.log(url);
         } else {
-            url = "https://api.parse.com/1/classes/Event";
+            var location = this._currentLocation;
+
+            if (location) {
+                var query = qs.stringify({
+                    where: JSON.stringify({
+                        location: {
+                            $nearSphere: {
+                                __type: "GeoPoint",
+                                latitude: location.latitude,
+                                longitude: location.longitude
+                            },
+                            $maxDistanceInKilometers: 20.0
+                        }
+                    })
+                });
+                url = "https://api.parse.com/1/classes/Event?" + query;
+            } else {
+                url = "https://api.parse.com/1/classes/Event";
+            }
         }
 
         console.log(url);
