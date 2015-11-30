@@ -108,21 +108,31 @@
                     <Image src="res://logo" stretch="none" horizontalAlignment="center" verticalAlignment="center"/>
                 </StackLayout>
                 <StackLayout cssClass="drawerMenuContent">
-                    <Button tap="selectView" tag="0"
-                            cssClass="{{ selectedViewIndex === 0 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
-                            text="Nearby Events"/>
-                    <Button tap="selectView" tag="1"
-                            cssClass="{{ selectedViewIndex === 1 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
-                            text="My Events" visibility="{{ loggedIn ? 'visible' : 'collapsed' }}"/>
-                    <Button tap="selectView" tag="2"
-                            cssClass="{{ selectedViewIndex === 2 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
-                            text="Create Event" visibility="{{ loggedIn ? 'visible' : 'collapsed' }}"/>
-                    <Button tap="switchToLogin" tag="5"
-                            cssClass="{{ selectedViewIndex === 5 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
-                            text="Log In" visibility="{{ loggedIn ? 'collapsed' : 'visible' }}"/>
-                    <Button tap="logOut" tag="6"
-                            cssClass="{{ selectedViewIndex === 6 ? 'slide-out-btn-selected' : 'slide-out-btn' }}"
-                            text="Log Out" visibility="{{ loggedIn ? 'visible' : 'collapsed' }}"/>
+
+                    <GridLayout tap="selectView" tag="0" columns="*, 150, *" rows="48" cssClass="{{ selectedViewIndex === 0 ? 'slide-out-btn-selected' : 'slide-out-btn' }}" style="vertical-align: center;">
+                        <Image col="0" stretch="none" cssClass="icon-image" src="res://ic_nearby_events" />
+                        <Label col="1" text="Nearby Events" verticalAlignment="center" cssClass="{{ selectedViewIndex === 0 ? 'event-label-selected' : 'event-label-unselected' }}" />
+                    </GridLayout>
+
+                    <GridLayout visibility="{{ loggedIn ? 'visible' : 'collapsed' }}" tap="selectView" tag="1" columns="*, 150, *" rows="48" cssClass="{{ selectedViewIndex === 1 ? 'slide-out-btn-selected' : 'slide-out-btn' }}" style="vertical-align: center;">
+                        <Image col="0" stretch="none" cssClass="icon-image" src="res://ic_my_events" />
+                        <Label col="1" text="My Events" verticalAlignment="center" cssClass="{{ selectedViewIndex === 1 ? 'event-label-selected' : 'event-label-unselected' }}" />
+                    </GridLayout>
+
+                    <GridLayout visibility="{{ loggedIn ? 'visible' : 'collapsed' }}" tap="selectView" tag="2" columns="*, 150, *" rows="48" cssClass="{{ selectedViewIndex === 2 ? 'slide-out-btn-selected' : 'slide-out-btn' }}" style="vertical-align: center;">
+                        <Image col="0" stretch="none" cssClass="icon-image" src="res://ic_create_event" />
+                        <Label col="1" text="Create Event" verticalAlignment="center" cssClass="{{ selectedViewIndex === 2 ? 'event-label-selected' : 'event-label-unselected' }}" />
+                    </GridLayout>
+
+                    <GridLayout visibility="{{ loggedIn ? 'collapsed' : 'visible' }}" tap="switchToLogin" tag="5" columns="*, 150, *" rows="48" cssClass="{{ selectedViewIndex === 5 ? 'slide-out-btn-selected' : 'slide-out-btn' }}" style="vertical-align: center;">
+                        <Image col="0" stretch="none" cssClass="icon-image" src="res://ic_login" />
+                        <Label col="1" text="Log In" verticalAlignment="center" cssClass="{{ selectedViewIndex === 5 ? 'event-label-selected' : 'event-label-unselected' }}" />
+                    </GridLayout>
+
+                    <GridLayout visibility="{{ loggedIn ? 'visible' : 'collapsed' }}" tap="logOut" tag="6" columns="*, 150, *" rows="48" cssClass="{{ selectedViewIndex === 6 ? 'slide-out-btn-selected' : 'slide-out-btn' }}" style="vertical-align: center;">
+                        <Image col="0" stretch="none" cssClass="icon-image" src="res://ic_logout" />
+                        <Label col="1" text="Log Out" verticalAlignment="center" cssClass="{{ selectedViewIndex === 6 ? 'event-label-selected' : 'event-label-unselected' }}" />
+                    </GridLayout>
 
                 </StackLayout>
             </StackLayout>

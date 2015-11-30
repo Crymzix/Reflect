@@ -138,7 +138,7 @@ var EventViewModel = (function (_super) {
         eventObject.saveInBackground(new com.parse.SaveCallback({
             done: function (error) {
                 that.set("isGalleryPublished", true);
-                this._event.isGalleryPusblished = "1";
+                that._event["isGalleryPublished"] = "1";
                 android.widget.Toast.makeText(appModule.android.context, "Published gallery!", 0).show();
             }
         }));

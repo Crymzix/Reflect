@@ -52,6 +52,7 @@
     text-align: left;
     horizontal-align: stretch;
     padding-left: 10;
+    vertical-align: center;
 }
 
 .slide-out-btn-selected {
@@ -62,7 +63,27 @@
     text-align: left;
     horizontal-align: stretch;
     padding-left: 10;
+    vertical-align: center;
 }
+
+.event-label-unselected {
+    margin-top: 32;
+    background-color: white;
+    color: #727272;
+    font-size: 12;
+    height: 48;
+    vertical-align: center;
+}
+
+.event-label-selected {
+    margin-top: 32;
+    background-color: #BBDEFB;
+    color: #727272;
+    font-size: 12;
+    height: 48;
+    vertical-align: center;
+}
+
 
 .event-photo {
     background-color: #CFD8DC;
