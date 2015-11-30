@@ -1,6 +1,6 @@
 /**
- * Created by Vineet on 2015-11-29.
- */
++ * Created by Vineet on 2015-11-29.
++ */
 var expect = require('chai').expect;
 var sinon = require('sinon');
 var proxyquire = require('proxyquire');
@@ -14,7 +14,7 @@ describe('gallery-view', function(){
         gallery_view = proxyquire("../app/shared/view-models/gallery-viewing-view-model",
             {'request': request,
             "data/observable": {
-                ObservableArray: Array,
+               ObservableArray: Array,
                 '@noCallThru': true
             }})
     });
