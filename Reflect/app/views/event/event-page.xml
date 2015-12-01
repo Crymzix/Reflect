@@ -46,7 +46,7 @@
                                autocorrect="false" cssClass="event-input-field"/>
 
                     <StackLayout orientation="horizontal" style="margin-top:20;">
-                        <Button text="edit gallery" tap="save" visibility="{{ isGalleryPublished ? 'visible' : 'collapsed'}}" cssClass="event-button1" style="margin-bottom:20;margin-left:20;margin-right:20;margin-top:5;width:100;"/>
+                        <Button text="edit gallery" tap="editGallery" visibility="{{ isGalleryPublished ? 'visible' : 'collapsed'}}" cssClass="event-button1" style="margin-bottom:20;margin-left:20;margin-right:20;margin-top:5;width:100;"/>
                         <Button text="curate gallery" tap="goToGallery" cssClass="event-button1" style="margin-bottom:20;margin-left:20;margin-right:20;margin-top:5;width:170;"/>
                     </StackLayout>
 
