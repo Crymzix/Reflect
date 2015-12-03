@@ -67,7 +67,7 @@ function createViewModel(index) {
             viewModel.checkLoggedIn();
             break;
         case 2:
-            viewModel = new createEventViewModule.CreateEventViewModel();
+            viewModel = createEventViewModule.CreateEventViewModel();
             page.bindingContext = viewModel;
 			viewModel.checkLoggedIn();
 			break;
