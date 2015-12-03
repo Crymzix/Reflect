@@ -15,57 +15,70 @@ function User(info) {
     });
 
     viewModel.signIn = function(){
-        return http.getJSON({
-            url:"https://api.parse.com/1/login?username=" + viewModel.get("email") + "&password=" +
-            viewModel.get("password"),
-            method: "GET",
-            headers: {
-                "X-Parse-Application-Id": "UZ348s5Fstpa9stS9q5jsDRxihPbt3PpDxQJDawp",
-                "X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6",
-                "X-Parse-Revocable-Session": "1"
-            }
-        }).then(function (response) {
-            console.log(JSON.stringify(response));
-            applicationSettings.setString("currentUser",response.objectId);
-        }, function (e) {
-            console.log(e);
-        });
+        var ret = validateLogin(viewModel.get("email"),viewModel.get("password"));
+        if(ret == null) {
+            return http.getJSON({
+                url: "https://api.parse.com/1/login?username=" + viewModel.get("email") + "&password=" +
+                viewModel.get("password"),
+                method: "GET",
+                headers: {
+                    "X-Parse-Application-Id": "UZ348s5Fstpa9stS9q5jsDRxihPbt3PpDxQJDawp",
+                    "X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6",
+                    "X-Parse-Revocable-Session": "1"
+                }
+            }).then(function (response) {
+                console.log(JSON.stringify(response));
+                applicationSettings.setString("currentUser", response.objectId);
+            }, function (e) {
+                console.log(e);
+            });
+        } else if (ret != null){
+            throw new Error("Login failed");
+        }
     };
 
     viewModel.register = function() {
-        return http.getJSON({
-            url:"https://api.parse.com/1/users",
-            method: "GET",
-            headers: {
-                "X-Parse-Application-Id": "UZ348s5Fstpa9stS9q5jsDRxihPbt3PpDxQJDawp",
-                "X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6"
-            }
-        }).then(function (response) {
-           var that = [];
-            that = response.results;
-            for(var i=0;i<response.results.length;i++){
-                if(that[i].username == viewModel.get("email")){
-                    throw new Error("Username taken");
-                }
-            }
-
-            http.request({
+        var ret = validateSignup(viewModel.get("email"),viewModel.get("password"));
+        if (ret == null) {
+            return http.getJSON({
                 url: "https://api.parse.com/1/users",
-                method: "POST",
-                headers: {"Content-Type": "application/json",
+                method: "GET",
+                headers: {
                     "X-Parse-Application-Id": "UZ348s5Fstpa9stS9q5jsDRxihPbt3PpDxQJDawp",
-                    "X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6",
-                    "X-Parse-Revocable-Session": "1"},
-                content:JSON.stringify({"username": viewModel.get("email"), "password": viewModel.get("password")})
+                    "X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6"
+                }
             }).then(function (response) {
-                result = response.content.toJSON();
-                console.log(result);
+                var that = [];
+                that = response.results;
+                var duplicate = checkDuplicate(viewModel.get("email"), that, response.results.length);
+
+                if (duplicate != null){
+                    throw new Error("username taken");
+                }
+
+                http.request({
+                    url: "https://api.parse.com/1/users",
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Parse-Application-Id": "UZ348s5Fstpa9stS9q5jsDRxihPbt3PpDxQJDawp",
+                        "X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6",
+                        "X-Parse-Revocable-Session": "1"
+                    },
+                    content: JSON.stringify({"username": viewModel.get("email"), "password": viewModel.get("password")})
+                }).then(function (response) {
+                    result = response.content.toJSON();
+                    console.log(result);
+                }, function (e) {
+                    console.log("Error occurred " + e);
+                });
             }, function (e) {
-                console.log("Error occurred " + e);
+                console.log(e);
             });
-        }, function (e) {
-            console.log(e);
-        });
+        } else if (ret != null) {
+            throw new Error("Signup failed");
+        }
+
 
     };
 
@@ -191,4 +204,33 @@ function handleErrors(response) {
     //return response;
 }
 
-module.exports = User;
+function validateLogin(username,password){
+    if(!username || !password){
+        return "Please ensure that both fields are filled in";
+    }
+    return null;
+}
+
+function validateSignup(username,password){
+    if(!username || !password){
+        return "Please ensure that both fields are filled in";
+    }
+    return null;
+}
+
+function checkDuplicate(name,response,responselength){
+    for (var i = 0; i < responselength; i++) {
+        if (response[i].username == name) {
+            return "Username taken";
+        }
+    }
+
+    return null;
+}
+
+module.exports = {
+    User: User,
+    validateLogin: validateLogin,
+    validateSignup: validateSignup,
+    checkDuplicate: checkDuplicate
+};
