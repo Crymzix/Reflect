@@ -4,7 +4,7 @@ var searchEventViewModule = require("./../../shared/view-models/search-view-mode
 var searchResultsViewModule = require("./../../shared/view-models/search-results-view-model");
 var eventsViewModule = require("./../../shared/view-models/events-list-view-model");
 var dialogsModule = require("ui/dialogs");
-
+var locationModule = require("location");
 
 var appModule = require("application");
 var applicationSettings = require("application-settings");
@@ -12,6 +12,7 @@ var frameModule = require("ui/frame");
 
 var viewModel;
 var page;
+var currentLocation;
 
 function pageLoaded(args) {
     console.log("Page loaded");
@@ -23,6 +24,14 @@ function pageLoaded(args) {
     createViewModel(selectedViewIndex);
     viewModel.selectView(selectedViewIndex);
     viewModel.checkLoggedIn();
+    var locationManager = new locationModule.LocationManager();
+    locationManager.startLocationMonitoring(function (location) {
+        console.log('Location received: ' + location);
+        currentLocation = location;
+    }, function (error) {
+        console.log('Location error received: ' + error);
+        currentLocation = null;
+    });
 }
 exports.pageLoaded = pageLoaded;
 
@@ -48,12 +57,12 @@ exports.selectView = selectView;
 function createViewModel(index) {
     switch(index) {
         case 0:
-            viewModel = new eventsViewModule.EventsViewModel(false);
+            viewModel = new eventsViewModule.EventsViewModel(false, currentLocation);
             page.bindingContext = viewModel;
             viewModel.checkLoggedIn();
             break;
         case 1:
-            viewModel = new eventsViewModule.EventsViewModel(true);
+            viewModel = new eventsViewModule.EventsViewModel(true, null);
             page.bindingContext = viewModel;
             viewModel.checkLoggedIn();
             break;

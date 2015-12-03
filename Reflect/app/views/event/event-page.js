@@ -119,3 +119,13 @@ function viewGallery() {
     eventModel.viewGallery();
 }
 exports.viewGallery = viewGallery;
+
+function editGallery() {
+    eventModel.editGallery();
+}
+exports.editGallery = editGallery;
+
+function shareGallery() {
+    eventModel.shareGallery();
+}
+exports.shareGallery = shareGallery;

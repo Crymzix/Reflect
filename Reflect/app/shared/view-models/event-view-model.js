@@ -37,8 +37,8 @@ var EventViewModel = (function (_super) {
             this.set("eventEndDate", eventEndDate[0]);
             this.set("eventEndTime", eventEndDate[1]);
         } else {
-            this.set("eventStartDate", event.start_date);
-            this.set("eventEndDate", event.end_date);
+            this.set("eventStartDate", "start: " + event.start_date);
+            this.set("eventEndDate", "end: " + event.end_date);
         }
 
         this.set("eventLocation", event.locationTitle);
@@ -138,7 +138,7 @@ var EventViewModel = (function (_super) {
         eventObject.saveInBackground(new com.parse.SaveCallback({
             done: function (error) {
                 that.set("isGalleryPublished", true);
-                this._event.isGalleryPusblished = "1";
+                that._event["isGalleryPublished"] = "1";
                 android.widget.Toast.makeText(appModule.android.context, "Published gallery!", 0).show();
             }
         }));
@@ -157,6 +157,27 @@ var EventViewModel = (function (_super) {
                 }
             }
         }
+    };
+
+    EventViewModel.prototype.editGallery = function() {
+
+        var event = this._event;
+        frameModule.topmost().navigate({
+            moduleName: "views/gallery-viewing/gallery-viewing-page",
+            context: event,
+            backstackVisible: true
+        });
+    };
+
+    EventViewModel.prototype.shareGallery = function() {
+
+        var shareIntent = new android.content.Intent();
+        shareIntent.setAction(android.content.Intent.ACTION_SEND);
+        var json = JSON.parse(this._event.imgurDeleteHash);
+        var uri = "http://imgur.com/a/" + json.id;
+        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, uri);
+        shareIntent.setType("text/plain");
+        appModule.android.foregroundActivity.startActivity(shareIntent);
     };
 
     return EventViewModel;
