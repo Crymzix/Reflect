@@ -7,5 +7,7 @@ module.exports ={
     imgurClientID: "ce3c6ac3d6c6cd6",
     imgurClientSecret: "3d8c91c52a8233ee38cf48684a927626bd4f739e",
     googleStaticMapsURL: "https://maps.googleapis.com/maps/api/staticmap?center=",
-    googleStaticAPIKey: "AIzaSyBwyASY0x7KBZ7l3Oba3Qpo_tUWsud5UAo"
+    googleStaticAPIKey: "AIzaSyBwyASY0x7KBZ7l3Oba3Qpo_tUWsud5UAo",
+    parseId :"UZ348s5Fstpa9stS9q5jsDRxihPbt3PpDxQJDawp",
+    parseKey : "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6"
 };
