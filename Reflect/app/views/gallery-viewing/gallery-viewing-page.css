@@ -17,7 +17,9 @@
     font-weight: bold;
     border-color: #ededed;
     border-width: 5;
-    margin-left: 45;
+    margin-left: 10;
+    margin-right: 10;
+    horiontal-align: center;
     vertical-align: bottom;
 }
 

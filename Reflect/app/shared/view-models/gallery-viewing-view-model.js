@@ -5,6 +5,7 @@ var config = require("../config");
 var http = require("http");
 var qs = require('querystring');
 var observableModule = require("data/observable");
+var appModule = require("application");
 
 var eventInfo;
 
@@ -32,19 +33,19 @@ function GalleryViewing(info) {
         image_url: "",
         image_id: ""
     });
-    viewModel.set("isLoading", true);
+
+    setLoadingSpinner(true);
+
     loadPhotos(imgurAlbumId);
 
 
     viewModel.swipeRight = function () {
         if (picturePosition > 0) {
             picturePosition--;
-            picture = pictures[picturePosition];
 
-            viewModel.set("image_url", picture.url);
-            viewModel.set("image_id", picture.id);
+            setImage(pictures[picturePosition]);
 
-            getParsePicture(picture.url);
+            getParsePicture(picture.url, eventInfo.eventId);
         }
 
     };
@@ -52,23 +53,21 @@ function GalleryViewing(info) {
     viewModel.swipeLeft = function () {
         if (picturePosition < pictures.length - 1) {
             picturePosition++;
-            picture = pictures[picturePosition];
             console.log(picture.id);
 
-            viewModel.set("image_url", picture.url);
-            viewModel.set("image_id", picture.id);
+            setImage(pictures[picturePosition]);
 
-            getParsePicture(picture.url);
+            getParsePicture(picture.url, eventInfo.eventId);
         }
     };
 
     viewModel.deletePicture = function(){
         var deletingPhoto = pictures[picturePosition];
-        shiftPhotos();
-        picture = pictures[picturePosition];
-
-        viewModel.set("image_url", picture.url);
-        viewModel.set("image_id", picture.id);
+        var shiftInfo = shiftPhotos(pictures, picturePosition, pictureCount);
+        pictures = shiftInfo.pictures;
+        picturePosition = shiftInfo.picturePosition;
+        pictureCount = shiftInfo.pictureCount;
+        setImage(pictures[picturePosition]);
         deletePhoto();
 
     };
@@ -81,105 +80,155 @@ function GalleryViewing(info) {
 
 }
 
-function getParsePicture(imgUrl){
+function getParsePicture(imgUrl, eventId){
     var query = qs.stringify({
         where: JSON.stringify({
             photoUrl: imgUrl,
-            eventId: eventInfo.objectId
+            eventId: eventId
         })
     });
     var url = "https://api.parse.com/1/classes/Event_Gallery?" + query;
-    http.getJSON({
-        url: url,
-        method: "GET",
-        headers: {
-            "X-Parse-Application-Id": "UZ348s5Fstpa9stS9q5jsDRxihPbt3PpDxQJDawp",
-            "X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6"
+    getParsePictureRequest(url).then(function(response){
+        if(response.results[0]){
+            pictureObject = response.results[0];
+        }else{
+           android.widget.Toast.makeText(appModule.android.context, "ERROR: Network error encountered; please check connection and try again");
         }
-    }).then(function (response) {
-        console.log(JSON.stringify(response));
-        pictureObject = response.results[0];
-        console.log(pictureObject.imgurDeleteHash);
-    }, function(e){
-        console.log("couldnt get photo object from Parse");
+
+    }, function (e){
         pictureObject = null;
+       android.widget.Toast.makeText(appModule.android.context, "ERROR: Network error encountered; please check connection and try again");
+    });
+    return pictureObject;
+}
+
+function getParsePictureRequest(url){
+    return new Promise(function(resolve,reject){
+        http.getJSON({
+            url: url,
+            method: "GET",
+            headers: {
+                "X-Parse-Application-Id": config.parseId,
+                "X-Parse-REST-API-Key": config.parseKey
+            }
+        }).then(function (response) {
+            //console.log(JSON.stringify(response));
+            resolve(response);
+        }, function(e){
+            reject("couldnt get photo object from Parse");
+            pictureObject = null;
+        });
     });
 }
 
 function loadPhotos(albumId){
-    loadFromImgur(albumId).then(function(response){
-        if(response){
-            var imageArray = response.images;
-            var picturesArray = [];
-            for (pictureCount = 0; pictureCount < imageArray.length; pictureCount++) {
-                var id = imageArray[pictureCount].id;
-                var pictureDefinition = {
-                    "url": imageArray[pictureCount].link,
-                    "id": id,
-                    "deleteHash" : imageArray[pictureCount].deletehash
-                };
-                console.log(pictureDefinition.url);
-                picturesArray[pictureCount] = pictureDefinition;
+    loadFromImgur(albumId , function(err, resp) {
+        var response = checkImgurStatusCode(resp);
+        if(response) {
+            if(checkImageCount(response) > 0){
+                console.log('loading photos');
+
+                pictures = loadPicturesArray(response.data.images);
+                pictureCount = pictures.length;
+                var firstPicture = pictures[picturePosition];
+                if (firstPicture) {
+                    console.log('first pic there');
+                    setLoadingSpinner(false);
+                    setImage(firstPicture);
+                }
+                pictureObject = getParsePicture(picture.url, eventInfo.eventId);
             }
-
-            pictures = picturesArray;
+            else {
+                console.log("no photos to show");
+                android.widget.Toast.makeText(appModule.android.context, "No photos to show!", 0).show();
+            }
+        }else if(err){
+           android.widget.Toast.makeText(appModule.android.context, "ERROR: Network error encountered; please check connection and try again", 0).show();
         }
 
-        picture = pictures[picturePosition];
-        console.log(pictureCount);
-
-        if(picture){
-            viewModel.set("isLoading", false);
-            viewModel.image_id = picture.id;
-            viewModel.image_url = picture.url;
-        }else{
-            console.log("no photos to show");
-            // show no photos image
-        }
-
-        pictureObject = getParsePicture(picture.url);
-    }, function(e){
-        console.log(e);
     });
-
 }
 
-function loadFromImgur(albumId){
-    return new Promise(function(resolve, reject){
-        http.getJSON({
-            url: config.imgurAPI + "album/" + albumId ,
-            method: "GET",
-            headers: {
-                "Authorization" : "Client-ID " + config.imgurClientID,
-                "Content-Type" : "application/json"
-            }
+
+
+function loadFromImgur(albumId, callback){
+    //console.log(albumId);
+   // return new Promise(function(resolve, reject){
+    http.getJSON({
+        url: config.imgurAPI + "album/" + albumId,
+        method: "GET",
+        headers: {
+            "Authorization": "Client-ID " + config.imgurClientID,
+            "Content-Type": "application/json"
+        }
+    //}, function(response) {
+    //    var data = '';
+    //    response.on('data', function(chunk) {
+    //        data += chunk;
+    //    });
+    //
+    //    response.on('end', function() {
+    //        callback(null, JSON.parse(data).data);
+    //    });
+    //});
+    //req.on('error', function(err) {
+    //    callback(err);
+    //});
+    //req.end();
         }).then(function (response) {
-            //applicationSettings.setString("currentUser",response.objectId);
-            if(response.data.images_count > 0){
-                resolve(response.data);
-            }else{
-                var empty= null;
-                resolve(empty);
-            }
+            //if(response.data.images_count > 0) {
+                console.log(JSON.stringify(response));
+
+                callback(null, response);
+                //resolve(response.data);
+            //}
+            //}else{
+            //    var empty= null;
+            //    resolve(empty);
+            //}
         }, function (e) {
-            reject("LOADING FROM IMGUR DIDN'T WORK");
+            callback(e);
         });
-    });
+    //});
 }
 
-function deletePhoto(){
-    console.log("in delete Photo method");
-    deleteFromImgur().then(function(response){
-        console.log("in deleteFrom Imgur promise");
-        deleteFromParse().then(function(response){
-            console.log("in deleteFrom Parse promise");
-            getParsePicture(picture.url);
-        }, function(e){
-            console.log(e);
-        });
-    }, function(e){
-        console.log(e);
-    });
+function loadPicturesArray(images){
+    if(images){
+        var imageArray = images;
+        var picturesArray = [];
+        var pictureCount = 0;
+        for (pictureCount; pictureCount < imageArray.length; pictureCount++) {
+            var id = imageArray[pictureCount].id;
+            var pictureDefinition = {
+                "url": imageArray[pictureCount].link,
+                "id": id,
+                "deleteHash": imageArray[pictureCount].deletehash
+            };
+            picturesArray[pictureCount] = pictureDefinition;
+        }
+        return picturesArray;
+    }else{
+        return null;
+    }
+
+}
+
+function checkImageCount(response){
+    if(response) {
+        if (response.data.images_count > 0) {
+            return response.data.images_count;
+        } else {
+            return 0;
+        }
+    }else{
+        return false;
+    }
+}
+
+function setImage(newPicture){
+    picture = newPicture;
+    viewModel.image_id = newPicture.id;
+    viewModel.image_url = newPicture.url;
 }
 
 function deleteFromImgur(){
@@ -192,13 +241,10 @@ function deleteFromImgur(){
                 "Content-Type" : "application/json"
             }
         }).then(function(response){
-            var resp = response.content.toJSON();
-            if(resp.statusCode == 200){
-                resolve("deleting image worked!");
-            }else{
-                reject("adding image didn't work!")
-            }
+            console.log(JSON.stringify(response));
+            resolve(response.toJSON());
         }, function(e){
+            console.log(e);
             reject("COUDLNT DELETE FROM IMGUR:  " + e);
         });
     });
@@ -211,16 +257,12 @@ function deleteFromParse(){
                 method: "DELETE",
                 url: "https://api.parse.com/1/classes/Event_Gallery/"+ pictureObject.objectId,
                 headers: {
-                    "X-Parse-Application-Id": "UZ348s5Fstpa9stS9q5jsDRxihPbt3PpDxQJDawp",
-                    "X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6"
+                    "X-Parse-Application-Id": config.parseId,
+                    "X-Parse-REST-API-Key": config.parseKey
                 }
             }).then(function(response){
                 var resp = response.toJSON();
-                if(resp.statusCode == 200){
-                    resolve("successfully deleted from parse!");
-                }else{
-                    reject("deleting image didn't work!")
-                }
+                resolve(resp);
             }, function(e){
                 reject("COULDNT DELETE FROM PARSE:  " + e );
             });
@@ -229,18 +271,91 @@ function deleteFromParse(){
 
 }
 
-function shiftPhotos(){
-    for(var i = picturePosition; i < pictureCount - 1; i++ ){
-        pictures[i] = pictures[i+1];
+function deletePhoto(){
+    console.log("in delete Photo method");
+    console.log(pictureObject.deleteHash);
+    deleteFromImgur().then(function(response){
+        if(checkImgurStatusCode(response)){
+            console.log("in deleteFrom Imgur promise");
+            deleteFromParse().then(function(response){
+                if(checkParseStatusCode(response)) {
+                    console.log("in deleteFrom Parse promise");
+                    getParsePicture(picture.url);
+                }else{
+                    android.widget.Toast.makeText(appModule.android.context, "ERROR: Network error; please check connection.", 0).show();
+                }
+            }, function(e){
+                android.widget.Toast.makeText(appModule.android.context, "ERROR: Network error; please check connection.", 0).show();
+            });
+        }else{
+            android.widget.Toast.makeText(appModule.android.context, "ERROR: Network error; could not delete photo from Imgur!", 0).show();
+        }
+    }, function(e){
+        android.widget.Toast.makeText(appModule.android.context, "ERROR: Network error; could not delete photo from Imgur!", 0).show();
+    });
+}
+
+function checkImgurStatusCode(response){
+    if(response){
+        console.log("here");
+        if(response.status == 200){
+            console.log("here2");
+            return response;
+        }else{
+            return false;
+        }
+    }else{
+        return false;
+    }
+}
+
+function checkParseStatusCode(response){
+    if(response){
+        if(response.statusCode == 200){
+            return response;
+        }else{
+            return false;
+        }
+    }else{
+        return false;
+    }
+}
+
+
+function setLoadingSpinner(status){
+    viewModel.set("isLoading", status);
+}
+
+
+function shiftPhotos(pictures, picturePosition, pictureCount){
+    if(picturePosition >= pictureCount){
+        return null;
     }
     if(picturePosition == pictureCount -1){
         picturePosition--;
+    }else{
+        for(var i = picturePosition; i < pictureCount - 1; i++ ){
+            pictures[i] = pictures[i+1];
+        }
     }
+
     pictures.pop();
+
     pictureCount--;
+
+    return {
+        "pictures" : pictures,
+        "picturePosition" : picturePosition,
+        "pictureCount" : pictureCount
+    };
 }
 
 module.exports = {
     galleryViewing: GalleryViewing,
-    loadFromImgur: loadFromImgur
+    checkImgurStatusCode : checkImgurStatusCode,
+    checkParseStatusCode : checkParseStatusCode,
+    checkImageCount : checkImageCount,
+    loadPicturesArray : loadPicturesArray,
+    shiftPhotos : shiftPhotos
+
 };
