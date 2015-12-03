@@ -9,13 +9,20 @@ var http = require("http");
 var REQUEST_SELECT_IMAGE = 1234;
 var REQUEST_LOCATION = 1235;
 var currentBitmap;
-var currentLocation;
+var currentLocation = null;
 
 var CreateEventViewModel = (function (_super) {
     __extends(CreateEventViewModel, _super);
+
+    var that;
+
     function CreateEventViewModel() {
         _super.call(this);
-        this.set("selectedViewIndex", 0);
+        that = this;
+
+        this.set("title", applicationSettings.getString("eventTitle"));
+        this.set("description", applicationSettings.getString("eventDescription"));
+        this.set("hashtags", applicationSettings.getString("eventHashtags"));
     }
 
     CreateEventViewModel.prototype.selectView = function (index) {
@@ -78,7 +85,8 @@ var CreateEventViewModel = (function (_super) {
 
     CreateEventViewModel.prototype.addEvent = function (imageView, title, location, description, startDate, startTime, endDate, endTime, hashtags) {
 
-        if (title.text && location.text && description.text && startDate.text && startTime.text && endDate.text && endTime.text) {
+        if (validateInputs(title.text, description.text, startDate.text, startTime.text, endDate.text, endTime.text, hashtags.text)) {
+
             var viewedPhotos = {
                 "ig" : [],
                 "upload" : []
@@ -125,11 +133,17 @@ var CreateEventViewModel = (function (_super) {
                 eventObject.put("imgurDeleteHash", imgurDeleteHash);
                 eventObject.saveInBackground(new com.parse.SaveCallback({
                     done: function (error) {
+                        android.widget.Toast.makeText(appModule.android.context, "Event uploaded!", 1).show();
                         //Clear input fields
                         title.text = "";
                         location.text = "";
                         description.text = "";
                         hashtags.text = "";
+                        startDate.text = "";
+                        startTime.text = "";
+                        endDate.text  = "";
+                        endTime.text = "";
+                        currentLocation = null;
                         imageView.imageSource = null;
                     }
                 }));
@@ -144,3 +158,70 @@ var CreateEventViewModel = (function (_super) {
     return CreateEventViewModel;
 })(observableModule.Observable);
 exports.CreateEventViewModel = CreateEventViewModel;
+
+function validateInputs(title_text,
+                        description_text,
+                        startDate_text,
+                        startTime_text,
+                        endDate_text ,
+                        endTime_text,
+                        hashtags_text) {
+
+
+    if (title_text == null || title_text == "") {
+        android.widget.Toast.makeText(appModule.android.context, "Please fill in a title.", 0).show();
+        return false;
+    }
+
+    if (description_text == null || description_text == "") {
+        android.widget.Toast.makeText(appModule.android.context, "Please fill in a description.", 0).show();
+        return false;
+    }
+
+    if (startDate_text == null || startDate_text == "") {
+        android.widget.Toast.makeText(appModule.android.context, "Please fill in a start date.", 0).show();
+        return false;
+    }
+
+    if (startTime_text == null || startTime_text == "") {
+        android.widget.Toast.makeText(appModule.android.context, "Please fill in a start time.", 0).show();
+        return false;
+    }
+
+    if (endDate_text == null || endDate_text == "") {
+        android.widget.Toast.makeText(appModule.android.context, "Please fill in an end date.", 0).show();
+        return false;
+    }
+
+    if (endTime_text == null || endTime_text == "") {
+        android.widget.Toast.makeText(appModule.android.context, "Please fill in an end time.", 0).show();
+        return false;
+    }
+
+    if (currentLocation == null) {
+        android.widget.Toast.makeText(appModule.android.context, "Please set a location", 0).show();
+        return false;
+    }
+
+    if (hashtags_text == null || hashtags_text == "") {
+        android.widget.Toast.makeText(appModule.android.context, "Please give a hashtag", 0).show();
+        return false;
+    } else {
+        if (hashtags_text.charAt(0) != "#") {
+            android.widget.Toast.makeText(appModule.android.context, "First character needs to be a hashtag", 0).show();
+            return false;
+        }
+
+        if (hashtags_text.split(" ").length > 1) {
+            android.widget.Toast.makeText(appModule.android.context, "Only one hashtag allowed", 0).show();
+            return false;
+        }
+    }
+
+    if (currentBitmap == null) {
+        android.widget.Toast.makeText(appModule.android.context, "Please add a cover photo.", 0).show();
+        return false;
+    }
+
+    return true;
+}
