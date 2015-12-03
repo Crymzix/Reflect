@@ -1,3 +1,4 @@
+// old code
 var observableModule = require("data/observable");
 var appModule = require("application");
 var frameModule = require("ui/frame");
@@ -10,21 +11,28 @@ var applicationSettings = require("application-settings");
 
 var arrayOfMatchingIDs = [];
 
-function SearchEventsViewModel() {
-	SearchEventsViewModel = new observableModule.Observable({
-		
-	});
+var SearchEventsViewModel = (function (_super) {
+	__extends(SearchEventsViewModel, _super);
 	
-	SearchEventsViewModel.checkLoggedIn = function(){
+	var that;
+	
+	function SearchEventsViewModel() {
+		_super.call(this);
+		this.set("selectedViewIndex", 0);
+		this._events = [];
+		that = this;
+	}
+
+	SearchEventsViewModel.prototype.checkLoggedIn = function(){
         var currentUser = applicationSettings.hasKey("currentUser");
         this.set("loggedIn",currentUser);
     };
-	
-	SearchEventsViewModel.selectView = function (index) {
+
+	SearchEventsViewModel.prototype.selectView = function (index) {
 		this.set("selectedViewIndex", index);
 	};
-	
-	SearchEventsViewModel.searchEvents = function (keywordSearch) {
+
+	SearchEventsViewModel.prototype.searchEvents = function (keywordSearch) {
 		var keywordArray = keywordSearch.text.split(" ");
 		console.log("the search terms are: " + keywordArray + "and the number of entries in array are" + keywordArray.length);
 		var regexArray = [];
@@ -35,6 +43,7 @@ function SearchEventsViewModel() {
 			
 		}
 		console.log("the content of regexArray: " + JSON.stringify(regexArray));
+		
 		var query = qs.stringify({
 			where: JSON.stringify({
 				$or: regexArray
@@ -66,10 +75,31 @@ function SearchEventsViewModel() {
 	}; 
 	
 	return SearchEventsViewModel;
-}
-exports.SearchEventsViewModel = SearchEventsViewModel;
 	
-function matchString(keywordArray, i, regexArray) {
+	
+	/* SearchEventsViewModel.prototype.locationSearch = function () {
+		
+
+		var query = qs.stringify({
+			where: JSON.stringify({
+				locationL: {
+					
+				}
+				/* title: {
+						//$regex: "^" regexArray[0];
+						$or: regexArray
+				} */
+	/* 		})
+		});
+		var url = "https://api.parse.com/1/classes/Event?" + query;
+	}  */
+
+	//SearchEventsViewModel.prototype.locationToLagLong = function ();
+	
+})(observableModule.Observable);
+exports.SearchEventsViewModel = SearchEventsViewModel;
+
+	function matchString(keywordArray, i, regexArray) {
 			var uppercaseString = keywordArray[i/6].charAt(0).toUpperCase() + keywordArray[i/6].slice(1);
 			// converts search word to lower case word
 			var lowercaseString = keywordArray[i/6].toLowerCase();
@@ -111,4 +141,4 @@ function matchString(keywordArray, i, regexArray) {
 			regexArray[i+5] = descriptionLowerCase;
 			
 			return regexArray;
-};
+	};
