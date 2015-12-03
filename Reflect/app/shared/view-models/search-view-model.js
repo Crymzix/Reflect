@@ -38,7 +38,68 @@ var SearchEventsViewModel = (function (_super) {
 		var regexArray = [];
 		for (var i = 0; i<keywordArray.length*6; i+=6) {
 			
+			regexArray = matchString(keywordArray, i, regexArray);
 			// converts search word to capitalized word 
+			
+		}
+		console.log("the content of regexArray: " + JSON.stringify(regexArray));
+		
+		var query = qs.stringify({
+			where: JSON.stringify({
+				$or: regexArray
+				/* title: {
+						//$regex: "^" regexArray[0];
+						$or: regexArray
+				} */
+			})
+		});
+		var url = "https://api.parse.com/1/classes/Event?" + query;
+
+		//Retrieve events
+		http.getJSON({
+			url: url,
+			method: "GET",
+			headers: {
+				"X-Parse-Application-Id": "UZ348s5Fstpa9stS9q5jsDRxihPbt3PpDxQJDawp",
+				"X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6"
+			}
+		}).then(function (response) {
+			frameModule.topmost().navigate ({
+				moduleName: "views/search/search-results-page",
+				context: response,
+				backstackVisible:true
+			});
+		}, function (e) {
+			console.log(e);
+		});
+	}; 
+	
+	return SearchEventsViewModel;
+	
+	
+	/* SearchEventsViewModel.prototype.locationSearch = function () {
+		
+
+		var query = qs.stringify({
+			where: JSON.stringify({
+				locationL: {
+					
+				}
+				/* title: {
+						//$regex: "^" regexArray[0];
+						$or: regexArray
+				} */
+	/* 		})
+		});
+		var url = "https://api.parse.com/1/classes/Event?" + query;
+	}  */
+
+	//SearchEventsViewModel.prototype.locationToLagLong = function ();
+	
+})(observableModule.Observable);
+exports.SearchEventsViewModel = SearchEventsViewModel;
+
+	function matchString(keywordArray, i, regexArray) {
 			var uppercaseString = keywordArray[i/6].charAt(0).toUpperCase() + keywordArray[i/6].slice(1);
 			// converts search word to lower case word
 			var lowercaseString = keywordArray[i/6].toLowerCase();
@@ -78,59 +139,6 @@ var SearchEventsViewModel = (function (_super) {
 				$regex: lowercaseString
 			}
 			regexArray[i+5] = descriptionLowerCase;
-		}
-		console.log("the content of regexArray: " + JSON.stringify(regexArray));
-		
-		var query = qs.stringify({
-			where: JSON.stringify({
-				$or: regexArray
-				/* title: {
-						//$regex: "^" regexArray[0];
-						$or: regexArray
-				} */
-			})
-		});
-		var url = "https://api.parse.com/1/classes/Event?" + query;
-
-		//Retrieve events
-		http.getJSON({
-			url: url,
-			method: "GET",
-			headers: {
-				"X-Parse-Application-Id": "UZ348s5Fstpa9stS9q5jsDRxihPbt3PpDxQJDawp",
-				"X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6"
-			}
-		}).then(function (response) {
-			frameModule.topmost().navigate ({
-				moduleName: "views/search/search-results-page",
-				context: response,
-				backstackVisible:true
-			});
-		}, function (e) {
-			console.log(e);
-		});
-	}; 
-	
-	return SearchEventsViewModel;
-	
-	/* SearchEventsViewModel.prototype.locationSearch = function () {
-		
-
-		var query = qs.stringify({
-			where: JSON.stringify({
-				locationL: {
-					
-				}
-				/* title: {
-						//$regex: "^" regexArray[0];
-						$or: regexArray
-				} */
-	/* 		})
-		});
-		var url = "https://api.parse.com/1/classes/Event?" + query;
-	}  */
-
-	//SearchEventsViewModel.prototype.locationToLagLong = function ();
-	
-})(observableModule.Observable);
-exports.SearchEventsViewModel = SearchEventsViewModel;
+			
+			return regexArray;
+	};
