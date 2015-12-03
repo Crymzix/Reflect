@@ -30,15 +30,59 @@ describe('search match test', function(){
 			}})
     });
 
-    it('should return array of regular expressions ', function(done){
+    it('shouldnt give null result', function(done){
 
 
         var response = [];
 		var regexArray = [];
 		var string = "hallo";
-        response = search_view.matchString(string, 0, regexArray);
+        response = search_view.matchString(string, 0, regexArray); 
+		
+		// searchInput = ("hallo", 0, regexArray);
 
-        expect(response.status).to.equal([{"title":{"$regex":"Hallo"}},{"title":{"$regex":"hallo"}},{"hashtags":{"$regex":"Hallo"}},{"hashtags":{"$regex":"hallo"}},{"description":{"$regex":"Hallo"}},{"description":{"$regex":"hallo"}},{"title":{"$regex":"P"}},{"title":{"$regex":"p"}},{"hashtags":{"$regex":"P"}},{"hashtags":{"$regex":"p"}},{"description":{"$regex":"P"}},{"description":{"$regex":"p"}}]);
+        expect(response).to.not.equal(null);
+        done();
+	});
+	
+	    it('shouldnt return a length of 5', function(done){
+
+
+        var response = [];
+		var regexArray = [];
+		var string = "hallo";
+        response = search_view.matchString(string, 0, regexArray); 
+		
+		//var searchInput = ("hallo", 0, regexArray);
+
+        expect(response.length).to.not.equal(5);
+        done();
+	});
+	
+		it('should return array of regular expressions ', function(done){
+
+
+        var response = [];
+		var regexArray = [];
+		var string = "hallo";
+        response = search_view.matchString(string, 0, regexArray); 
+		
+	
+
+        expect(response.length).to.not.equal(7);
+        done();
+	});
+	
+	it('shouldnt give null result', function(done){
+
+
+        var response = [];
+		var regexArray = [];
+		var string = "hallo";
+        response = search_view.matchString(string, 0, regexArray); 
+
+
+        expect(response.length).to.equal(6);
         done();
 	});
 });
+

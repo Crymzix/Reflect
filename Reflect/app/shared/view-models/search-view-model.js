@@ -70,6 +70,8 @@ function SearchEventsViewModel() {
 exports.SearchEventsViewModel = SearchEventsViewModel;
 	
 function matchString(keywordArray, i, regexArray) {
+
+			
 			var uppercaseString = keywordArray[i/6].charAt(0).toUpperCase() + keywordArray[i/6].slice(1);
 			// converts search word to lower case word
 			var lowercaseString = keywordArray[i/6].toLowerCase();
@@ -111,4 +113,8 @@ function matchString(keywordArray, i, regexArray) {
 			regexArray[i+5] = descriptionLowerCase;
 			
 			return regexArray;
+};
+module.exports = {
+	matchString: matchString
+
 };
