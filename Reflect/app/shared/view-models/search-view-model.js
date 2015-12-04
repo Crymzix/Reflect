@@ -25,15 +25,16 @@ function SearchEventsViewModel() {
 	};
 	
 	SearchEventsViewModel.searchEvents = function (keywordSearch) {
+		//var keywordArray = keywordSearch;
 		var keywordArray = keywordSearch.text.split(" ");
 		console.log("the search terms are: " + keywordArray + "and the number of entries in array are" + keywordArray.length);
 		var regexArray = [];
-		for (var i = 0; i<keywordArray.length*6; i+=6) {
-			
-			matchString(keywordArray, i, regexArray);
+		//for (var i = 0; i<keywordArray.length*6; i+=6) {
+		var i = 0;	
+		matchString(keywordArray, i, regexArray);
 			// converts search word to capitalized word 
 			
-		}
+		//}
 		//console.log("the content of regexArray: " + JSON.stringify(regexArray));
 		var query = qs.stringify({
 			where: JSON.stringify({
@@ -69,12 +70,13 @@ function SearchEventsViewModel() {
 }
 //exports.SearchEventsViewModel = SearchEventsViewModel;
 	
-function matchString(keywordArray, i, regexArray) {
-
+function matchString(keywordSearch, i, regexArray) {
+			//var keywordArray = keywordSearch.text.split(" ");
 			
-			var uppercaseString = keywordArray[i/6].charAt(0).toUpperCase() + keywordArray[i/6].slice(1);
+			var uppercaseString = keywordSearch[i/6].charAt(0).toUpperCase() + keywordSearch[i/6].slice(1);
+			console.log ("uppercaseString is: " + uppercaseString);
 			// converts search word to lower case word
-			var lowercaseString = keywordArray[i/6].toLowerCase();
+			var lowercaseString = keywordSearch[i/6].toLowerCase();
 			
 			var uppercase = {};
 			uppercase["title"] = {

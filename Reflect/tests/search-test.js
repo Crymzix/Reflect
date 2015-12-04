@@ -156,5 +156,59 @@ describe('search match test', function(){
         done();
 	});
 	
+		it('test array length', function(done){
+
+
+        var response = [];
+		var regexArray = [];
+		var string = "justin lee";
+        response = search_view.matchString(string, 0, regexArray); 
+		
+		//var expectedResponse = [{"title":{"$regex":"J"}},{"title":{"$regex":"j"}},{"hashtags":{"$regex":"J"}},{"hashtags":{"$regex":"j"}},{"description":{"$regex":"J"}},{"description":{"$regex":"j"}}];
+
+        expect(response.length).to.equal(6);
+        done();
+	});
+	
+	it('test array length', function(done){
+
+
+        var response = [];
+		var regexArray = [];
+		var string = "1";
+        response = search_view.matchString(string, 0, regexArray); 
+		
+		//var expectedResponse = [{"title":{"$regex":"J"}},{"title":{"$regex":"j"}},{"hashtags":{"$regex":"J"}},{"hashtags":{"$regex":"j"}},{"description":{"$regex":"J"}},{"description":{"$regex":"j"}}];
+
+        expect(response.length).to.equal(6);
+        done();
+	});
+	/* it('test array content', function(done){
+
+
+        var response = [];
+		var regexArray = [];
+		//var string = new String("justin");
+        response = search_view.matchString("justin", 0, regexArray); 
+		
+		var expectedResponse = [{"title":{"$regex":"Justin"}},{"title":{"$regex":"justin"}},{"hashtags":{"$regex":"Justin"}},{"hashtags":{"$regex":"justin"}},{"description":{"$regex":"Justin"}},{"description":{"$regex":"justin"}}];
+
+        expect(JSON.stringify(response)).to.equal(JSON.stringify(expectedResponse));
+        done();
+	}); */
+	it('test array length', function(done){
+
+
+        var response = [];
+		var regexArray = [];
+		
+        response = search_view.matchString("chris li", 0, regexArray); 
+		
+		//var expectedResponse = [{"title":{"$regex":"c"}},{"title":{"$regex":"justin"}},{"hashtags":{"$regex":"Justin"}},{"hashtags":{"$regex":"justin"}},{"description":{"$regex":"Justin"}},{"description":{"$regex":"justin"}}];
+
+        expect(response.length).to.equal(6);
+        done();
+	});
+	
 });
 
