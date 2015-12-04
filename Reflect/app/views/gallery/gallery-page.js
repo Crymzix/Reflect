@@ -154,7 +154,7 @@ function reportPicture(){
             okButtonText: "Yes",
             cancelButtonText: "No"
         };
-        dialogs.confirm(options).then(function (result) {
+        dialogsModule.confirm(options).then(function (result) {
             if (result == true) {
                 image.animate({
                     translate: {x: -300, y: 0},
