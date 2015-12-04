@@ -18,7 +18,7 @@ var eventInfo;
 function loaded(args){
     var page = args.object;
     eventInfo = page.navigationContext;
-    gallery = new GalleryViewModel(eventInfo);
+    gallery = new GalleryViewModel.Gallery(eventInfo);
     image = page.getViewById("image");
     reject = page.getViewById("reject");
     accept = page.getViewById("accept");
@@ -28,14 +28,74 @@ function loaded(args){
 exports.loaded = loaded;
 
 function swipePicture(eventData){
-    console.log("Picture Swiped" +  eventData.direction);
-    if(eventData.direction === 8  || eventData.direction === 2){
+    if(gallery.getPictureCount() > 0) {
+        console.log("Picture Swiped" + eventData.direction);
+        if (eventData.direction === 8 || eventData.direction === 2) {
+            image.animate({
+                translate: {x: -600, y: 0},
+                duration: 200
+            }).then(function () {
+                return image.animate({opacity: 0});
+            }).then(function () {
+                gallery.visitPhoto();
+                gallery.swipeLeft();
+                return image.animate({
+                    translate: {x: 0, y: 0},
+                    duration: 1
+                });
+            }).then(function () {
+                return image.animate({opacity: 1, duration: 1500});
+            });
+
+            reject.animate({
+                scale: {x: 1.10, y: 1.10},
+                duration: 200
+            }).then(function () {
+                return reject.animate({scale: {x: 1, y: 1}, duration: 200});
+            });
+
+
+        }
+
+        if (eventData.direction === 4 || eventData.direction === 1) {
+            image.animate({
+                translate: {x: 600, y: 0},
+                duration: 200
+            }).then(function () {
+                return image.animate({opacity: 0});
+            }).then(function () {
+                gallery.visitPhoto();
+                gallery.swipeRight();
+                return image.animate({
+                    translate: {x: 0, y: 0},
+                    duration: 1
+                });
+            }).then(function () {
+                return image.animate({opacity: 1, duration: 1500});
+            });
+
+            accept.animate({
+                scale: {x: 1.10, y: 1.10},
+                duration: 100
+            }).then(function () {
+                return accept.animate({scale: {x: 1, y: 1}, duration: 200});
+            });
+
+
+        }
+    }
+}
+
+exports.swipePicture = swipePicture;
+
+function swipeLeft(eventData){
+    if(gallery.getPictureCount() > 0) {
         image.animate({
-            translate: { x: -600, y: 0 },
+            translate: {x: -600, y: 0},
             duration: 200
-        }).then(function(){
-            return image.animate({ opacity: 0 });
-        }).then(function(){
+        }).then(function () {
+            return image.animate({opacity: 0});
+        }).then(function () {
             gallery.visitPhoto();
             gallery.swipeLeft();
             return image.animate({
@@ -43,26 +103,27 @@ function swipePicture(eventData){
                 duration: 1
             });
         }).then(function () {
-            return image.animate({ opacity: 1, duration: 1500 });
+            return image.animate({opacity: 1, duration: 1500});
         });
 
         reject.animate({
-            scale: {x: 1.15, y: 1.15},
-            duration: 200
-        }).then(function(){
-            return reject.animate({ scale :  {x: 1, y: 1}, duration: 200});
+            scale: {x: 1.10, y: 1.10},
+            duration: 100
+        }).then(function () {
+            return reject.animate({scale: {x: 1, y: 1}, duration: 200});
         });
-
-
     }
+}
+exports.swipeLeft = swipeLeft;
 
-    if(eventData.direction === 4  || eventData.direction === 1){
+function swipeRight(eventData){
+    if(gallery.getPictureCount() > 0) {
         image.animate({
-            translate: { x: 600, y: 0 },
+            translate: {x: 600, y: 0},
             duration: 200
-        }).then(function(){
-            return image.animate({ opacity: 0 });
-        }).then(function(){
+        }).then(function () {
+            return image.animate({opacity: 0});
+        }).then(function () {
             gallery.visitPhoto();
             gallery.swipeRight();
             return image.animate({
@@ -70,95 +131,56 @@ function swipePicture(eventData){
                 duration: 1
             });
         }).then(function () {
-            return image.animate({ opacity: 1, duration: 1500 });
+            return image.animate({opacity: 1, duration: 1500});
         });
 
         accept.animate({
-            scale: {x: 1.15, y: 1.15},
-            duration: 200
-        }).then(function(){ return accept.animate({ scale :  {x: 1, y: 1}, duration: 200}); });
-
-
+            scale: {x: 1.10, y: 1.10},
+            duration: 100
+        }).then(function () {
+            return accept.animate({scale: {x: 1, y: 1}, duration: 200});
+        });
     }
-}
-
-exports.swipePicture = swipePicture;
-
-function swipeLeft(eventData){
-    image.animate({
-        translate: { x: -600, y: 0 },
-        duration: 200
-    }).then(function(){
-        return image.animate({ opacity: 0 });
-    }).then(function(){
-        gallery.visitPhoto();
-        gallery.swipeLeft();
-        return image.animate({
-            translate: {x: 0, y: 0},
-            duration: 1
-        });
-    }).then(function () {
-        return image.animate({ opacity: 1, duration: 1500 });
-    });
-
-    reject.animate({
-        scale: {x: 1.15, y: 1.15},
-        duration: 200
-    }).then(function(){
-        return reject.animate({ scale :  {x: 1, y: 1}, duration: 200});
-    });
-}
-exports.swipeLeft = swipeLeft;
-
-function swipeRight(eventData){
-    image.animate({
-        translate: { x: 600, y: 0 },
-        duration: 200
-    }).then(function(){
-        return image.animate({ opacity: 0 });
-    }).then(function(){
-        gallery.visitPhoto();
-        gallery.swipeRight();
-        return image.animate({
-            translate: {x: 0, y: 0},
-            duration: 1
-        });
-    }).then(function () {
-        return image.animate({ opacity: 1, duration: 1500 });
-    });
-
-    accept.animate({
-        scale: {x: 1.15, y: 1.15},
-        duration: 200
-    }).then(function(){ return accept.animate({ scale :  {x: 1, y: 1}, duration: 200}); });
 
 }
 
 exports.swipeRight = swipeRight;
 
 function reportPicture(){
-    image.animate({
-        translate: { x: -300, y: 0 },
-        duration: 200
-    }).then(function(){
-        return image.animate({ opacity: 0 });
-    }).then(function(){
-        gallery.visitPhoto();
-        gallery.reportPicture();
-        return image.animate({
-            translate: {x: 0, y: 0},
-            duration: 1
-        });
-    }).then(function () {
-        return image.animate({ opacity: 1, duration: 1500 });
-    });
+    if(gallery.getPictureCount() > 0) {
+        var options = {
+            title: "Report Photo",
+            message: "Are you sure you want to report this photo?",
+            okButtonText: "Yes",
+            cancelButtonText: "No"
+        };
+        dialogs.confirm(options).then(function (result) {
+            if (result == true) {
+                image.animate({
+                    translate: {x: -300, y: 0},
+                    duration: 200
+                }).then(function () {
+                    return image.animate({opacity: 0});
+                }).then(function () {
+                    gallery.visitPhoto();
+                    gallery.reportPicture();
+                    return image.animate({
+                        translate: {x: 0, y: 0},
+                        duration: 1
+                    });
+                }).then(function () {
+                    return image.animate({opacity: 1, duration: 1500});
+                });
 
-    reject.animate({
-        scale: {x: 1.25, y: 1.25},
-        duration: 200
-    }).then(function(){
-        return reject.animate({ scale :  {x: 1, y: 1}, duration: 200});
-    });
+                reject.animate({
+                    scale: {x: 1.10, y: 1.10},
+                    duration: 100
+                }).then(function () {
+                    return reject.animate({scale: {x: 1, y: 1}, duration: 200});
+                });
+            }
+        });
+    }
 }
 
 exports.reportPicture = reportPicture;

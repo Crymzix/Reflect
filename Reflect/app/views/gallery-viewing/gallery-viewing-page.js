@@ -129,8 +129,8 @@ function deletePhoto(eventData){
 
 
     del.animate({
-        scale: {x: 1.15, y: 1.15},
-        duration: 200
+        scale: {x: 1.10, y: 1.10},
+        duration: 100
     }).then(function(){ return del.animate({ scale :  {x: 1, y: 1}, duration: 200}); });
 
 

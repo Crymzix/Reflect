@@ -2,12 +2,12 @@
  * Created by Vineet on 2015-10-25.
  */
 var config = require("../config");
-var fetchModule = require("fetch");
-var igRest = require("../../helpers/instagram-rest.js");
 var observableModule = require("data/observable");
 var igAPI = config.instagramAPIURL;
 var http = require("http");
 var qs = require('querystring');
+var appModule = require("application");
+var appSettings = require("application-settings");
 
 
 
@@ -32,7 +32,7 @@ function Gallery(info){
 
     paginationUrl = eventInfo.curIGUrl;
 
-    loadPhotos(hashtags, eventInfo.objectId, paginationUrl);
+    loadPhotos(hashtags, eventInfo.objectId, paginationUrl, visitedPhotos);
 
     eventObject = com.parse.ParseObject.createWithoutData("Event", eventInfo.objectId);
     try {
@@ -47,7 +47,9 @@ function Gallery(info){
         image_url: "",
         image_id:  ""
     });
+
     viewModel.set("isLoading", true);
+
     viewModel.visitPhoto = function(){
         console.log("Visit Photo");
 
@@ -56,30 +58,18 @@ function Gallery(info){
     };
 
     viewModel.swipeLeft = function(){
-        visitPhoto(picture.id, picture.isUploaded);
-        console.log("swipe_left");
+        visitedPhotos = visitPhoto(picture.id, picture.isUploaded, visitedPhotos);
+        visitedPhotoInParse(visitedPhotos, eventInfo, eventObject);
         picture = pictures.pop();
         if(picture){
-            viewModel.set("image_url" , picture.url);
-            viewModel.set("image_id", picture.id);
+            setImage(picture);
         }else if(paginationUrl) {
             viewModel.set("isLoading", true);
-            eventInfo.curIGUrl = paginationUrl;
-            eventObject.put("curIGUrl", paginationUrl);
-            eventObject.saveInBackground(new com.parse.SaveCallback({
-                done: function (error) {
-                    console.log("new pagination link added for instagram");
-                    loadPhotos(hashtags, "eventId", paginationUrl);
-                }
-            }));
+            setCurrIgInParse(paginationUrl, true);
         }else{
-            eventObject.put("curIGUrl", "");
-            eventObject.saveInBackground(new com.parse.SaveCallback({
-                done: function (error) {
-                    console.log("original pagination link added for instagram");
-                }
-            }));
-            //set photo to NO MORE PHOTOS;
+            setCurrIgInParse("", false);
+            setImage(null);
+            android.widget.Toast.makeText(appModule.android.context, "No new photos!", 0).show();
         }
     };
 
@@ -87,37 +77,32 @@ function Gallery(info){
         var savedPicture = picture;
         picture = pictures.pop();
         if(picture){
-            viewModel.set("image_url" , picture.url);
-            viewModel.set("image_id", picture.id);
+            setImage(picture);
         }else{
             viewModel.set("isLoading", true);
         }
         //Add to event-gallery table
         addToImgur(savedPicture).then(function(resp){
-            addToEventGallery(resp, savedPicture).then(function(response){
-                console.log(response);
-                visitPhoto(savedPicture.id, savedPicture.isUploaded);
-            },function (e){
-                console.log(e);
-            });
+            if(checkImgurStatusCode(resp)){
+                addToEventGallery(resp.data, savedPicture).then(function(response){
+                    console.log(response);
+                    visitedPhotos = visitPhoto(savedPicture.id, savedPicture.isUploaded, visitedPhotos);
+                    visitedPhotoInParse(visitedPhotos, eventInfo, eventObject);
+                },function (e){
+                    console.log(e);
+                    android.widget.Toast.makeText(appModule.android.context, "NETWORK ERROR: Couldn't add to Imgur!", 0).show();
+                });
+            }else{
+                android.widget.Toast.makeText(appModule.android.context, "ERROR: Couldn't add to Imgur!", 0).show();
+            }
+
             console.log("swipe_right");
            if(paginationUrl && !picture) {
-                eventInfo.curIGUrl = paginationUrl;
-                eventObject.put("curIGUrl", paginationUrl);
-                eventObject.saveInBackground(new com.parse.SaveCallback({
-                    done: function (error) {
-                        console.log("new pagination link added for instagram");
-                        loadPhotos(hashtags, "eventId", paginationUrl);
-                    }
-                }));
+               setCurrIgInParse(paginationUrl, true);
             }else if(!paginationUrl){
-               eventObject.put("curIGUrl", "");
-               eventObject.saveInBackground(new com.parse.SaveCallback({
-                   done: function (error) {
-                       console.log("original pagination link added for instagram");
-                   }
-               }));
-                //set photo to NO MORE PHOTOS;
+               setImage(null);
+               setCurrIgInParse("", false);
+               android.widget.Toast.makeText(appModule.android.context, "No new photos!", 0).show();
             }
         }, function(e){
             console.log(e);
@@ -136,12 +121,20 @@ function Gallery(info){
         }));
         picture = pictures.pop();
         if(picture){
-            viewModel.set("image_url" , picture.url);
-            viewModel.set("image_id", picture.id);
+            setImage(picture);
 
+        }else if(paginationUrl) {
+            viewModel.set("isLoading", true);
+            setCurrIgInParse(paginationUrl, true);
         }else{
-            //show no more photos
+            setImage(null);
+            setCurrIgInParse("", false);
+            android.widget.Toast.makeText(appModule.android.context, "No new photos!", 0).show();
         }
+    };
+
+    viewModel.getPictureCount = function(){
+      return pictures.length;
     };
 
     return viewModel;
@@ -150,9 +143,8 @@ function Gallery(info){
 
 
 
-
-function loadPhotos(tag, eventId, url){
-    loadIGPhotos(tag, "event", url).then(function (response) {
+function loadPhotos(tag, eventId, url, visited){
+    loadIGPhotos(tag, url, visited).then(function (response) {
         console.log("In IG Photos promise");
         pictures = response;
         loadParsePhotos(eventId).then(function(response){
@@ -162,22 +154,20 @@ function loadPhotos(tag, eventId, url){
 
             if(picture){
                 console.log(picture.url);
-                viewModel.set("image_url", picture.url);
-                viewModel.set("image_id", picture.id);
+                setImage(picture);
             }else{
-                //show no more photos image
+                setImage(null);
+                android.widget.Toast.makeText(appModule.android.context, "No new photos!", 0).show();
             }
         }, function(e){
-           console.log(e);
+            android.widget.Toast.makeText(appModule.android.context, "NETWORK ERROR: Couldn't load from Parse!", 0).show();
         });
-
 
     }, function (err) {
         console.log(err);
+        android.widget.Toast.makeText(appModule.android.context, "NETWORK ERROR: Couldn't load from Instagram! Ensure you have logged in with your Instagram Account.", 0).show();
     });
 }
-
-
 
 
 function loadParsePhotos(eventId){
@@ -197,67 +187,57 @@ function loadParsePhotos(eventId){
                 "X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6"
             }
         }).then(function (response) {
-            var prePictureArrayLength = pictures.length;
-            var results = response.results;
-            console.log(results.length);
-            for(var i = 0; i < results.length ; i++){
-                var result = results[i];
-                var pictureDefinition = {
-                    "url": result.photoUrl,
-                    "id": result.objectId,
-                    "isUploaded" : 1,
-                    "ip" : result.ipAddress,
-                    "objectId": result.objectId
-                };
-                pictures[prePictureArrayLength + i] = pictureDefinition;
+            if(checkParseStatusCode(response)){
+                var fullPictures = loadParsePicturesArray(pictures, pictures.length, response);
+                resolve(fullPictures);
+            }else{
+                resolve(pictures);
             }
-            resolve(pictures);
         }, function(e){
-            resolve("couldn't get photos from parse");
+            reject("couldn't get photos from parse");
         });
     });
 
 }
 
 
+function loadParsePicturesArray(pictures, previousArrayLength, response){
+    if(response){
+        var results = response.results;
+        console.log(results.length);
+        for(var i = 0; i < results.length ; i++){
+            var result = results[i];
+            var pictureDefinition = {
+                "url": result.photoUrl,
+                "id": result.objectId,
+                "isUploaded" : 1,
+                "ip" : result.ipAddress,
+                "objectId": result.objectId
+            };
+            pictures[previousArrayLength + i] = pictureDefinition;
+        }
+    }
+    return pictures;
+
+}
+
 
 
 // This function takes the a hashtag (string) associated with Event and fills
 // global picture array with photos from Instagram that haven't already been visited
-function loadIGPhotos (tags, eventID, url){
+function loadIGPhotos (tags, url, visited){
     return new Promise(function(resolve, reject){
         searchTags(tags, url).then(function(response){
-            console.log("in_search_tags_promise");
-            var count = 0;
-            var jsresp = response;
-            var dataJSON = jsresp.data;
-            paginationUrl = jsresp.pagination.next_url;
-            var pictures = [];
-            console.log(dataJSON.length);
-            for (var i = 0; i < dataJSON.length; i++) {
-                console.log("in_loop");
-                //Get visited column in event-gallery table
-                //var visited = eventModel.getVisited(eventID);
-                var id = dataJSON[count].id;
-                //console.log(dataJSON[count].images.standard_resolution.url);
-                if(findIfVisited(id, 0)){
-                    //  do nothing;
-                    console.log(id);
-                }else {
-                    var pictureDefinition = {
-                        "url": dataJSON[count].images.standard_resolution.url,
-                        "id": id,
-                        "isUploaded" : 0,
-                        "ip" : "",
-                        "objectId" : ""
-                    };
-                    pictures[count] = pictureDefinition;
-                    count++;
-                }
+            if(checkIGStatusCode(response)){
+                console.log("in_search_tags_promise");
+                paginationUrl = response.pagination.next_url;
+                var pictures = loadIGPicturesArray(response, visited);
+            }
+            else{
+                pictures = [];
             }
             console.log("out of loop");
             resolve(pictures);
-
         }, function(err) {
             console.log(err);
             reject("NO PICTURES");
@@ -265,15 +245,46 @@ function loadIGPhotos (tags, eventID, url){
     });
 }
 
+function loadIGPicturesArray(response, visited){
+    if(response) {
+        var count = 0;
+        var dataJSON = response.data;
+        var pictures = [];
+        console.log(dataJSON.length);
+        for (var i = 0; i < dataJSON.length; i++) {
+            var id = dataJSON[count].id;
+            if (findIfVisited(id, 0, visited)) {
+                console.log("visited: " + id);
+            } else {
+                var pictureDefinition = {
+                    "url": dataJSON[count].images.standard_resolution.url,
+                    "id": id,
+                    "isUploaded": 0,
+                    "ip": "",
+                    "objectId": ""
+                };
+                pictures[count] = pictureDefinition;
+                count++;
+            }
+        }
+
+        return pictures;
+    }else{
+        return [];
+    }
+}
 
 
-
-function visitPhoto(id , uploaded){
+function visitPhoto(id , uploaded, visitedPhotos){
     if(uploaded > 0) {
         visitedPhotos.upload.push(id);
     }else {
         visitedPhotos.ig.push(id);
     }
+    return visitedPhotos;
+}
+
+function visitedPhotoInParse(visitedPhotos, eventInfo, eventObject){
     eventInfo.viewedPhotos = JSON.stringify(visitedPhotos);
     eventObject.put("viewedPhotos", JSON.stringify(visitedPhotos));
     eventObject.saveInBackground(new com.parse.SaveCallback({
@@ -283,19 +294,44 @@ function visitPhoto(id , uploaded){
     }));
 }
 
+function setCurrIgInParse(paginationUrl, shouldLoad){
+    eventInfo.curIGUrl = paginationUrl;
+    eventObject.put("curIGUrl", paginationUrl);
+    eventObject.saveInBackground(new com.parse.SaveCallback({
+        done: function (error) {
+            if(shouldLoad){
+                console.log("new pagination link added for instagram");
+                loadPhotos(hashtags, "eventId", paginationUrl);
+            }else {
+                console.log("no pagination link to load photos");
+            }
+        }
+    }));
+}
 
+function setImage(newPicture){
+    if(newPicture) {
+        picture = newPicture;
+        viewModel.image_id = newPicture.id;
+        viewModel.image_url = newPicture.url;
+    }else{
+        viewModel.image_id = "";
+        viewModel.image_url = "";
+    }
+}
 
 
 // Takes a list of visited photos (JSON Array) and a photo ID (int)
 //
 // Returns true if ID is in visited photos, else returns false
-function findIfVisited(id, isUploaded){
-    var visited;
-    if(isUploaded == 0) {
-        visited = visitedPhotos.ig;
-    }else {
-        visited = visitedPhotos.upload;
-    }
+function findIfVisited(id, isUploaded, visitedPhotos){
+    if(visitedPhotos){
+        var visited;
+        if(isUploaded == 0) {
+            visited = visitedPhotos.ig;
+        }else {
+            visited = visitedPhotos.upload;
+        }
         var isVisited = false;
         for (var i = 0; i < visited.length; i++) {
             if (visited[i] == id) {
@@ -305,6 +341,9 @@ function findIfVisited(id, isUploaded){
             }
         }
         return isVisited;
+    }else{
+        return false;
+    }
 }
 
 
@@ -312,8 +351,9 @@ function findIfVisited(id, isUploaded){
 
 function searchTags(tags, url){
     return new Promise(function(resolve, reject){
-        //var accessToken = appSettings.getString("instagram_access_token");
-        var accessToken = "305911773.eaf0871.ebf52d56320d45e8b275fc53f1948129";
+        var accessToken = appSettings.getString("instagram_access_token");
+        //var accessToken = "305911773.eaf0871.ebf52d56320d45e8b275fc53f1948129";
+        console.log(accessToken);
         var responses = [];
         var getURL;
         if(url){
@@ -329,8 +369,6 @@ function searchTags(tags, url){
                     url: getURL,
                     method: "GET"
                 }).then(function (response) {
-                    //console.log(JSON.stringify(response));
-                    //applicationSettings.setString("currentUser",response.objectId);
                      resolve(response);
                 }, function (e) {
                     reject("SEARCHING DIDN'T WORK");
@@ -389,8 +427,6 @@ function addToEventGallery(response, picture){
 }
 
 
-
-
 function addToImgur(picture){
     return new Promise(function(resolve, reject){
         http.request({
@@ -409,7 +445,7 @@ function addToImgur(picture){
             //console.log(response.content.statusCode);
             console.log(resp.data.deletehash);
             //if(resp.statusCode == 200){
-                resolve(resp.data);
+                resolve(resp);
             //}else{
             //    reject("adding image didn't work!")
             //}
@@ -419,6 +455,42 @@ function addToImgur(picture){
     });
 }
 
+function checkImgurStatusCode(response){
+    if(response){
+        if(response.status == 200){
+            return response;
+        }else{
+            return false;
+        }
+    }else{
+        return false;
+    }
+}
+
+function checkParseStatusCode(response){
+    if(response){
+        if(response.statusCode == 200){
+            return response;
+        }else{
+            return false;
+        }
+    }else{
+        return false;
+    }
+}
+
+function checkIGStatusCode(response){
+    if(response){
+        if(response.meta.code == 200){
+            return response;
+        }else{
+            return false;
+        }
+    }else{
+        return false;
+    }
+}
+
 
 
 function getListOfHashtags(hashtags){
@@ -426,4 +498,12 @@ function getListOfHashtags(hashtags){
     return hashtags.split("#");
 }
 
-module.exports = Gallery;
+module.exports = {
+    Gallery : Gallery,
+    visitPhoto : visitPhoto,
+    findIfVisited : findIfVisited,
+    checkIGStatusCode : checkIGStatusCode,
+    checkImgurStatusCode: checkImgurStatusCode,
+    checkParseStatusCode : checkParseStatusCode,
+    loadIGPicturesArray : loadIGPicturesArray
+};

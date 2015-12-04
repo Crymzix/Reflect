@@ -226,9 +226,16 @@ function checkImageCount(response){
 }
 
 function setImage(newPicture){
-    picture = newPicture;
-    viewModel.image_id = newPicture.id;
-    viewModel.image_url = newPicture.url;
+    if(newPicture){
+        picture = newPicture;
+        viewModel.image_id = newPicture.id;
+        viewModel.image_url = newPicture.url;
+    }else{
+        viewModel.image_id = "";
+        viewModel.image_url = "";
+        android.widget.Toast.makeText(appModule.android.context, "No photos to show!", 0).show();
+    }
+
 }
 
 function deleteFromImgur(){

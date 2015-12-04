@@ -6,6 +6,7 @@ var config = require("../../shared/config.js");
 var fetchModule = require("fetch");
 var frameModule = require("ui/frame");
 var appSettings = require("application-settings");
+var appModule = require("application");
 
 var clientID = config.clientID;
 var redirectURI = config.redirectURI;
@@ -48,37 +49,12 @@ exports.loaded = function(args) {
                 var token = getTokenFromURI(args.url);
                 var navigationEntry = {
                     moduleName: "views/main/main-page",
-                    backstackVisible: false
+                    //backstackVisible: false,
+                    clearHistory: true
                 };
                 appSettings.setString("instagram_access_token", token);
-                //topmost.navigate(navigationEntry);
-                //var apiCode = getCodeFromURI(args.url);
-                //console.log("just before fetch");
-                //var result;
-                //fetchModule.fetch(config.instagramAPIURL + "oauth/access_token/", {
-                //    method: "POST",
-                //    headers: {
-                //        "Content-Type": "application/json"
-                //    },
-                //    body: JSON.stringify({
-                //        client_id: clientID,
-                //        client_secret: clientSecret,
-                //        grant_type: "authorization_code",
-                //        redirect_uri: redirectURI,
-                //        code: apiCode
-                //    })
-                //})
-                //    .then(handleErrors)
-                //    .then(function(response) {
-                //        //Setting shared preferences here
-                //        //appSettings.setString("instagram_access_token", response.content.toJSON.access_token)
-                //        console.log(JSON.stringify(response));
-                //        return(response.content.toJSON());
-                //    })
-                //    .then(function(data) {
-                //        //appSettings.setString("instagram_access_token", response.content.toJSON.access_token)
-                //        console.log(data.access_token);
-                //    });
+                android.widget.Toast.makeText(appModule.android.context, "Login successful!", 0).show();
+                topmost.navigate(navigationEntry);
             }else{
                 message = "ERROR!! ";
             }

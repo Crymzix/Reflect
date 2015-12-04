@@ -2,6 +2,7 @@ var gesturesModule = require("ui/gestures");
 var frameModule = require("ui/frame");
 var loginViewModel = require("../../shared/view-models/login-view-model");
 var dialogsModule = require("ui/dialogs");
+var appModule = require("application");
 
 var applicationSettings = require("application-settings");
 
@@ -40,15 +41,24 @@ exports.asGuest = function(){
 
 exports.signIn = function(){
     user.signIn().then(function(){
-        dialogsModule.alert("You've successfully signed in!");
         var topmost = frameModule.topmost();
-        topmost.navigate({
-            moduleName: "views/main/main-page",
-            clearHistory: true
-        });
+        if(applicationSettings.getString("instagram_access_token")){
+            android.widget.Toast.makeText(appModule.android.context, "Login successful!", 0).show();
+            topmost.navigate({
+                moduleName: "views/main/main-page",
+                clearHistory: true
+            });
+        }else{
+            android.widget.Toast.makeText(appModule.android.context, "Please login with Instagram to proceed.", 0).show();
+            topmost.navigate({
+                moduleName: "views/webview/instagram-webview",
+                clearHistory: true
+            });
+        }
     }).catch(function(e){
         dialogsModule.alert("Login Failed! Try again");
     });
+
 
 };
 

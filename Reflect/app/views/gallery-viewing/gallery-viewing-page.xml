@@ -1,16 +1,12 @@
 <Page xmlns="http://www.nativescript.org/tns.xsd" loaded="loaded" actionBarHidden="true">
     <StackLayout cssClass="gallery-viewing">
-        <StackLayout cssClass="logo">
-            <Image src="res://logo" stretch="none" horizontalAlignment="center" verticalAlignment="center"/>
-        </StackLayout>
         <StackLayout id="image" cssClass="image">
             <Image src="{{ image_url }}"  id="{{ image_id }}"
                    horizontalAlignment="center" swipe="swipePicture" cssClass="image-pic" />
             <ActivityIndicator busy="{{ isLoading }}" verticalAlignment="center" />
         </StackLayout>
-        <GridLayout cssClass="action-buttons" columns="auto, *" rows="auto, *" >
-            <Button row="0" col="0" id="delete" text="X" tap="deletePhoto" cssClass="deletePhoto"/>
-            <Label row="2" />
-        </GridLayout>
+        <StackLayout cssClass="action-buttons">
+            <Button id="delete" text="X" tap="deletePhoto" cssClass="deletePhoto"/>
+        </StackLayout>
     </StackLayout>
 </Page>
