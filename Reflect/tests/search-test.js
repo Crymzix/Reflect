@@ -80,7 +80,7 @@ describe('search match test', function(){
 		var string = "justin";
         response = search_view.matchString(string, 0, regexArray); 
 		
-		var expectedResponse = [{"title":{"$regex":"Justin"}},{"title":{"$regex":"justin"}},{"hashtags":{"$regex":"Justin"}},{"hashtags":{"$regex":"justin"}},{"description":{"$regex":"Justin"}},{"description":{"$regex":"justin"}}];
+		var expectedResponse = [{"title":{"$regex":"J"}},{"title":{"$regex":"j"}},{"hashtags":{"$regex":"J"}},{"hashtags":{"$regex":"j"}},{"description":{"$regex":"J"}},{"description":{"$regex":"j"}}];
 
         expect(JSON.stringify(response)).to.equal(JSON.stringify(expectedResponse));
         done();
@@ -100,6 +100,61 @@ describe('search match test', function(){
         done();
 	});
 	
+		it('test array content', function(done){
+
+
+        var response = [];
+		var regexArray = [];
+		var string = "jason";
+        response = search_view.matchString(string, 0, regexArray); 
+		
+		var expectedResponse = [{"title":{"$regex":"J"}},{"title":{"$regex":"j"}},{"hashtags":{"$regex":"J"}},{"hashtags":{"$regex":"j"}},{"description":{"$regex":"J"}},{"description":{"$regex":"j"}}];
+
+        expect(JSON.stringify(response)).to.equal(JSON.stringify(expectedResponse));
+        done();
+	});
+	
+		it('test array content', function(done){
+
+
+        var response = [];
+		var regexArray = [];
+		var string = "Justin";
+        response = search_view.matchString(string, 0, regexArray); 
+		
+		var expectedResponse = [{"title":{"$regex":"J"}},{"title":{"$regex":"j"}},{"hashtags":{"$regex":"J"}},{"hashtags":{"$regex":"j"}},{"description":{"$regex":"J"}},{"description":{"$regex":"j"}}];
+
+        expect(JSON.stringify(response)).to.equal(JSON.stringify(expectedResponse));
+        done();
+	});
+	
+		it('test array content', function(done){
+
+
+        var response = [];
+		var regexArray = [];
+		var string = "2";
+        response = search_view.matchString(string, 0, regexArray); 
+		
+		var expectedResponse = [{"title":{"$regex":"2"}},{"title":{"$regex":"2"}},{"hashtags":{"$regex":"2"}},{"hashtags":{"$regex":"2"}},{"description":{"$regex":"2"}},{"description":{"$regex":"2"}}];
+
+        expect(JSON.stringify(response)).to.equal(JSON.stringify(expectedResponse));
+        done();
+	
+	});
+		it('test array content', function(done){
+
+
+        var response = [];
+		var regexArray = [];
+		var string = "jfdlJedfsf";
+        response = search_view.matchString(string, 0, regexArray); 
+		
+		var expectedResponse = [{"title":{"$regex":"J"}},{"title":{"$regex":"j"}},{"hashtags":{"$regex":"J"}},{"hashtags":{"$regex":"j"}},{"description":{"$regex":"J"}},{"description":{"$regex":"j"}}];
+
+        expect(JSON.stringify(response)).to.equal(JSON.stringify(expectedResponse));
+        done();
+	});
 	
 });
 
