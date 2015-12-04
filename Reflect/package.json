@@ -5,6 +5,15 @@
       "version": "1.4.0"
     }
   },
+  "scripts": {
+    "test": "mocha tests"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.1",
+    "chai": "^2.1.1",
+    "proxyquire": "^1.4.0",
+    "sinon": "^1.14.0"
+  },
   "dependencies": {
     "nativescript-google-maps-sdk": "^1.0.4",
     "nativescript-telerik-ui": "0.0.10",
