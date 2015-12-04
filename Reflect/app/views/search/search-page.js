@@ -30,7 +30,7 @@ function searchEvents() {
     viewModule.searchEvents(keywordSearch);
 }
 
-function locationSearch() {
-	
-}
+/* function locationSearch() {
+	viewModule.locationSearch();
+} */
 exports.searchEvents = searchEvents;

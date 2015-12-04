@@ -17,7 +17,18 @@ exports.onShownModally = onShownModally;
 
 function confirm() {
     var time = page.getViewById("eventTime");
-    var timeString = time.hour + ":" + time.minute;
+
+    var hour = time.hour;
+    if (hour == null) {
+        hour = String(new Date().getHours());
+    }
+
+    var minutes = time.minutes;
+    if (minutes == null) {
+        minutes = String(new Date().getMinutes());
+    }
+
+    var timeString = hour + ":" + minutes;
     closeCallback(timeString);
 }
 exports.confirm = confirm;

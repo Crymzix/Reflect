@@ -67,7 +67,7 @@ function createViewModel(index) {
             viewModel.checkLoggedIn();
             break;
         case 2:
-            viewModel = new createEventViewModule.CreateEventViewModel();
+            viewModel = createEventViewModule.CreateEventViewModel();
             page.bindingContext = viewModel;
 			viewModel.checkLoggedIn();
 			break;
@@ -94,6 +94,8 @@ exports.createViewModel = createViewModel;
 
 function choosePhoto() {
     var imageView = page.getViewById("eventCover");
+    saveInputs();
+
     viewModel.choosePhoto(imageView);
 }
 exports.choosePhoto = choosePhoto;
@@ -109,6 +111,10 @@ function addEvent() {
     var endTime = page.getViewById("eventEndTimeLabel");
     var hashtags = page.getViewById("eventHashtags");
     viewModel.addEvent(imageView, title, location, description, startDate, startTime, endDate, endTime, hashtags);
+
+    applicationSettings.setString("eventTitle", "");
+    applicationSettings.setString("eventDescription", "");
+    applicationSettings.setString("eventHashtags", "");
 }
 
 exports.selectView = selectView;
@@ -184,6 +190,8 @@ exports.showMap = showMap;
 
 function chooseLocation() {
     var locationLabel = page.getViewById("eventLocation");
+    saveInputs();
+
     viewModel.chooseLocation(locationLabel);
 }
 exports.chooseLocation = chooseLocation;
@@ -197,5 +205,15 @@ function logOut(){
     applicationSettings.setNumber("selectedViewIndex", 0);
 }
 exports.logOut = logOut;
+
+function saveInputs() {
+    var title = page.getViewById("eventTitle");
+    var description = page.getViewById("eventDescription");
+    var hashtags = page.getViewById("eventHashtags");
+    applicationSettings.setString("eventTitle", title.text);
+    applicationSettings.setString("eventDescription", description.text);
+    applicationSettings.setString("eventHashtags", hashtags.text);
+}
+exports.saveInputs = saveInputs;
 
 

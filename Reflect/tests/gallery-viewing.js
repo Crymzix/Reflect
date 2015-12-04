@@ -1,6 +1,6 @@
 /**
- * Created by Vineet on 2015-11-29.
- */
++ * Created by Vineet on 2015-11-29.
++ */
 var expect = require('chai').expect;
 var sinon = require('sinon');
 require('sinon-as-promised');
@@ -13,6 +13,7 @@ describe('gallery-view-checkImgurStatusCode', function(){
     var gallery_view;
     before(function(){
         gallery_view = proxyquire("../app/shared/view-models/gallery-viewing-view-model",
+
             {
                 "data/observable": {
                     ObservableArray: Array,
@@ -20,6 +21,7 @@ describe('gallery-view-checkImgurStatusCode', function(){
                 },
             "application":{
                 ObservableArray: Array,
+
                 '@noCallThru': true
             }})
 

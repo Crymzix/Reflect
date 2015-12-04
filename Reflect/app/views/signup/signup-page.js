@@ -4,7 +4,7 @@ var gesturesModule = require("ui/gestures");
 var loginViewModel = require("../../shared/view-models/login-view-model");
 var applicationSettings = require("application-settings");
 
-var user = new loginViewModel({ authenticating: false });
+var user = new loginViewModel.User({ authenticating: false });
 
 var email;
 var password;

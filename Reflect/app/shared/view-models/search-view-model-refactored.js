@@ -1,3 +1,4 @@
+// old code
 var observableModule = require("data/observable");
 var appModule = require("application");
 var frameModule = require("ui/frame");
@@ -10,32 +11,39 @@ var applicationSettings = require("application-settings");
 
 var arrayOfMatchingIDs = [];
 
-function SearchEventsViewModel() {
-	SearchEventsViewModel = new observableModule.Observable({
-		
-	});
+var SearchEventsViewModel = (function (_super) {
+	__extends(SearchEventsViewModel, _super);
 	
-	SearchEventsViewModel.checkLoggedIn = function(){
+	var that;
+	
+	function SearchEventsViewModel() {
+		_super.call(this);
+		this.set("selectedViewIndex", 0);
+		this._events = [];
+		that = this;
+	}
+
+	SearchEventsViewModel.prototype.checkLoggedIn = function(){
         var currentUser = applicationSettings.hasKey("currentUser");
         this.set("loggedIn",currentUser);
     };
-	
-	SearchEventsViewModel.selectView = function (index) {
+
+	SearchEventsViewModel.prototype.selectView = function (index) {
 		this.set("selectedViewIndex", index);
 	};
-	
-	SearchEventsViewModel.searchEvents = function (keywordSearch) {
-		//var keywordArray = keywordSearch;
+
+	SearchEventsViewModel.prototype.searchEvents = function (keywordSearch) {
 		var keywordArray = keywordSearch.text.split(" ");
 		console.log("the search terms are: " + keywordArray + "and the number of entries in array are" + keywordArray.length);
 		var regexArray = [];
-		//for (var i = 0; i<keywordArray.length*6; i+=6) {
-		var i = 0;	
-		matchString(keywordArray, i, regexArray);
+		for (var i = 0; i<keywordArray.length*6; i+=6) {
+			
+			regexArray = matchString(keywordArray, i, regexArray);
 			// converts search word to capitalized word 
 			
-		//}
-		//console.log("the content of regexArray: " + JSON.stringify(regexArray));
+		}
+		console.log("the content of regexArray: " + JSON.stringify(regexArray));
+		
 		var query = qs.stringify({
 			where: JSON.stringify({
 				$or: regexArray
@@ -67,16 +75,34 @@ function SearchEventsViewModel() {
 	}; 
 	
 	return SearchEventsViewModel;
-}
-//exports.SearchEventsViewModel = SearchEventsViewModel;
 	
-function matchString(keywordSearch, i, regexArray) {
-			//var keywordArray = keywordSearch.text.split(" ");
-			
-			var uppercaseString = keywordSearch[i/6].charAt(0).toUpperCase() + keywordSearch[i/6].slice(1);
-			console.log ("uppercaseString is: " + uppercaseString);
+	
+	/* SearchEventsViewModel.prototype.locationSearch = function () {
+		
+
+		var query = qs.stringify({
+			where: JSON.stringify({
+				locationL: {
+					
+				}
+				/* title: {
+						//$regex: "^" regexArray[0];
+						$or: regexArray
+				} */
+	/* 		})
+		});
+		var url = "https://api.parse.com/1/classes/Event?" + query;
+	}  */
+
+	//SearchEventsViewModel.prototype.locationToLagLong = function ();
+	
+})(observableModule.Observable);
+exports.SearchEventsViewModel = SearchEventsViewModel;
+
+	function matchString(keywordArray, i, regexArray) {
+			var uppercaseString = keywordArray[i/6].charAt(0).toUpperCase() + keywordArray[i/6].slice(1);
 			// converts search word to lower case word
-			var lowercaseString = keywordSearch[i/6].toLowerCase();
+			var lowercaseString = keywordArray[i/6].toLowerCase();
 			
 			var uppercase = {};
 			uppercase["title"] = {
@@ -113,12 +139,6 @@ function matchString(keywordSearch, i, regexArray) {
 				$regex: lowercaseString
 			}
 			regexArray[i+5] = descriptionLowerCase;
-			console.log("the content of regexArray: " + JSON.stringify(regexArray));
-			return regexArray;
 			
-};
-module.exports = {
-	matchString: matchString,
-	SearchEventsViewModel: SearchEventsViewModel
-
-};
+			return regexArray;
+	};

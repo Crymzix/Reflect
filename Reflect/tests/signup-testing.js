@@ -26,94 +26,53 @@ describe('login-view', function() {
             })
     });
 
-    it('Signing up with a username that is not yet in use', function(done){
-        var expectedEndpoint = 'https://api.parse.com/1/users';
-        var body = JSON.stringify({
-            status: "201 Created"
-        });
-        request.withArgs(expectedEndpoint).yields(body,null);
-
-
-        signup_view.signupLogic("nowayever@hotmail.ca","testfail").then(function(response){
-            eexpect(response.code).to.equal(body.code);
-        },function (e){
-            expect(e).to.be.null;
-        });
+    it('signup should return an error if both fields are left blank.', function(done){
+        var validation = signup_view.validateSignup(null,null);
+        expect(validation).to.not.equal(null);
         done();
-
-
     });
 
-    it('Signing up with a username that is not yet in use', function(done){
-        var expectedEndpoint = 'https://api.parse.com/1/users';
-        var body = JSON.stringify({
-            status: "201 Created"
-        });
-        request.withArgs(expectedEndpoint).yields(body,null);
-
-
-        signup_view.signupLogic("nowayever@hotmail.ca","testfail").then(function(response){
-            expect(response.code).to.equal(body.code);
-        },function (e){
-            expect(e).to.be.null;
-        });
+    it('signup should return an error if the username field is left blank.', function(done){
+        var validation = signup_view.validateSignup(null,"123");
+        expect(validation).to.not.equal(null);
         done();
-
-
     });
 
-    it('Signing up with a username but blank password', function(done){
-        var expectedEndpoint = 'https://api.parse.com/1/users';
-        var body = JSON.stringify({
-            "code": "102"
-        });
-        request.withArgs(expectedEndpoint).yields(null,body);
-
-
-        signup_view.signupLogic("nowayever@hotmail.ca","").then(function(response){
-            expect(response).to.be.null;
-        },function (e){
-            expect(e.code).to.equal(body.code);
-        });
+    it('signup should return an error if the password field is left blank.', function(done){
+        var validation = signup_view.validateSignup("yoloswag",null);
+        expect(validation).to.not.equal(null);
         done();
-
-
     });
 
-    it('Signing up with a blank username but non-empty password', function(done){
-        var expectedEndpoint = 'https://api.parse.com/1/users';
-        var body = JSON.stringify({
-            "code": "102"
-        });
-        request.withArgs(expectedEndpoint).yields(null,body);
+    it('signup should return an error if the user already exists', function(done){
+        var JSONarray = [
+            {
+                "createdAt": "2015-10-29T04:55:19.296Z",
+                "email": "test@mail.com",
+                "objectId": "V34Styi1V2",
+                "updatedAt": "2015-10-29T04:55:19.296Z",
+                "username": "test@mail.com"
+            }
+        ];
+        var validation = signup_view.checkDuplicate("test@mail.com",JSONarray,1);
+        expect(validation).to.not.equal(null);
 
-
-        signup_view.signupLogic("","yayou").then(function(response){
-            expect(response).to.be.null;
-        },function (e){
-            expect(e.code).to.equal(body.code);
-        });
         done();
-
-
     });
 
-    it('Signing up with username that is already taken', function(done){
-        var expectedEndpoint = 'https://api.parse.com/1/users';
-        var body = JSON.stringify({
-            "code": "102"
-        });
-        request.withArgs(expectedEndpoint).yields(null,body);
-
-
-        signup_view.signupLogic("test@hotmail.ca","test").then(function(response){
-            expect(response).to.be.null;
-        },function (e){
-            expect(e.code).to.equal(body.code);
-        });
+    it('signup should not return an error if the user doesnt already exist', function(done){
+        var JSONarray2 = [
+            {
+                "createdAt": "2015-10-29T04:55:19.296Z",
+                "email": "test@mail.com",
+                "objectId": "V34Styi1V2",
+                "updatedAt": "2015-10-29T04:55:19.296Z",
+                "username": "test@mail.com"
+            }
+        ];
+        var validation = signup_view.checkDuplicate("nonexistent@mail.com",JSONarray2,1);
+        expect(validation).to.be.null;
         done();
-
-
     });
 
 

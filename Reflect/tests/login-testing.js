@@ -25,76 +25,23 @@ describe('login-view', function() {
                 }
             })
     });
-    it('logging in with a correct username and password', function(done){
-        var expectedEndpoint = 'https://api.parse.com/1/login?username=test@hotmail.ca&password=test';
-        var body = JSON.stringify({
-            "objectId": "mvs6tQR1Hs"
-        });
-        request.withArgs(expectedEndpoint).yields(body,null);
 
-
-        login_view.loginLogic("test@hotmail.ca","test").then(function(response){
-            expect(response.objectId).to.equal(body.objectId);
-        },function (e){
-            expect(e).to.be.null;
-        });
+    it('login should return an error if both fields are left blank.', function(done){
+        var validation = login_view.validateLogin(null,null);
+        expect(validation).to.not.equal(null);
         done();
-
-
     });
 
-    it('logging in with a correct username but incorrect password', function(done){
-        var expectedEndpoint = 'https://api.parse.com/1/login?username=test@hotmail.ca&password=test';
-        var body = JSON.stringify({
-            "code": "102"
-        });
-        request.withArgs(expectedEndpoint).yields(null,body);
-
-
-        login_view.loginLogic("test@hotmail.ca","testfail").then(function(response){
-            expect(response).to.be.null;
-        },function (e){
-            expect(e.code).to.equal(body.code);
-        });
+    it('login should return an error if the username field is left blank.', function(done){
+        var validation = login_view.validateLogin(null,"123");
+        expect(validation).to.not.equal(null);
         done();
-
-
     });
 
-    it('logging in with an incorrect username', function(done){
-        var expectedEndpoint = 'https://api.parse.com/1/login?username=test@hotmail.ca&password=test';
-        var body = JSON.stringify({
-            "code": "102"
-        });
-        request.withArgs(expectedEndpoint).yields(null,body);
-
-
-        login_view.loginLogic("nowayever@hotmail.ca","testfail").then(function(response){
-            expect(response).to.be.null;
-        },function (e){
-            expect(e.code).to.equal(body.code);
-        });
+    it('login should return an error if the password field is left blank.', function(done){
+        var validation = login_view.validateLogin("yoloswag",null);
+        expect(validation).to.not.equal(null);
         done();
-
-
-    });
-
-    it('logging in with null fields', function(done){
-        var expectedEndpoint = 'https://api.parse.com/1/login?username=test@hotmail.ca&password=test';
-        var body = JSON.stringify({
-            "code": "102"
-        });
-        request.withArgs(expectedEndpoint).yields(null,body);
-
-
-        login_view.loginLogic("","").then(function(response){
-            expect(response).to.be.null;
-        },function (e){
-            expect(e.code).to.equal(body.code);
-        });
-        done();
-
-
     });
 
 
