@@ -5,6 +5,7 @@ var appModule = require("application");
 var applicationSettings = require("application-settings");
 var config = require("../config");
 var http = require("http");
+var dialog = require("nativescript-dialog");
 
 var REQUEST_SELECT_IMAGE = 1234;
 var REQUEST_LOCATION = 1235;
@@ -87,6 +88,18 @@ function CreateEventViewModel() {
         if (inputError == null) {
 
             if (checkAttachments()) {
+
+                var view = new android.widget.ProgressBar(appModule.android.context);
+                view.setIndeterminate(true);
+
+                dialog.show({
+                        title: "Loading...",
+                        message: "Please wait!",
+                        cancelButtonText: "Cancel",
+                        nativeView: view}
+                ).then(function(r){ console.log("Result: " + r); },
+                    function(e){console.log("Error: " + e)});
+
                 var viewedPhotos = {
                     "ig" : [],
                     "upload" : []
@@ -133,7 +146,9 @@ function CreateEventViewModel() {
                     eventObject.put("imgurDeleteHash", imgurDeleteHash);
                     eventObject.saveInBackground(new com.parse.SaveCallback({
                         done: function (error) {
+
                             android.widget.Toast.makeText(appModule.android.context, "Event uploaded!", 1).show();
+                            dialog.close();
                             //Clear input fields
                             title.text = "";
                             location.text = "";

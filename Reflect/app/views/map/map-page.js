@@ -1,36 +1,8 @@
 var frameModule = require("ui/frame");
 var eventObjects;
-var locationModule = require("location");
-//var locationManager = new locationModule.LocationManager();
-var locationOptions = {
-    desiredAccuracy: 3,
-    updateDistance: 0,
-    minimumUpdateTime: 5000,
-    maximumAge: 20000
-};
-var buttonModule = require("ui/button");
-var appModule = require("application");
-var platformModule = require("platform");
+var markers = [];
 
-var LocationManager = require("location").LocationManager;
-var isEnabled = LocationManager.isEnabled();
-var Location = require("location").Location;
-var userLocation = new Location();
-
-var LocationManager = require("location").LocationManager;
-var locationManager = new LocationManager();
-
-var locationManager = new LocationManager();
-locationManager.startLocationMonitoring(function (location) {
-    console.log('Location received: ' + location);
-}, function (error) {
-    console.log('Location error received: ' + error);
-});
-
-//var userLocation = locationManager.lastKnownLocation;
-userLocation.latitude = 49.2827;
-userLocation.longitude = 123.1207;
-
+var page;
 
 function pageLoaded(args) {
     page = args.object;
@@ -43,6 +15,7 @@ console.log ("my location is: " )
 function OnMapReady(args) {
     var mapView = args.object;
     var gMap = mapView.gMap;
+    gMap.setMyLocationEnabled(true);
 
     console.log("Setting markers...");
 
@@ -60,15 +33,35 @@ function OnMapReady(args) {
 
             var latLng = new com.google.android.gms.maps.model.LatLng(latitude, longitude);
             markerOptions.position(latLng);
-            gMap.addMarker(markerOptions);
-            gMap.setMyLocationEnabled(true);
-			
-			var distance = LocationManager.distance(userLocation, eventObject);
-			
-			console.log("Distance to events are: " + distance);
-			
+            var marker = gMap.addMarker(markerOptions);
+
+            var markerObject = {};
+            markerObject["markerId"] = marker.getId();
+            markerObject["eventIndex"] = i;
+            markers.push(markerObject);
         }
     }
+
+    gMap.setOnInfoWindowClickListener(new com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener({
+        onInfoWindowClick: function (marker) {
+            for (var j = 0; j < markers.length; j++) {
+                if (marker.getId() == markers[j].markerId) {
+
+                    var event = eventObjects[j];
+                    event["isOwner"] = false;
+
+                    frameModule.topmost().navigate({
+                        moduleName: "views/event/event-page",
+                        context: event,
+                        backstackVisible: true
+                    });
+                    break;
+                }
+            }
+
+        }
+    }));
+
 }
 exports.OnMapReady = OnMapReady;
 

@@ -3,6 +3,7 @@ var frameModule = require("ui/frame");
 var config = require("../config");
 var http = require("http");
 var appModule = require("application");
+var dialog = require("nativescript-dialog");
 
 
 var EventViewModel = (function (_super) {
@@ -72,10 +73,16 @@ var EventViewModel = (function (_super) {
 
         if (imageView.imageSource) {
 
-            //var progressDialog = new android.app.ProgressDialog(appModule.android.context);
-            //progressDialog.setMessage("Uploading photo");
-            //progressDialog.setCancelable(false);
-            //progressDialog.show();
+            var view = new android.widget.ProgressBar(appModule.android.context);
+            view.setIndeterminate(true);
+
+            dialog.show({
+                    title: "Loading...",
+                    message: "Please wait!",
+                    cancelButtonText: "Cancel",
+                    nativeView: view}
+            ).then(function(r){ console.log("Result: " + r); },
+                function(e){console.log("Error: " + e)});
 
             var bitmap = imageView.imageSource.android;
 
@@ -92,6 +99,7 @@ var EventViewModel = (function (_super) {
                     eventObject.saveInBackground(new com.parse.SaveCallback({
                         done: function (error) {
                             console.log("Saved image.");
+                            dialog.close();
                             android.widget.Toast.makeText(appModule.android.context, "Uploaded photo", 0).show();
                             imageView.imageSource = null;
                         }
