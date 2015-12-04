@@ -23,7 +23,7 @@ function confirm() {
         hour = String(new Date().getHours());
     }
 
-    var minutes = time.minutes;
+    var minutes = time.minute;
     if (minutes == null) {
         minutes = String(new Date().getMinutes());
     }

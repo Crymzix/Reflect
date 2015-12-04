@@ -69,7 +69,7 @@ function Gallery(info){
         }else{
             setCurrIgInParse("", false);
             setImage(null);
-            android.widget.Toast.makeText(appModule.android.context, "No new photos!", 0).show();
+            //android.widget.Toast.makeText(appModule.android.context, "No new photos!", 0).show();
         }
     };
 
@@ -93,7 +93,7 @@ function Gallery(info){
                     android.widget.Toast.makeText(appModule.android.context, "NETWORK ERROR: Couldn't add to Imgur!", 0).show();
                 });
             }else{
-                android.widget.Toast.makeText(appModule.android.context, "ERROR: Couldn't add to Imgur!", 0).show();
+                //android.widget.Toast.makeText(appModule.android.context, "ERROR: Couldn't add to Imgur!", 0).show();
             }
 
             console.log("swipe_right");
@@ -129,7 +129,7 @@ function Gallery(info){
         }else{
             setImage(null);
             setCurrIgInParse("", false);
-            android.widget.Toast.makeText(appModule.android.context, "No new photos!", 0).show();
+            //android.widget.Toast.makeText(appModule.android.context, "No new photos!", 0).show();
         }
     };
 
