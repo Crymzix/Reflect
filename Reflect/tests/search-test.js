@@ -58,7 +58,7 @@ describe('search match test', function(){
         done();
 	});
 	
-		it('should return array of regular expressions ', function(done){
+		it('array length should not equal 7', function(done){
 
 
         var response = [];
@@ -72,17 +72,34 @@ describe('search match test', function(){
         done();
 	});
 	
-	it('shouldnt give null result', function(done){
+	it('test array content', function(done){
 
 
         var response = [];
 		var regexArray = [];
-		var string = "hallo";
+		var string = "justin";
         response = search_view.matchString(string, 0, regexArray); 
+		
+		var expectedResponse = [{"title":{"$regex":"Justin"}},{"title":{"$regex":"justin"}},{"hashtags":{"$regex":"Justin"}},{"hashtags":{"$regex":"justin"}},{"description":{"$regex":"Justin"}},{"description":{"$regex":"justin"}}];
 
-
-        expect(response.length).to.equal(6);
+        expect(JSON.stringify(response)).to.equal(JSON.stringify(expectedResponse));
         done();
 	});
+	
+	it('test first array value', function(done){
+
+
+        var response = [];
+		var regexArray = [];
+		var string = "j";
+        response = search_view.matchString(string, 0, regexArray); 
+		
+		var expectedResponse = {"title":{"$regex":"J"}};
+
+        expect(JSON.stringify(response[0])).to.equal(JSON.stringify(expectedResponse));
+        done();
+	});
+	
+	
 });
 

@@ -6,7 +6,7 @@ var dialogsModule = require("ui/dialogs");
 var applicationSettings = require("application-settings");
 
 
-var user = new loginViewModel({
+var user = new loginViewModel.User({
     email: "test@hotmail.ca",
     password: "test",
     authenticating: false

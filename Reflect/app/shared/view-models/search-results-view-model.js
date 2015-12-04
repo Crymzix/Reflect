@@ -32,7 +32,7 @@ var SearchResultsViewModel = (function (_super) {
 			}
         this.set("searchEvents", eventList);
 		}
-		if (this._events == null) {
+		if (this._events == null || this._events.length ==0) {
 			dialogsModule.alert ({
 				message: "Unforunately, no search results were found...",
 				okButtonText: "OK"

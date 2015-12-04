@@ -232,5 +232,6 @@ module.exports = {
     User: User,
     validateLogin: validateLogin,
     validateSignup: validateSignup,
-    checkDuplicate: checkDuplicate
+    checkDuplicate: checkDuplicate,
+	
 };

@@ -30,11 +30,11 @@ function SearchEventsViewModel() {
 		var regexArray = [];
 		for (var i = 0; i<keywordArray.length*6; i+=6) {
 			
-			regexArray = matchString(keywordArray, i, regexArray);
+			matchString(keywordArray, i, regexArray);
 			// converts search word to capitalized word 
 			
 		}
-		console.log("the content of regexArray: " + JSON.stringify(regexArray));
+		//console.log("the content of regexArray: " + JSON.stringify(regexArray));
 		var query = qs.stringify({
 			where: JSON.stringify({
 				$or: regexArray
@@ -67,7 +67,7 @@ function SearchEventsViewModel() {
 	
 	return SearchEventsViewModel;
 }
-exports.SearchEventsViewModel = SearchEventsViewModel;
+//exports.SearchEventsViewModel = SearchEventsViewModel;
 	
 function matchString(keywordArray, i, regexArray) {
 
@@ -111,10 +111,12 @@ function matchString(keywordArray, i, regexArray) {
 				$regex: lowercaseString
 			}
 			regexArray[i+5] = descriptionLowerCase;
-			
+			console.log("the content of regexArray: " + JSON.stringify(regexArray));
 			return regexArray;
+			
 };
 module.exports = {
-	matchString: matchString
+	matchString: matchString,
+	SearchEventsViewModel: SearchEventsViewModel
 
 };
