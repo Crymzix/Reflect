@@ -187,12 +187,11 @@ function loadParsePhotos(eventId){
                 "X-Parse-REST-API-Key": "iBYBrLJvCSMRD8Ngn5cq4hURPSQ2hEBO9OgPgBu6"
             }
         }).then(function (response) {
-            if(checkParseStatusCode(response)){
-                var fullPictures = loadParsePicturesArray(pictures, pictures.length, response);
-                resolve(fullPictures);
-            }else{
-                resolve(pictures);
-            }
+            console.log(JSON.stringify(response));
+            console.log(response);
+            var fullPictures = loadParsePicturesArray(pictures, pictures.length, response);
+            resolve(fullPictures);
+
         }, function(e){
             reject("couldn't get photos from parse");
         });
@@ -202,6 +201,7 @@ function loadParsePhotos(eventId){
 
 
 function loadParsePicturesArray(pictures, previousArrayLength, response){
+    console.log("in loadparse array");
     if(response){
         var results = response.results;
         console.log(results.length);
@@ -276,7 +276,7 @@ function loadIGPicturesArray(response, visited){
 
 
 function visitPhoto(id , uploaded, visitedPhotos){
-    if(uploaded > 0) {
+    if(uploaded == "1") {
         visitedPhotos.upload.push(id);
     }else {
         visitedPhotos.ig.push(id);
