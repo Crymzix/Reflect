@@ -21,6 +21,10 @@ describe('gallery-visitPhoto', function(){
                 "application":{
                     ObservableArray: Array,
                     '@noCallThru': true
+                },
+                "application-settings": {
+                    ObservableArray: Array,
+                    '@noCallThru': true
                 }})
 
     });
@@ -71,6 +75,10 @@ describe('gallery-findIfVisited', function(){
                     '@noCallThru': true
                 },
                 "application":{
+                    ObservableArray: Array,
+                    '@noCallThru': true
+                },
+                "application-settings": {
                     ObservableArray: Array,
                     '@noCallThru': true
                 }})
@@ -152,6 +160,10 @@ describe('gallery-checkIGStatusCode', function() {
                 "application": {
                     ObservableArray: Array,
                     '@noCallThru': true
+                },
+                "application-settings": {
+                    ObservableArray: Array,
+                    '@noCallThru': true
                 }
             })
 
@@ -215,6 +227,10 @@ describe('gallery-view-checkImgurStatusCode', function(){
                     '@noCallThru': true
                 },
                 "application":{
+                    ObservableArray: Array,
+                    '@noCallThru': true
+                },
+                "application-settings": {
                     ObservableArray: Array,
                     '@noCallThru': true
                 }})
@@ -282,6 +298,10 @@ describe('gallery-view-checkParseStatusCode', function(){
                 "application":{
                     ObservableArray: Array,
                     '@noCallThru': true
+                },
+                "application-settings": {
+                    ObservableArray: Array,
+                    '@noCallThru': true
                 }})
 
     });
@@ -345,6 +365,10 @@ describe('gallery-loadIGPicturesArray', function(){
                     '@noCallThru': true
                 },
                 "application":{
+                    ObservableArray: Array,
+                    '@noCallThru': true
+                },
+                "application-settings": {
                     ObservableArray: Array,
                     '@noCallThru': true
                 }})

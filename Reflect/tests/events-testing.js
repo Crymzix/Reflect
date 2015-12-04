@@ -30,6 +30,10 @@ describe('create-events-view-check', function () {
                 "application-settings": {
                     ObservableArray: Array,
                     '@noCallThru': true
+                },
+                "nativescript-dialog": {
+                    ObservableArray: Array,
+                    '@noCallThru': true
                 }
             })
 
